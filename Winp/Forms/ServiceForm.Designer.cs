@@ -164,7 +164,7 @@ namespace Winp.Forms
             this.Controls.Add(this._configurationGroupBox);
             this.Name = "ServiceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ServiceForm";
+            this.Text = "Winp Service";
             this.Shown += new System.EventHandler(this.ServiceForm_Shown);
             this._executionGroupBox.ResumeLayout(false);
             this._configurationGroupBox.ResumeLayout(false);

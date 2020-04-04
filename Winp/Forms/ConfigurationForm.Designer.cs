@@ -58,9 +58,9 @@ namespace Winp.Forms
             this._environmentGroupBox.SuspendLayout();
             this._locationGroupBox.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // _environmentGroupBox
-            //
+            // 
             this._environmentGroupBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -78,9 +78,9 @@ namespace Winp.Forms
             this._environmentGroupBox.TabIndex = 0;
             this._environmentGroupBox.TabStop = false;
             this._environmentGroupBox.Text = "Environment";
-            //
+            // 
             // _serverPortTextBox
-            //
+            // 
             this._serverPortTextBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top |
                                                        System.Windows.Forms.AnchorStyles.Right)));
@@ -88,9 +88,9 @@ namespace Winp.Forms
             this._serverPortTextBox.Name = "_serverPortTextBox";
             this._serverPortTextBox.Size = new System.Drawing.Size(68, 23);
             this._serverPortTextBox.TabIndex = 21;
-            //
+            // 
             // _serverPortLabel
-            //
+            // 
             this._serverPortLabel.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top |
                                                        System.Windows.Forms.AnchorStyles.Right)));
@@ -100,18 +100,18 @@ namespace Winp.Forms
             this._serverPortLabel.Size = new System.Drawing.Size(32, 15);
             this._serverPortLabel.TabIndex = 20;
             this._serverPortLabel.Text = "Port:";
-            //
+            // 
             // _serverAddressLabel
-            //
+            // 
             this._serverAddressLabel.AutoSize = true;
             this._serverAddressLabel.Location = new System.Drawing.Point(6, 54);
             this._serverAddressLabel.Name = "_serverAddressLabel";
             this._serverAddressLabel.Size = new System.Drawing.Size(85, 15);
             this._serverAddressLabel.TabIndex = 19;
             this._serverAddressLabel.Text = "Server address:";
-            //
+            // 
             // _serverAddressTextBox
-            //
+            // 
             this._serverAddressTextBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -120,9 +120,9 @@ namespace Winp.Forms
             this._serverAddressTextBox.Name = "_serverAddressTextBox";
             this._serverAddressTextBox.Size = new System.Drawing.Size(363, 23);
             this._serverAddressTextBox.TabIndex = 18;
-            //
+            // 
             // _installDirectoryButton
-            //
+            // 
             this._installDirectoryButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top |
                                                        System.Windows.Forms.AnchorStyles.Right)));
@@ -133,9 +133,9 @@ namespace Winp.Forms
             this._installDirectoryButton.Text = "...";
             this._installDirectoryButton.UseVisualStyleBackColor = true;
             this._installDirectoryButton.Click += new System.EventHandler(this.InstallDirectoryButton_Click);
-            //
+            // 
             // _installDirectoryTextBox
-            //
+            // 
             this._installDirectoryTextBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -144,18 +144,18 @@ namespace Winp.Forms
             this._installDirectoryTextBox.Name = "_installDirectoryTextBox";
             this._installDirectoryTextBox.Size = new System.Drawing.Size(436, 23);
             this._installDirectoryTextBox.TabIndex = 3;
-            //
+            // 
             // _installDirectoryLabel
-            //
+            // 
             this._installDirectoryLabel.AutoSize = true;
             this._installDirectoryLabel.Location = new System.Drawing.Point(6, 25);
             this._installDirectoryLabel.Name = "_installDirectoryLabel";
             this._installDirectoryLabel.Size = new System.Drawing.Size(91, 15);
             this._installDirectoryLabel.TabIndex = 2;
             this._installDirectoryLabel.Text = "Install directory:";
-            //
+            // 
             // _acceptButton
-            //
+            // 
             this._acceptButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom |
                                                        System.Windows.Forms.AnchorStyles.Left)));
@@ -166,9 +166,9 @@ namespace Winp.Forms
             this._acceptButton.Text = "Save";
             this._acceptButton.UseVisualStyleBackColor = true;
             this._acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
-            //
+            // 
             // _cancelButton
-            //
+            // 
             this._cancelButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom |
                                                        System.Windows.Forms.AnchorStyles.Left)));
@@ -179,9 +179,9 @@ namespace Winp.Forms
             this._cancelButton.Text = "Cancel";
             this._cancelButton.UseVisualStyleBackColor = true;
             this._cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
-            //
+            // 
             // _locationGroupBox
-            //
+            // 
             this._locationGroupBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top |
                                                          System.Windows.Forms.AnchorStyles.Bottom) |
@@ -205,27 +205,27 @@ namespace Winp.Forms
             this._locationGroupBox.TabIndex = 11;
             this._locationGroupBox.TabStop = false;
             this._locationGroupBox.Text = "Locations";
-            //
+            // 
             // _locationListCheckBox
-            //
+            // 
             this._locationListCheckBox.Location = new System.Drawing.Point(318, 107);
             this._locationListCheckBox.Name = "_locationListCheckBox";
             this._locationListCheckBox.Size = new System.Drawing.Size(104, 24);
             this._locationListCheckBox.TabIndex = 16;
             this._locationListCheckBox.Text = "Allowed";
             this._locationListCheckBox.UseVisualStyleBackColor = true;
-            //
+            // 
             // _locationListLabel
-            //
+            // 
             this._locationListLabel.AutoSize = true;
             this._locationListLabel.Location = new System.Drawing.Point(212, 111);
             this._locationListLabel.Name = "_locationListLabel";
             this._locationListLabel.Size = new System.Drawing.Size(93, 15);
             this._locationListLabel.TabIndex = 15;
             this._locationListLabel.Text = "Directory listing:";
-            //
+            // 
             // _locationAliasButton
-            //
+            // 
             this._locationAliasButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top |
                                                        System.Windows.Forms.AnchorStyles.Right)));
@@ -236,9 +236,9 @@ namespace Winp.Forms
             this._locationAliasButton.Text = "...";
             this._locationAliasButton.UseVisualStyleBackColor = true;
             this._locationAliasButton.Click += new System.EventHandler(this.LocationAliasButton_Click);
-            //
+            // 
             // _locationDeleteButton
-            //
+            // 
             this._locationDeleteButton.Location = new System.Drawing.Point(318, 138);
             this._locationDeleteButton.Name = "_locationDeleteButton";
             this._locationDeleteButton.Size = new System.Drawing.Size(100, 23);
@@ -246,9 +246,9 @@ namespace Winp.Forms
             this._locationDeleteButton.Text = "Delete";
             this._locationDeleteButton.UseVisualStyleBackColor = true;
             this._locationDeleteButton.Click += new System.EventHandler(this.LocationDeleteButton_Click);
-            //
+            // 
             // _locationUpdateButton
-            //
+            // 
             this._locationUpdateButton.Location = new System.Drawing.Point(212, 138);
             this._locationUpdateButton.Name = "_locationUpdateButton";
             this._locationUpdateButton.Size = new System.Drawing.Size(100, 23);
@@ -256,9 +256,9 @@ namespace Winp.Forms
             this._locationUpdateButton.Text = "Update";
             this._locationUpdateButton.UseVisualStyleBackColor = true;
             this._locationUpdateButton.Click += new System.EventHandler(this.LocationUpdateButton_Click);
-            //
+            // 
             // _locationAliasTextBox
-            //
+            // 
             this._locationAliasTextBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -267,27 +267,27 @@ namespace Winp.Forms
             this._locationAliasTextBox.Name = "_locationAliasTextBox";
             this._locationAliasTextBox.Size = new System.Drawing.Size(230, 23);
             this._locationAliasTextBox.TabIndex = 8;
-            //
+            // 
             // _locationAliasLabel
-            //
+            // 
             this._locationAliasLabel.AutoSize = true;
             this._locationAliasLabel.Location = new System.Drawing.Point(212, 81);
             this._locationAliasLabel.Name = "_locationAliasLabel";
             this._locationAliasLabel.Size = new System.Drawing.Size(85, 15);
             this._locationAliasLabel.TabIndex = 7;
             this._locationAliasLabel.Text = "Root directory:";
-            //
+            // 
             // _locationTypeLabel
-            //
+            // 
             this._locationTypeLabel.AutoSize = true;
             this._locationTypeLabel.Location = new System.Drawing.Point(212, 51);
             this._locationTypeLabel.Name = "_locationTypeLabel";
             this._locationTypeLabel.Size = new System.Drawing.Size(35, 15);
             this._locationTypeLabel.TabIndex = 6;
             this._locationTypeLabel.Text = "Type:";
-            //
+            // 
             // _locationTypeComboBox
-            //
+            // 
             this._locationTypeComboBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -300,9 +300,9 @@ namespace Winp.Forms
             this._locationTypeComboBox.TabIndex = 5;
             this._locationTypeComboBox.SelectedIndexChanged +=
                 new System.EventHandler(this.LocationTypeComboBox_SelectedIndexChanged);
-            //
+            // 
             // _locationBaseTextBox
-            //
+            // 
             this._locationBaseTextBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Left) |
@@ -311,18 +311,18 @@ namespace Winp.Forms
             this._locationBaseTextBox.Name = "_locationBaseTextBox";
             this._locationBaseTextBox.Size = new System.Drawing.Size(269, 23);
             this._locationBaseTextBox.TabIndex = 4;
-            //
+            // 
             // _locationBaseLabel
-            //
+            // 
             this._locationBaseLabel.AutoSize = true;
             this._locationBaseLabel.Location = new System.Drawing.Point(212, 21);
             this._locationBaseLabel.Name = "_locationBaseLabel";
             this._locationBaseLabel.Size = new System.Drawing.Size(58, 15);
             this._locationBaseLabel.TabIndex = 4;
             this._locationBaseLabel.Text = "Base URL:";
-            //
+            // 
             // _locationListBox
-            //
+            // 
             this._locationListBox.Anchor =
                 ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
                                                         System.Windows.Forms.AnchorStyles.Bottom) |
@@ -336,13 +336,13 @@ namespace Winp.Forms
             this._locationListBox.TabIndex = 0;
             this._locationListBox.SelectedIndexChanged +=
                 new System.EventHandler(this.LocationListBox_SelectedIndexChanged);
-            //
+            // 
             // _folderBrowserDialog
-            //
+            // 
             this._folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
-            //
+            // 
             // ConfigurationForm
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 314);
@@ -352,7 +352,7 @@ namespace Winp.Forms
             this.Controls.Add(this._environmentGroupBox);
             this.Name = "ConfigurationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Configuration";
+            this.Text = "Winp Configuration";
             this._environmentGroupBox.ResumeLayout(false);
             this._environmentGroupBox.PerformLayout();
             this._locationGroupBox.ResumeLayout(false);
