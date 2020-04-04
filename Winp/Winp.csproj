@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Cottle" Version="1.6.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Services\Nginx\custom.conf" />
+      <None Remove="Services\Nginx\fastcgi-php.conf" />
+      <EmbeddedResource Include="Services\Nginx\fastcgi-php.conf" />
+      <None Remove="Services\Nginx\nginx.conf" />
+      <EmbeddedResource Include="Services\Nginx\nginx.conf" />
+    </ItemGroup>
+
+</Project>
