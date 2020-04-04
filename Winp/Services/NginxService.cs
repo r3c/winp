@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -39,15 +38,24 @@ namespace Winp.Services
 
             // Write configuration files
             var configurationDirectory = Path.Combine(installDirectory.AbsolutePath, "conf");
-            var context = Context.CreateCustom(new Dictionary<Value, Value>
+            var locationValues = new List<Value>();
+
+            foreach (var location in locations)
             {
-                ["locations"] = locations.Select<LocationConfig, Value>(location => new Dictionary<Value, Value>
+                Directory.CreateDirectory(location.AliasOrDefault.AbsolutePath);
+
+                locationValues.Add(new Dictionary<Value, Value>
                 {
                     ["alias"] = location.AliasOrDefault.AbsolutePath,
                     ["base"] = location.BaseOrDefault,
                     ["list"] = location.List,
                     ["type"] = (int) location.Type
-                }).ToList()
+                });
+            }
+
+            var context = Context.CreateCustom(new Dictionary<Value, Value>
+            {
+                ["locations"] = locationValues
             });
 
             foreach (var configurationName in new[] {ConfigurationFastCgi, ConfigurationNginx})
