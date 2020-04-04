@@ -13,11 +13,12 @@ portable install of Nginx and PHP and is suitable for development.
 Installation
 ------------
 
-Compile and run Winp, optionally click "Configure" button to change default
-options then click "Install" to download and install Nginx & PHP with options
-you previously defined.
+Download latest [Winp release](https://github.com/r3c/winp/releases) from
+GitHub or compile from source and run `Winp.exe`. Optionally click
+"Configure" button to change default options then click "Install" to download
+and install Nginx & PHP with options you previously defined.
 
-Once install is complete, click "Start services" to start Nginx and PHP and
+Once install is complete click "Start services" to start Nginx and PHP and
 open your browser to `http://localhost/` (or whatever local address if you
 changed it).
 
