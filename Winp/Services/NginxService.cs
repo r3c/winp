@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
+using Winp.Install;
 
 namespace Winp.Services
 {
@@ -30,7 +31,7 @@ namespace Winp.Services
         {
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ServiceHelper.DownloadAndExtract(environment.NginxDownloadOrDefault,
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(environment.NginxDownloadOrDefault,
                 environment.NginxArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)
@@ -53,10 +54,10 @@ namespace Winp.Services
             {
                 var destinationPath = Path.Combine(configurationDirectory, configurationName);
                 var resourceName = $"{GetType().Namespace}.Nginx.{configurationName}";
-                var writeMessage = await ServiceHelper.WriteConfiguration(resourceName, destinationPath, context);
+                var success = await ResourceHelper.WriteToFile(resourceName, context, destinationPath);
 
-                if (writeMessage != null)
-                    return $"configuration failure with '{configurationName}' ({writeMessage})";
+                if (!success)
+                    return $"configuration failure with '{configurationName}'";
             }
 
             return null;

@@ -130,7 +130,7 @@ namespace Winp.Forms
 
             if (missing.Count > 0)
             {
-                var message = "Missing services: " + string.Join(", ", missing);
+                var message = "Missing services: " + string.Join(", ", missing) + $" (click '{_installButton.Text}')";
 
                 SetStatusLabel(_installStatusLabel, _statusImageList, Status.Notice, message);
             }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Winp.Configuration;
+using Winp.Install;
 
 namespace Winp.Services
 {
@@ -24,7 +25,7 @@ namespace Winp.Services
         public async Task<string?> Install(EnvironmentConfig environment, IEnumerable<LocationConfig> locations)
         {
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ServiceHelper.DownloadAndExtract(environment.PhpDownloadOrDefault,
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(environment.PhpDownloadOrDefault,
                 environment.PhpArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)
