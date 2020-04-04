@@ -55,7 +55,9 @@ namespace Winp.Services
 
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
-                ["locations"] = locationValues
+                ["locations"] = locationValues,
+                ["serverAddress"] = environment.ServerAddressOrDefault,
+                ["serverPort"] = environment.ServerPortOrDefault
             });
 
             foreach (var configurationName in new[] {ConfigurationFastCgi, ConfigurationNginx})

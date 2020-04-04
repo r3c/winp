@@ -38,5 +38,17 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "phpDownload")]
         public Uri? PhpDownload;
+
+        [JsonIgnore]
+        public readonly string ServerAddressOrDefault => ServerAddress ?? "localhost";
+
+        [JsonProperty(PropertyName = "serverAddress")]
+        public string? ServerAddress;
+
+        [JsonIgnore]
+        public readonly int ServerPortOrDefault => ServerPort ?? 80;
+
+        [JsonProperty(PropertyName = "serverPort")]
+        public int? ServerPort;
     }
 }

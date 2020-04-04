@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -20,12 +21,15 @@ namespace Winp.Forms
             var descriptions = Enum.GetNames(typeof(LocationType))
                 .Select(name => typeof(LocationType).GetField(name)?.GetCustomAttribute(typeof(DescriptionAttribute)))
                 .Cast<DescriptionAttribute>().Select(a => a.Description);
+            var environment = configuration.Environment;
 
-            _installDirectoryTextBox.Text = configuration.Environment.InstallDirectoryOrDefault.AbsolutePath;
+            _installDirectoryTextBox.Text = environment.InstallDirectoryOrDefault.AbsolutePath;
             _locations = configuration.LocationsOrDefault.ToList();
             _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
             _locationTypeComboBox.SelectedIndex = 0;
             _save = save;
+            _serverAddressTextBox.Text = environment.ServerAddressOrDefault;
+            _serverPortTextBox.Text = environment.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
 
             LocationRefresh();
         }
@@ -36,7 +40,9 @@ namespace Winp.Forms
             {
                 Environment = new EnvironmentConfig
                 {
-                    InstallDirectory = new Uri(_installDirectoryTextBox.Text)
+                    InstallDirectory = new Uri(_installDirectoryTextBox.Text),
+                    ServerAddress = _serverAddressTextBox.Text.Length > 0 ? _serverAddressTextBox.Text : null,
+                    ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort) ? (int?) serverPort : null
                 },
                 Locations = _locations.ToArray()
             };
