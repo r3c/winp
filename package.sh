@@ -1,14 +1,15 @@
 #!/bin/sh -e
 
 base="$(dirname "$0")"
-root=nbrowse
+root=winp
 
 # Retreive latest version from current HEAD
 version="$(git --work-tree "$base" tag --points-at HEAD)"
 
 if [ -z "$version" ]; then
-	echo >&2 "error: current HEAD doesn't point to a tag"
-	exit 1
+	echo >&2 "warning: current HEAD doesn't point to a tag"
+
+	version=.draft
 fi
 
 # Create archive for each target runtime
