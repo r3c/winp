@@ -18,6 +18,8 @@
       <EmbeddedResource Include="Services\Nginx\fastcgi-php.conf" />
       <None Remove="Services\Nginx\nginx.conf" />
       <EmbeddedResource Include="Services\Nginx\nginx.conf" />
+      <None Remove="Services\Php\php.ini" />
+      <EmbeddedResource Include="Services\Php\php.ini" />
     </ItemGroup>
 
 </Project>

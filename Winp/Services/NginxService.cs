@@ -37,7 +37,6 @@ namespace Winp.Services
                 return $"download failure ({downloadMessage})";
 
             // Write configuration files
-            var configurationDirectory = Path.Combine(installDirectory.AbsolutePath, "conf");
             var locationValues = new List<Value>();
 
             foreach (var location in locations)
@@ -60,14 +59,13 @@ namespace Winp.Services
                 ["serverPort"] = environment.ServerPortOrDefault
             });
 
-            foreach (var configurationName in new[] {ConfigurationFastCgi, ConfigurationNginx})
+            foreach (var name in new[] {ConfigurationFastCgi, ConfigurationNginx})
             {
-                var destinationPath = Path.Combine(configurationDirectory, configurationName);
-                var resourceName = $"{GetType().Namespace}.Nginx.{configurationName}";
-                var success = await ResourceHelper.WriteToFile(resourceName, context, destinationPath);
+                var destinationPath = Path.Combine(installDirectory.AbsolutePath, "conf", name);
+                var success = await ResourceHelper.WriteToFile<NginxService>($"Nginx.{name}", context, destinationPath);
 
                 if (!success)
-                    return $"configuration failure with '{configurationName}'";
+                    return $"configuration failure with '{name}'";
             }
 
             return null;

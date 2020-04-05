@@ -73,11 +73,15 @@ namespace Winp.Forms
 
             InstallExecute().ContinueWith(async run =>
             {
-                var result = run.Result;
-
-                if (result != null)
+                if (run.IsFaulted && run.Exception != null)
                 {
-                    SetStatusLabel(label, imageList, Status.Failure, "Installation failed: " + result);
+                    SetStatusLabel(label, imageList, Status.Failure, "Installation failed: " + run.Exception.Message);
+
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                }
+                else if (run.Result != null)
+                {
+                    SetStatusLabel(label, imageList, Status.Failure, "Installation failed: " + run.Result);
 
                     await Task.Delay(TimeSpan.FromSeconds(3));
                 }

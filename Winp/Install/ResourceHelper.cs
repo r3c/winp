@@ -11,9 +11,14 @@ namespace Winp.Install
 {
     internal static class ResourceHelper
     {
-        public static async Task<bool> WriteToFile(string resourceName, IContext extraContext, string path)
+        private static readonly DocumentConfiguration Configuration = new DocumentConfiguration
+            {BlockBegin = "{{", BlockContinue = "}|{", BlockEnd = "}}"};
+
+        public static async Task<bool> WriteToFile<TOrigin>(string resourceName, IContext extraContext, string path)
         {
-            await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            var resourcePath = $"{typeof(TOrigin).Namespace}.{resourceName}";
+
+            await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
 
             if (stream == null)
                 throw new ArgumentOutOfRangeException(nameof(resourceName), resourceName, @"invalid resource name");
@@ -21,9 +26,7 @@ namespace Winp.Install
             using var reader = new StreamReader(stream, Encoding.UTF8);
             await using var writer = new StreamWriter(File.Create(path));
 
-            var documentConfiguration = new DocumentConfiguration
-                {BlockBegin = "{{", BlockContinue = "}|{", BlockEnd = "}}"};
-            var documentResult = Document.CreateDefault(reader, documentConfiguration);
+            var documentResult = Document.CreateDefault(reader, Configuration);
 
             if (!documentResult.Success)
                 return false;
