@@ -34,7 +34,7 @@ namespace Winp.Configuration
 
         [JsonIgnore]
         public readonly Uri PhpDownloadOrDefault =>
-            PhpDownload ?? new Uri("https://windows.php.net/downloads/releases/php-7.4.4-Win32-vc15-x64.zip");
+            PhpDownload ?? new Uri("https://windows.php.net/downloads/releases/archives/php-7.4.4-Win32-vc15-x64.zip");
 
         [JsonProperty(PropertyName = "phpDownload")]
         public Uri? PhpDownload;

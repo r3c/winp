@@ -10,7 +10,7 @@ namespace Winp.Configuration
         [Description("Direct access to PHP files")]
         PhpFileName,
 
-        [Description("Execute PHP file 'index.php' (WIP)")]
+        [Description("Execute PHP file 'index.php'")]
         PhpIndex,
 
         [Description("Static files only")]

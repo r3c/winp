@@ -132,6 +132,15 @@ namespace Winp.Forms
 
                     break;
 
+                case LocationType.PhpIndex:
+                    _locationAliasButton.Visible = true;
+                    _locationAliasLabel.Visible = true;
+                    _locationAliasTextBox.Visible = true;
+                    _locationListCheckBox.Visible = false;
+                    _locationListLabel.Visible = false;
+
+                    break;
+
                 default:
                     _locationAliasButton.Visible = false;
                     _locationAliasLabel.Visible = false;
