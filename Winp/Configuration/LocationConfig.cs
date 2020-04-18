@@ -19,6 +19,9 @@ namespace Winp.Configuration
         [JsonProperty(PropertyName = "base")]
         public string? Base;
 
+        [JsonProperty(PropertyName = "index")]
+        public string? Index;
+
         [JsonProperty(PropertyName = "list")]
         public bool List;
 

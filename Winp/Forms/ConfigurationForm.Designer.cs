@@ -55,6 +55,8 @@ namespace Winp.Forms
             this._locationBaseLabel = new System.Windows.Forms.Label();
             this._locationListBox = new System.Windows.Forms.ListBox();
             this._folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this._locationIndexLabel = new System.Windows.Forms.Label();
+            this._locationIndexComboBox = new System.Windows.Forms.ComboBox();
             this._environmentGroupBox.SuspendLayout();
             this._locationGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -159,7 +161,7 @@ namespace Winp.Forms
             this._acceptButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom |
                                                        System.Windows.Forms.AnchorStyles.Left)));
-            this._acceptButton.Location = new System.Drawing.Point(12, 279);
+            this._acceptButton.Location = new System.Drawing.Point(12, 309);
             this._acceptButton.Name = "_acceptButton";
             this._acceptButton.Size = new System.Drawing.Size(100, 23);
             this._acceptButton.TabIndex = 9;
@@ -172,7 +174,7 @@ namespace Winp.Forms
             this._cancelButton.Anchor =
                 ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom |
                                                        System.Windows.Forms.AnchorStyles.Left)));
-            this._cancelButton.Location = new System.Drawing.Point(118, 279);
+            this._cancelButton.Location = new System.Drawing.Point(118, 309);
             this._cancelButton.Name = "_cancelButton";
             this._cancelButton.Size = new System.Drawing.Size(100, 23);
             this._cancelButton.TabIndex = 10;
@@ -187,6 +189,8 @@ namespace Winp.Forms
                                                          System.Windows.Forms.AnchorStyles.Bottom) |
                                                         System.Windows.Forms.AnchorStyles.Left) |
                                                        System.Windows.Forms.AnchorStyles.Right)));
+            this._locationGroupBox.Controls.Add(this._locationIndexComboBox);
+            this._locationGroupBox.Controls.Add(this._locationIndexLabel);
             this._locationGroupBox.Controls.Add(this._locationListCheckBox);
             this._locationGroupBox.Controls.Add(this._locationListLabel);
             this._locationGroupBox.Controls.Add(this._locationAliasButton);
@@ -201,14 +205,14 @@ namespace Winp.Forms
             this._locationGroupBox.Controls.Add(this._locationListBox);
             this._locationGroupBox.Location = new System.Drawing.Point(12, 103);
             this._locationGroupBox.Name = "_locationGroupBox";
-            this._locationGroupBox.Size = new System.Drawing.Size(600, 170);
+            this._locationGroupBox.Size = new System.Drawing.Size(600, 200);
             this._locationGroupBox.TabIndex = 11;
             this._locationGroupBox.TabStop = false;
             this._locationGroupBox.Text = "Locations";
             // 
             // _locationListCheckBox
             // 
-            this._locationListCheckBox.Location = new System.Drawing.Point(318, 107);
+            this._locationListCheckBox.Location = new System.Drawing.Point(318, 137);
             this._locationListCheckBox.Name = "_locationListCheckBox";
             this._locationListCheckBox.Size = new System.Drawing.Size(104, 24);
             this._locationListCheckBox.TabIndex = 16;
@@ -218,7 +222,7 @@ namespace Winp.Forms
             // _locationListLabel
             // 
             this._locationListLabel.AutoSize = true;
-            this._locationListLabel.Location = new System.Drawing.Point(212, 111);
+            this._locationListLabel.Location = new System.Drawing.Point(212, 141);
             this._locationListLabel.Name = "_locationListLabel";
             this._locationListLabel.Size = new System.Drawing.Size(93, 15);
             this._locationListLabel.TabIndex = 15;
@@ -239,7 +243,7 @@ namespace Winp.Forms
             // 
             // _locationDeleteButton
             // 
-            this._locationDeleteButton.Location = new System.Drawing.Point(318, 138);
+            this._locationDeleteButton.Location = new System.Drawing.Point(318, 168);
             this._locationDeleteButton.Name = "_locationDeleteButton";
             this._locationDeleteButton.Size = new System.Drawing.Size(100, 23);
             this._locationDeleteButton.TabIndex = 13;
@@ -249,7 +253,7 @@ namespace Winp.Forms
             // 
             // _locationUpdateButton
             // 
-            this._locationUpdateButton.Location = new System.Drawing.Point(212, 138);
+            this._locationUpdateButton.Location = new System.Drawing.Point(212, 168);
             this._locationUpdateButton.Name = "_locationUpdateButton";
             this._locationUpdateButton.Size = new System.Drawing.Size(100, 23);
             this._locationUpdateButton.TabIndex = 12;
@@ -332,7 +336,7 @@ namespace Winp.Forms
             this._locationListBox.ItemHeight = 15;
             this._locationListBox.Location = new System.Drawing.Point(6, 22);
             this._locationListBox.Name = "_locationListBox";
-            this._locationListBox.Size = new System.Drawing.Size(200, 139);
+            this._locationListBox.Size = new System.Drawing.Size(200, 169);
             this._locationListBox.TabIndex = 0;
             this._locationListBox.SelectedIndexChanged +=
                 new System.EventHandler(this.LocationListBox_SelectedIndexChanged);
@@ -341,11 +345,33 @@ namespace Winp.Forms
             // 
             this._folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
+            // _locationIndexLabel
+            // 
+            this._locationIndexLabel.AutoSize = true;
+            this._locationIndexLabel.Location = new System.Drawing.Point(212, 111);
+            this._locationIndexLabel.Name = "_locationIndexLabel";
+            this._locationIndexLabel.Size = new System.Drawing.Size(58, 15);
+            this._locationIndexLabel.TabIndex = 17;
+            this._locationIndexLabel.Text = "Index file:";
+            // 
+            // _locationIndexComboBox
+            // 
+            this._locationIndexComboBox.Anchor =
+                ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
+                                                        System.Windows.Forms.AnchorStyles.Left) |
+                                                       System.Windows.Forms.AnchorStyles.Right)));
+            this._locationIndexComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._locationIndexComboBox.FormattingEnabled = true;
+            this._locationIndexComboBox.Location = new System.Drawing.Point(318, 108);
+            this._locationIndexComboBox.Name = "_locationIndexComboBox";
+            this._locationIndexComboBox.Size = new System.Drawing.Size(269, 23);
+            this._locationIndexComboBox.TabIndex = 18;
+            // 
             // ConfigurationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 314);
+            this.ClientSize = new System.Drawing.Size(624, 344);
             this.Controls.Add(this._locationGroupBox);
             this.Controls.Add(this._cancelButton);
             this.Controls.Add(this._acceptButton);
@@ -386,5 +412,7 @@ namespace Winp.Forms
         private System.Windows.Forms.Label _serverPortLabel;
         private System.Windows.Forms.Label _serverAddressLabel;
         private System.Windows.Forms.TextBox _serverAddressTextBox;
+        private System.Windows.Forms.Label _locationIndexLabel;
+        private System.Windows.Forms.ComboBox _locationIndexComboBox;
     }
 }
