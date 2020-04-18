@@ -16,22 +16,27 @@ namespace Winp.Services
 
         public string Name => "Nginx";
 
-        public ProcessStartInfo ConfigureStart(EnvironmentConfig environment)
+        public ProcessStartInfo ConfigureStart(ApplicationConfig application)
         {
-            return GetProcessStartInfo(environment);
+            return GetProcessStartInfo(application.Environment);
         }
 
-        public ProcessStartInfo? ConfigureStop(EnvironmentConfig environment)
+        public ProcessStartInfo? ConfigureStop(ApplicationConfig application)
         {
-            return GetProcessStartInfo(environment, "-s", "quit");
+            return GetProcessStartInfo(application.Environment, "-s", "quit");
         }
 
-        public async Task<string?> Install(EnvironmentConfig environment, IEnumerable<LocationConfig> locations)
+        public async Task<string?> Install(ApplicationConfig application)
         {
+            var environment = application.Environment;
+            var locations = application.Locations;
+            var nginx = application.Service.Nginx;
+            var php = application.Service.Php;
+
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(environment.NginxDownloadOrDefault,
-                environment.NginxArchivePathOrDefault, installDirectory);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadOrDefault,
+                nginx.ArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -55,8 +60,10 @@ namespace Winp.Services
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
                 ["locations"] = locationValues,
-                ["serverAddress"] = environment.ServerAddressOrDefault,
-                ["serverPort"] = environment.ServerPortOrDefault
+                ["phpServerAddress"] = php.ServerAddressOrDefault,
+                ["phpServerPort"] = php.ServerPortOrDefault,
+                ["serverAddress"] = nginx.ServerAddressOrDefault,
+                ["serverPort"] = nginx.ServerPortOrDefault
             });
 
             foreach (var name in new[] {ConfigurationFastCgi, ConfigurationNginx})
@@ -71,9 +78,9 @@ namespace Winp.Services
             return null;
         }
 
-        public Task<bool> IsReady(EnvironmentConfig environment)
+        public Task<bool> IsReady(ApplicationConfig application)
         {
-            return Task.FromResult(File.Exists(GetProcessStartInfo(environment).FileName));
+            return Task.FromResult(File.Exists(GetProcessStartInfo(application.Environment).FileName));
         }
 
         private static Uri GetInstallDirectory(EnvironmentConfig environment)

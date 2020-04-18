@@ -7,11 +7,11 @@ namespace Winp.Configuration
         [Description("No access (HTTP 403)")]
         Deny,
 
-        [Description("Direct access to PHP files")]
+        [Description("Execute PHP files by URL")]
         PhpFileName,
 
-        [Description("Execute PHP file 'index.php'")]
-        PhpIndex,
+        [Description("Pass all requests to PHP")]
+        PhpOnly,
 
         [Description("Static files only")]
         Static

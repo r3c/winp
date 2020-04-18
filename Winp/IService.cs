@@ -9,9 +9,9 @@ namespace Winp
     {
         string Name { get; }
 
-        ProcessStartInfo ConfigureStart(EnvironmentConfig environment);
-        ProcessStartInfo? ConfigureStop(EnvironmentConfig environment);
-        Task<string?> Install(EnvironmentConfig environment, IEnumerable<LocationConfig> locations);
-        Task<bool> IsReady(EnvironmentConfig environment);
+        ProcessStartInfo ConfigureStart(ApplicationConfig application);
+        ProcessStartInfo? ConfigureStop(ApplicationConfig application);
+        Task<string?> Install(ApplicationConfig application);
+        Task<bool> IsReady(ApplicationConfig application);
     }
 }

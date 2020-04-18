@@ -282,7 +282,7 @@ namespace Winp.Forms
             this._locationTypeLabel.AutoSize = true;
             this._locationTypeLabel.Location = new System.Drawing.Point(212, 51);
             this._locationTypeLabel.Name = "_locationTypeLabel";
-            this._locationTypeLabel.Size = new System.Drawing.Size(35, 15);
+            this._locationTypeLabel.Size = new System.Drawing.Size(34, 15);
             this._locationTypeLabel.TabIndex = 6;
             this._locationTypeLabel.Text = "Type:";
             // 

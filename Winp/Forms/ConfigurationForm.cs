@@ -11,43 +11,43 @@ namespace Winp.Forms
 {
     public partial class ConfigurationForm : Form
     {
+        private ApplicationConfig _application;
         private readonly List<LocationConfig> _locations;
         private readonly Action<ApplicationConfig> _save;
 
-        public ConfigurationForm(ApplicationConfig configuration, Action<ApplicationConfig> save)
+        public ConfigurationForm(ApplicationConfig application, Action<ApplicationConfig> save)
         {
             InitializeComponent();
 
             var descriptions = Enum.GetNames(typeof(LocationType))
                 .Select(name => typeof(LocationType).GetField(name)?.GetCustomAttribute(typeof(DescriptionAttribute)))
                 .Cast<DescriptionAttribute>().Select(a => a.Description);
-            var environment = configuration.Environment;
+            var environment = application.Environment;
+            var service = application.Service;
 
+            _application = application;
             _installDirectoryTextBox.Text = environment.InstallDirectoryOrDefault.AbsolutePath;
-            _locations = configuration.LocationsOrDefault.ToList();
+            _locations = application.LocationsOrDefault.ToList();
             _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
             _locationTypeComboBox.SelectedIndex = 0;
             _save = save;
-            _serverAddressTextBox.Text = environment.ServerAddressOrDefault;
-            _serverPortTextBox.Text = environment.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
+            _serverAddressTextBox.Text = service.Nginx.ServerAddressOrDefault;
+            _serverPortTextBox.Text = service.Nginx.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
 
             LocationRefresh();
         }
 
         private void AcceptButton_Click(object sender, EventArgs e)
         {
-            var configuration = new ApplicationConfig
-            {
-                Environment = new EnvironmentConfig
-                {
-                    InstallDirectory = new Uri(_installDirectoryTextBox.Text),
-                    ServerAddress = _serverAddressTextBox.Text.Length > 0 ? _serverAddressTextBox.Text : null,
-                    ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort) ? (int?) serverPort : null
-                },
-                Locations = _locations.ToArray()
-            };
+            _application.Environment.InstallDirectory = new Uri(_installDirectoryTextBox.Text);
+            _application.Locations = _locations.ToArray();
+            _application.Service.Nginx.ServerAddress =
+                _serverAddressTextBox.Text.Length > 0 ? _serverAddressTextBox.Text : null;
+            _application.Service.Nginx.ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort)
+                ? (int?) serverPort
+                : null;
 
-            _save(configuration);
+            _save(_application);
 
             Close();
         }
@@ -132,7 +132,7 @@ namespace Winp.Forms
 
                     break;
 
-                case LocationType.PhpIndex:
+                case LocationType.PhpOnly:
                     _locationAliasButton.Visible = true;
                     _locationAliasLabel.Visible = true;
                     _locationAliasTextBox.Visible = true;

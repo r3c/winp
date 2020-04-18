@@ -20,12 +20,12 @@ namespace Winp
             _process = null;
         }
 
-        public Task<bool> Start(EnvironmentConfig environment, Action refresh)
+        public Task<bool> Start(ApplicationConfig application, Action refresh)
         {
             if (_process != null)
-                Stop(environment);
+                Stop(application);
 
-            var startInfo = Service.ConfigureStart(environment);
+            var startInfo = Service.ConfigureStart(application);
             var process = new Process {StartInfo = startInfo};
 
             process.Exited += (o, a) => refresh();
@@ -38,11 +38,11 @@ namespace Winp
             return Task.FromResult(true);
         }
 
-        public Task Stop(EnvironmentConfig environment)
+        public Task Stop(ApplicationConfig application)
         {
             if (_process != null)
             {
-                var startInfo = Service.ConfigureStop(environment);
+                var startInfo = Service.ConfigureStop(application);
                 var wait = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
 
                 if (startInfo != null)

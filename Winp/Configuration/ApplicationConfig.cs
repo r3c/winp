@@ -18,5 +18,8 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "locations")]
         public LocationConfig[]? Locations;
+
+        [JsonProperty(PropertyName = "service")]
+        public ServiceConfig Service;
     }
 }

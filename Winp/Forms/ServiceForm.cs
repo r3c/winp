@@ -108,12 +108,9 @@ namespace Winp.Forms
 
         private async Task<string?> InstallExecute()
         {
-            var environment = _configuration.Environment;
-            var locations = _configuration.LocationsOrDefault;
-
             foreach (var instance in _instances)
             {
-                var message = await instance.Service.Install(environment, locations);
+                var message = await instance.Service.Install(_configuration);
 
                 if (message != null)
                     return $"{instance.Service.Name}: {message}";
@@ -128,7 +125,7 @@ namespace Winp.Forms
 
             foreach (var instance in _instances)
             {
-                if (!await instance.Service.IsReady(_configuration.Environment))
+                if (!await instance.Service.IsReady(_configuration))
                     missing.Add(instance.Service.Name);
             }
 
@@ -165,19 +162,17 @@ namespace Winp.Forms
 
         private async Task ExecuteStart()
         {
-            var environment = _configuration.Environment;
-
             SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Loading, "Starting services...");
 
             for (var i = 0; i < _instances.Count; ++i)
             {
                 var instance = _instances[i];
 
-                if (await instance.Start(environment, () => Task.Run(ExecuteRefresh)))
+                if (await instance.Start(_configuration, () => Task.Run(ExecuteRefresh)))
                     continue;
 
                 for (var j = 0; j < i; ++j)
-                    await _instances[j].Stop(environment);
+                    await _instances[j].Stop(_configuration);
 
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure,
                     $"Failed starting process {instance.Service.Name}");
@@ -190,12 +185,10 @@ namespace Winp.Forms
 
         private async Task ExecuteStop()
         {
-            var environment = _configuration.Environment;
-
             SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Loading, "Stopping services...");
 
             foreach (var instance in _instances)
-                await instance.Stop(environment);
+                await instance.Stop(_configuration);
 
             await ExecuteRefresh();
         }

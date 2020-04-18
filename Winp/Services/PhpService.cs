@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,22 +14,25 @@ namespace Winp.Services
 
         public string Name => "PHP";
 
-        public ProcessStartInfo ConfigureStart(EnvironmentConfig environment)
+        public ProcessStartInfo ConfigureStart(ApplicationConfig application)
         {
-            return GetProcessStartInfo(environment);
+            return GetProcessStartInfo(application.Environment, application.Service.Php);
         }
 
-        public ProcessStartInfo? ConfigureStop(EnvironmentConfig environment)
+        public ProcessStartInfo? ConfigureStop(ApplicationConfig application)
         {
             return null;
         }
 
-        public async Task<string?> Install(EnvironmentConfig environment, IEnumerable<LocationConfig> locations)
+        public async Task<string?> Install(ApplicationConfig application)
         {
+            var environment = application.Environment;
+            var php = application.Service.Php;
+
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(environment.PhpDownloadOrDefault,
-                environment.PhpArchivePathOrDefault, installDirectory);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadOrDefault,
+                php.ArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -50,9 +52,10 @@ namespace Winp.Services
             return null;
         }
 
-        public Task<bool> IsReady(EnvironmentConfig environment)
+        public Task<bool> IsReady(ApplicationConfig application)
         {
-            return Task.FromResult(File.Exists(GetProcessStartInfo(environment).FileName));
+            return Task.FromResult(File.Exists(GetProcessStartInfo(application.Environment, application.Service.Php)
+                .FileName));
         }
 
         private static Uri GetInstallDirectory(EnvironmentConfig environment)
@@ -60,13 +63,13 @@ namespace Winp.Services
             return new Uri(Path.Combine(environment.InstallDirectoryOrDefault.AbsolutePath, "php"));
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(EnvironmentConfig environment)
+        private static ProcessStartInfo GetProcessStartInfo(EnvironmentConfig environment, PhpConfig php)
         {
             var installDirectory = GetInstallDirectory(environment).AbsolutePath;
 
             return new ProcessStartInfo(Path.Combine(installDirectory, "php-cgi.exe"))
             {
-                ArgumentList = {"-b", "127.0.0.1:9000", "-c", "php.ini"},
+                ArgumentList = {"-b", $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}", "-c", "php.ini"},
                 CreateNoWindow = true,
                 WorkingDirectory = installDirectory
             };
