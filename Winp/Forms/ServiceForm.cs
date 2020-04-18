@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -108,6 +109,9 @@ namespace Winp.Forms
 
         private async Task<string?> InstallExecute()
         {
+            if (_instances.Any(instance => instance.IsRunning))
+                return "stop services before installing";
+
             foreach (var instance in _instances)
             {
                 var message = await instance.Service.Install(_configuration);
