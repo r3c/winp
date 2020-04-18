@@ -31,7 +31,7 @@ namespace Winp.Services
 
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadOrDefault,
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadUrlOrDefault,
                 php.ArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)

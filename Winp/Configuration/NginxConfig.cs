@@ -5,17 +5,20 @@ namespace Winp.Configuration
 {
     public struct NginxConfig
     {
-        [JsonIgnore] public readonly string ArchivePathOrDefault => ArchivePath ?? "nginx-1.17.9";
+        private const string Package = "nginx-1.17.9";
+
+        [JsonIgnore]
+        public readonly string ArchivePathOrDefault => ArchivePath ?? Package;
 
         [JsonProperty(PropertyName = "archivePath")]
         public string? ArchivePath;
 
         [JsonIgnore]
-        public readonly Uri DownloadOrDefault =>
-            Download ?? new Uri("https://nginx.org/download/nginx-1.17.9.zip");
+        public readonly Uri DownloadUrlOrDefault =>
+            DownloadUrl ?? new Uri("https://nginx.org/download/" + Package + ".zip");
 
-        [JsonProperty(PropertyName = "download")]
-        public Uri? Download;
+        [JsonProperty(PropertyName = "downloadUrl")]
+        public Uri? DownloadUrl;
 
         [JsonIgnore]
         public readonly string ServerAddressOrDefault => ServerAddress ?? "127.0.0.1";

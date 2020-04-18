@@ -35,7 +35,7 @@ namespace Winp.Services
 
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadOrDefault,
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
                 nginx.ArchivePathOrDefault, installDirectory);
 
             if (downloadMessage != null)
