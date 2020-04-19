@@ -1,17 +1,18 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Winp.Configuration;
+using Winp.Processes;
 
 namespace Winp
 {
     internal class Instance
     {
-        public bool IsRunning => _process != null && !_process.HasExited;
+        public bool IsRunning => _process != null && _process.IsRunning;
 
         public IService Service { get; }
 
-        private Process? _process;
+        private SystemProcess? _process;
 
         public Instance(IService service)
         {
@@ -20,48 +21,43 @@ namespace Winp
             _process = null;
         }
 
-        public Task<bool> Start(ApplicationConfig application, Action refresh)
+        public async Task<bool> Start(ApplicationConfig application, Action refresh)
         {
             if (_process != null)
-                Stop(application);
+                await Stop(application);
 
-            var startInfo = Service.ConfigureStart(application);
-            var process = new Process {StartInfo = startInfo};
+            var process = SystemProcess.Start(Service.ConfigureStart(application));
 
-            process.Exited += (o, a) => refresh();
+            if (process == null)
+                return false;
 
-            if (!process.Start())
-                return Task.FromResult(false);
+            process.Exited += refresh;
 
             _process = process;
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task Stop(ApplicationConfig application)
+        public async Task Stop(ApplicationConfig application)
         {
             if (_process != null)
             {
-                var startInfo = Service.ConfigureStop(application);
-                var wait = (int) TimeSpan.FromSeconds(1).TotalMilliseconds;
+                // Stop running process
+                var duration = TimeSpan.FromSeconds(5);
+                var tasks = new List<Task<int?>>(2) {_process.Stop(duration)};
 
-                if (startInfo != null)
-                {
-                    var process = new Process {StartInfo = startInfo};
+                // Execute "stop" command
+                var stopStartInfo = Service.ConfigureStop(application, _process.Id);
+                var stopProcess = SystemProcess.Start(stopStartInfo);
 
-                    process.Start();
+                if (stopProcess != null)
+                    tasks.Add(stopProcess.Stop(duration));
 
-                    if (!process.WaitForExit(wait))
-                        process.Kill();
-                }
-
-                if (!_process.CloseMainWindow() && !_process.WaitForExit(wait))
-                    _process.Kill();
+                // Wait for both processes to end
+                await Task.WhenAll(tasks);
             }
 
             _process = null;
-
-            return Task.CompletedTask;
         }
     }
 }

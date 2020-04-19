@@ -18,12 +18,12 @@ namespace Winp.Services
 
         public ProcessStartInfo ConfigureStart(ApplicationConfig application)
         {
-            return GetProcessStartInfo(application.Environment);
+            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault);
         }
 
-        public ProcessStartInfo? ConfigureStop(ApplicationConfig application)
+        public ProcessStartInfo ConfigureStop(ApplicationConfig application, int pid)
         {
-            return GetProcessStartInfo(application.Environment, "-s", "quit");
+            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault, "-s", "quit");
         }
 
         public async Task<string?> Install(ApplicationConfig application)
@@ -34,7 +34,7 @@ namespace Winp.Services
             var php = application.Service.Php;
 
             // Download and extract archive
-            var installDirectory = GetInstallDirectory(environment);
+            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
                 nginx.ArchivePathOrDefault, installDirectory);
 
@@ -81,21 +81,25 @@ namespace Winp.Services
 
         public Task<bool> IsReady(ApplicationConfig application)
         {
-            return Task.FromResult(File.Exists(GetProcessStartInfo(application.Environment).FileName));
+            var installDirectory = application.Environment.InstallDirectoryOrDefault;
+            var startInfo = GetProcessStartInfo(installDirectory);
+
+            return Task.FromResult(File.Exists(startInfo.FileName));
         }
 
-        private static Uri GetInstallDirectory(EnvironmentConfig environment)
+        private static Uri GetInstallDirectory(Uri installDirectory)
         {
-            return new Uri(Path.Combine(environment.InstallDirectoryOrDefault.AbsolutePath, "nginx"));
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx"));
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(EnvironmentConfig environment, params string[] arguments)
+        private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, params string[] arguments)
         {
-            var installDirectory = GetInstallDirectory(environment).AbsolutePath;
-            var processStartInfo = new ProcessStartInfo(Path.Combine(installDirectory, "nginx.exe"))
+            var serviceDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
+            var processStartInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
-                WorkingDirectory = installDirectory
+                FileName = Path.Combine(serviceDirectory, "nginx.exe"),
+                WorkingDirectory = serviceDirectory
             };
 
             foreach (var argument in arguments)

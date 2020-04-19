@@ -10,7 +10,7 @@ namespace Winp
         string Name { get; }
 
         ProcessStartInfo ConfigureStart(ApplicationConfig application);
-        ProcessStartInfo? ConfigureStop(ApplicationConfig application);
+        ProcessStartInfo ConfigureStop(ApplicationConfig application, int pid);
         Task<string?> Install(ApplicationConfig application);
         Task<bool> IsReady(ApplicationConfig application);
     }
