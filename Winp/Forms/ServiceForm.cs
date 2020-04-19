@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,6 +18,9 @@ namespace Winp.Forms
 
         private readonly IReadOnlyList<Instance> _instances = new[]
             {new Instance(new MariaDbService()), new Instance(new NginxService()), new Instance(new PhpService())};
+
+        private readonly IReadOnlyList<IService> _packages = new IService[]
+            {new MariaDbService(), new NginxService(), new PhpService(), new PhpMyAdminService()};
 
         private Configuration.ApplicationConfig _configuration;
 
@@ -87,7 +89,7 @@ namespace Winp.Forms
                     await Task.Delay(TimeSpan.FromSeconds(3));
                 }
 
-                await InstallRefresh();
+                InstallRefresh();
             });
         }
 
@@ -109,28 +111,27 @@ namespace Winp.Forms
 
         private async Task<string?> InstallExecute()
         {
-            if (_instances.Any(instance => instance.IsRunning))
-                return "stop services before installing";
+            await ExecuteStop();
 
-            foreach (var instance in _instances)
+            foreach (var package in _packages)
             {
-                var message = await instance.Service.Install(_configuration);
+                var message = await package.Install(_configuration);
 
                 if (message != null)
-                    return $"{instance.Service.Name}: {message}";
+                    return $"{package.Name}: {message}";
             }
 
             return null;
         }
 
-        private async Task InstallRefresh()
+        private void InstallRefresh()
         {
             var missing = new List<string>();
 
-            foreach (var instance in _instances)
+            foreach (var package in _packages)
             {
-                if (!await instance.Service.IsReady(_configuration))
-                    missing.Add(instance.Service.Name);
+                if (!package.IsReady(_configuration))
+                    missing.Add(package.Name);
             }
 
             if (missing.Count > 0)
@@ -143,7 +144,7 @@ namespace Winp.Forms
                 SetStatusLabel(_installStatusLabel, _statusImageList, Status.Success, "Services installed");
         }
 
-        private Task ExecuteRefresh()
+        private void ExecuteRefresh()
         {
             var allExited = true;
             var anyExited = false;
@@ -160,8 +161,6 @@ namespace Winp.Forms
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure, "Process faulted");
             else
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Success, "Services running");
-
-            return Task.CompletedTask;
         }
 
         private async Task ExecuteStart()
@@ -184,7 +183,7 @@ namespace Winp.Forms
                 return;
             }
 
-            await ExecuteRefresh();
+            ExecuteRefresh();
         }
 
         private async Task ExecuteStop()
@@ -194,7 +193,7 @@ namespace Winp.Forms
             foreach (var instance in _instances)
                 await instance.Stop(_configuration);
 
-            await ExecuteRefresh();
+            ExecuteRefresh();
         }
 
         private void SetStatusLabel(Label label, ImageList imageList, Status? status, string text)

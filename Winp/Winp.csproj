@@ -22,6 +22,8 @@
       <EmbeddedResource Include="Services\Php\php.ini" />
       <None Remove="Services\MariaDb\mysqld.cnf" />
       <EmbeddedResource Include="Services\MariaDb\mysqld.cnf" />
+      <None Remove="Services\PhpMyAdmin\config.inc.php" />
+      <EmbeddedResource Include="Services\PhpMyAdmin\config.inc.php" />
     </ItemGroup>
 
 </Project>

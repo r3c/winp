@@ -79,12 +79,11 @@ namespace Winp.Services
             return null;
         }
 
-        public Task<bool> IsReady(ApplicationConfig application)
+        public bool IsReady(ApplicationConfig application)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
-            var startInfo = GetProcessStartInfo(installDirectory);
 
-            return Task.FromResult(File.Exists(startInfo.FileName));
+            return File.Exists(GetProcessStartInfo(installDirectory).FileName);
         }
 
         private static Uri GetInstallDirectory(Uri installDirectory)

@@ -12,5 +12,8 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "php")]
         public PhpConfig Php;
+
+        [JsonProperty(PropertyName = "phpMyAdmin")]
+        public PhpMyAdminConfig PhpMyAdmin;
     }
 }

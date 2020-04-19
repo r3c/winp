@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -10,8 +11,25 @@ namespace Winp.Configuration
                                              string.Empty;
 
         [JsonIgnore]
-        public IReadOnlyList<LocationConfig> LocationsOrDefault =>
-            Locations ?? new[] {new LocationConfig {Base = "/", List = true, Type = LocationType.PhpFileName}};
+        public IReadOnlyList<LocationConfig> LocationsOrDefault => Locations ?? new[]
+        {
+            new LocationConfig
+            {
+                Alias = new Uri(Path.Combine(Base, "Root")),
+                Base = "/",
+                Index = "index.php",
+                List = true,
+                Type = LocationType.PhpFileName
+            },
+            new LocationConfig
+            {
+                Alias = new Uri(Path.Combine(Base, Environment.InstallDirectoryOrDefault.AbsolutePath, "phpmyadmin")),
+                Base = "/phpmyadmin/",
+                Index = "index.php",
+                List = true,
+                Type = LocationType.PhpFileName
+            }
+        };
 
         [JsonProperty(PropertyName = "environment")]
         public EnvironmentConfig Environment;
