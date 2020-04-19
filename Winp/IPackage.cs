@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Winp.Configuration;
 
 namespace Winp
 {
-    public interface IService
+    public interface IPackage
     {
         string Name { get; }
 

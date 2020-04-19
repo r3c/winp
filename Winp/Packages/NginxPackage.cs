@@ -7,9 +7,9 @@ using Cottle;
 using Winp.Configuration;
 using Winp.Install;
 
-namespace Winp.Services
+namespace Winp.Packages
 {
-    public class NginxService : IService
+    public class NginxPackage : IPackage
     {
         private const string ConfigurationFastCgi = "fastcgi-php.conf";
         private const string ConfigurationNginx = "nginx.conf";
@@ -30,8 +30,8 @@ namespace Winp.Services
         {
             var environment = application.Environment;
             var locations = application.LocationsOrDefault;
-            var nginx = application.Service.Nginx;
-            var php = application.Service.Php;
+            var nginx = application.Package.Nginx;
+            var php = application.Package.Php;
 
             // Download and extract archive
             var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
@@ -70,7 +70,7 @@ namespace Winp.Services
             foreach (var name in new[] {ConfigurationFastCgi, ConfigurationNginx})
             {
                 var destinationPath = Path.Combine(installDirectory.AbsolutePath, "conf", name);
-                var success = await ResourceHelper.WriteToFile<NginxService>($"Nginx.{name}", context, destinationPath);
+                var success = await ResourceHelper.WriteToFile<NginxPackage>($"Nginx.{name}", context, destinationPath);
 
                 if (!success)
                     return $"configuration failure with '{name}'";
@@ -93,12 +93,12 @@ namespace Winp.Services
 
         private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, params string[] arguments)
         {
-            var serviceDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
+            var packageDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
             var processStartInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
-                FileName = Path.Combine(serviceDirectory, "nginx.exe"),
-                WorkingDirectory = serviceDirectory
+                FileName = Path.Combine(packageDirectory, "nginx.exe"),
+                WorkingDirectory = packageDirectory
             };
 
             foreach (var argument in arguments)

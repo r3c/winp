@@ -15,15 +15,15 @@
     <ItemGroup>
       <None Remove="Services\Nginx\custom.conf" />
       <None Remove="Services\Nginx\fastcgi-php.conf" />
-      <EmbeddedResource Include="Services\Nginx\fastcgi-php.conf" />
+      <EmbeddedResource Include="Packages\Nginx\fastcgi-php.conf" />
       <None Remove="Services\Nginx\nginx.conf" />
-      <EmbeddedResource Include="Services\Nginx\nginx.conf" />
+      <EmbeddedResource Include="Packages\Nginx\nginx.conf" />
       <None Remove="Services\Php\php.ini" />
-      <EmbeddedResource Include="Services\Php\php.ini" />
+      <EmbeddedResource Include="Packages\Php\php.ini" />
       <None Remove="Services\MariaDb\mysqld.cnf" />
-      <EmbeddedResource Include="Services\MariaDb\mysqld.cnf" />
+      <EmbeddedResource Include="Packages\MariaDb\mysqld.cnf" />
       <None Remove="Services\PhpMyAdmin\config.inc.php" />
-      <EmbeddedResource Include="Services\PhpMyAdmin\config.inc.php" />
+      <EmbeddedResource Include="Packages\PhpMyAdmin\config.inc.php" />
     </ItemGroup>
 
 </Project>

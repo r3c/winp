@@ -26,7 +26,7 @@ namespace Winp.Forms
                 .Select(name => typeof(LocationType).GetField(name)?.GetCustomAttribute(typeof(DescriptionAttribute)))
                 .Cast<DescriptionAttribute>().Select(a => a.Description);
             var environment = application.Environment;
-            var service = application.Service;
+            var package = application.Package;
 
             _application = application;
             _installDirectoryTextBox.Text = environment.InstallDirectoryOrDefault.AbsolutePath;
@@ -36,8 +36,8 @@ namespace Winp.Forms
             _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
             _locationTypeComboBox.SelectedIndex = 0;
             _save = save;
-            _serverAddressTextBox.Text = service.Nginx.ServerAddressOrDefault;
-            _serverPortTextBox.Text = service.Nginx.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
+            _serverAddressTextBox.Text = package.Nginx.ServerAddressOrDefault;
+            _serverPortTextBox.Text = package.Nginx.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
 
             LocationRefresh();
         }
@@ -46,9 +46,9 @@ namespace Winp.Forms
         {
             _application.Environment.InstallDirectory = new Uri(_installDirectoryTextBox.Text);
             _application.Locations = _locations.ToArray();
-            _application.Service.Nginx.ServerAddress =
+            _application.Package.Nginx.ServerAddress =
                 _serverAddressTextBox.Text.Length > 0 ? _serverAddressTextBox.Text : null;
-            _application.Service.Nginx.ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort)
+            _application.Package.Nginx.ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort)
                 ? (int?) serverPort
                 : null;
 

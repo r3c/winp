@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Winp.Services;
+using Winp.Packages;
 
 namespace Winp.Forms
 {
@@ -17,10 +17,10 @@ namespace Winp.Forms
                 Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".json");
 
         private readonly IReadOnlyList<Instance> _instances = new[]
-            {new Instance(new MariaDbService()), new Instance(new NginxService()), new Instance(new PhpService())};
+            {new Instance(new MariaDbPackage()), new Instance(new NginxPackage()), new Instance(new PhpPackage())};
 
-        private readonly IReadOnlyList<IService> _packages = new IService[]
-            {new MariaDbService(), new NginxService(), new PhpService(), new PhpMyAdminService()};
+        private readonly IReadOnlyList<IPackage> _packages = new IPackage[]
+            {new MariaDbPackage(), new NginxPackage(), new PhpPackage(), new PhpMyAdminPackage()};
 
         private Configuration.ApplicationConfig _configuration;
 
@@ -72,7 +72,7 @@ namespace Winp.Forms
             var imageList = _statusImageList;
             var label = _installStatusLabel;
 
-            SetStatusLabel(label, imageList, Status.Loading, "Downloading and configuring services...");
+            SetStatusLabel(label, imageList, Status.Loading, "Downloading and configuring packages...");
 
             InstallExecute().ContinueWith(async run =>
             {
@@ -136,12 +136,12 @@ namespace Winp.Forms
 
             if (missing.Count > 0)
             {
-                var message = "Missing services: " + string.Join(", ", missing) + $" (click '{_installButton.Text}')";
+                var message = "Missing packages: " + string.Join(", ", missing) + $" (click '{_installButton.Text}')";
 
                 SetStatusLabel(_installStatusLabel, _statusImageList, Status.Notice, message);
             }
             else
-                SetStatusLabel(_installStatusLabel, _statusImageList, Status.Success, "Services installed");
+                SetStatusLabel(_installStatusLabel, _statusImageList, Status.Success, "Packages installed");
         }
 
         private void ExecuteRefresh()
@@ -178,7 +178,7 @@ namespace Winp.Forms
                     await _instances[j].Stop(_configuration);
 
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure,
-                    $"Failed starting process {instance.Service.Name}");
+                    $"Failed starting process {instance.Package.Name}");
 
                 return;
             }

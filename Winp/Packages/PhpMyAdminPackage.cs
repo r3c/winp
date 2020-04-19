@@ -6,9 +6,9 @@ using Cottle;
 using Winp.Configuration;
 using Winp.Install;
 
-namespace Winp.Services
+namespace Winp.Packages
 {
-    internal class PhpMyAdminService : IService
+    internal class PhpMyAdminPackage : IPackage
     {
         private const string ConfigurationPhpMyAdmin = "config.inc.php";
 
@@ -27,12 +27,12 @@ namespace Winp.Services
         public async Task<string?> Install(ApplicationConfig application)
         {
             var environment = application.Environment;
-            var phpMyAdmin = application.Service.PhpMyAdmin;
+            var phpMyAdmin = application.Package.PhpMyAdmin;
 
             // Download and extract archive
-            var serviceDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(phpMyAdmin.DownloadUrlOrDefault,
-                phpMyAdmin.ArchivePathOrDefault, serviceDirectory);
+                phpMyAdmin.ArchivePathOrDefault, packageDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -42,9 +42,9 @@ namespace Winp.Services
 
             foreach (var name in new[] {ConfigurationPhpMyAdmin})
             {
-                var destinationPath = Path.Combine(serviceDirectory.AbsolutePath, name);
+                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
                 var success =
-                    await ResourceHelper.WriteToFile<PhpMyAdminService>($"PhpMyAdmin.{name}", context, destinationPath);
+                    await ResourceHelper.WriteToFile<PhpMyAdminPackage>($"PhpMyAdmin.{name}", context, destinationPath);
 
                 if (!success)
                     return $"configuration failure with '{name}'";
@@ -55,9 +55,9 @@ namespace Winp.Services
 
         public bool IsReady(ApplicationConfig application)
         {
-            var serviceDirectory = GetInstallDirectory(application.Environment.InstallDirectoryOrDefault);
+            var packageDirectory = GetInstallDirectory(application.Environment.InstallDirectoryOrDefault);
 
-            return File.Exists(Path.Combine(serviceDirectory.AbsolutePath, ConfigurationPhpMyAdmin));
+            return File.Exists(Path.Combine(packageDirectory.AbsolutePath, ConfigurationPhpMyAdmin));
         }
 
         private static Uri GetInstallDirectory(Uri installDirectory)

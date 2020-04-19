@@ -42,6 +42,8 @@ namespace Winp.Forms
             this._acceptButton = new System.Windows.Forms.Button();
             this._cancelButton = new System.Windows.Forms.Button();
             this._locationGroupBox = new System.Windows.Forms.GroupBox();
+            this._locationIndexComboBox = new System.Windows.Forms.ComboBox();
+            this._locationIndexLabel = new System.Windows.Forms.Label();
             this._locationListCheckBox = new System.Windows.Forms.CheckBox();
             this._locationListLabel = new System.Windows.Forms.Label();
             this._locationAliasButton = new System.Windows.Forms.Button();
@@ -55,8 +57,6 @@ namespace Winp.Forms
             this._locationBaseLabel = new System.Windows.Forms.Label();
             this._locationListBox = new System.Windows.Forms.ListBox();
             this._folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this._locationIndexLabel = new System.Windows.Forms.Label();
-            this._locationIndexComboBox = new System.Windows.Forms.ComboBox();
             this._environmentGroupBox.SuspendLayout();
             this._locationGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -210,6 +210,28 @@ namespace Winp.Forms
             this._locationGroupBox.TabStop = false;
             this._locationGroupBox.Text = "Locations";
             // 
+            // _locationIndexComboBox
+            // 
+            this._locationIndexComboBox.Anchor =
+                ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
+                                                        System.Windows.Forms.AnchorStyles.Left) |
+                                                       System.Windows.Forms.AnchorStyles.Right)));
+            this._locationIndexComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._locationIndexComboBox.FormattingEnabled = true;
+            this._locationIndexComboBox.Location = new System.Drawing.Point(318, 108);
+            this._locationIndexComboBox.Name = "_locationIndexComboBox";
+            this._locationIndexComboBox.Size = new System.Drawing.Size(269, 23);
+            this._locationIndexComboBox.TabIndex = 18;
+            // 
+            // _locationIndexLabel
+            // 
+            this._locationIndexLabel.AutoSize = true;
+            this._locationIndexLabel.Location = new System.Drawing.Point(212, 111);
+            this._locationIndexLabel.Name = "_locationIndexLabel";
+            this._locationIndexLabel.Size = new System.Drawing.Size(58, 15);
+            this._locationIndexLabel.TabIndex = 17;
+            this._locationIndexLabel.Text = "Index file:";
+            // 
             // _locationListCheckBox
             // 
             this._locationListCheckBox.Location = new System.Drawing.Point(318, 137);
@@ -344,28 +366,6 @@ namespace Winp.Forms
             // _folderBrowserDialog
             // 
             this._folderBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
-            // 
-            // _locationIndexLabel
-            // 
-            this._locationIndexLabel.AutoSize = true;
-            this._locationIndexLabel.Location = new System.Drawing.Point(212, 111);
-            this._locationIndexLabel.Name = "_locationIndexLabel";
-            this._locationIndexLabel.Size = new System.Drawing.Size(58, 15);
-            this._locationIndexLabel.TabIndex = 17;
-            this._locationIndexLabel.Text = "Index file:";
-            // 
-            // _locationIndexComboBox
-            // 
-            this._locationIndexComboBox.Anchor =
-                ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top |
-                                                        System.Windows.Forms.AnchorStyles.Left) |
-                                                       System.Windows.Forms.AnchorStyles.Right)));
-            this._locationIndexComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this._locationIndexComboBox.FormattingEnabled = true;
-            this._locationIndexComboBox.Location = new System.Drawing.Point(318, 108);
-            this._locationIndexComboBox.Name = "_locationIndexComboBox";
-            this._locationIndexComboBox.Size = new System.Drawing.Size(269, 23);
-            this._locationIndexComboBox.TabIndex = 18;
             // 
             // ConfigurationForm
             // 

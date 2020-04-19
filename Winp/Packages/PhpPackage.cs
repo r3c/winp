@@ -7,9 +7,9 @@ using Cottle;
 using Winp.Configuration;
 using Winp.Install;
 
-namespace Winp.Services
+namespace Winp.Packages
 {
-    public class PhpService : IService
+    public class PhpPackage : IPackage
     {
         private const string ConfigurationPhp = "php.ini";
 
@@ -18,7 +18,7 @@ namespace Winp.Services
         public ProcessStartInfo ConfigureStart(ApplicationConfig application)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
-            var php = application.Service.Php;
+            var php = application.Package.Php;
 
             return GetProcessStartInfo(installDirectory, "-b",
                 $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}", "-c", "php.ini");
@@ -37,12 +37,12 @@ namespace Winp.Services
         public async Task<string?> Install(ApplicationConfig application)
         {
             var environment = application.Environment;
-            var php = application.Service.Php;
+            var php = application.Package.Php;
 
             // Download and extract archive
-            var serviceDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadUrlOrDefault,
-                php.ArchivePathOrDefault, serviceDirectory);
+                php.ArchivePathOrDefault, packageDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -52,8 +52,8 @@ namespace Winp.Services
 
             foreach (var name in new[] {ConfigurationPhp})
             {
-                var destinationPath = Path.Combine(serviceDirectory.AbsolutePath, name);
-                var success = await ResourceHelper.WriteToFile<PhpService>($"Php.{name}", context, destinationPath);
+                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
+                var success = await ResourceHelper.WriteToFile<PhpPackage>($"Php.{name}", context, destinationPath);
 
                 if (!success)
                     return $"configuration failure with '{name}'";
@@ -76,12 +76,12 @@ namespace Winp.Services
 
         private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, params string[] arguments)
         {
-            var serviceDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
+            var packageDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
             var startInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,
-                FileName = Path.Combine(serviceDirectory, "php-cgi.exe"),
-                WorkingDirectory = serviceDirectory
+                FileName = Path.Combine(packageDirectory, "php-cgi.exe"),
+                WorkingDirectory = packageDirectory
             };
 
             foreach (var argument in arguments)

@@ -5,7 +5,9 @@ namespace Winp.Configuration
 {
     public struct PhpConfig
     {
-        private const string Package = "php-7.4.4";
+        private const string Identifier = "php";
+        private const string Variant = "Win32-vc15-x64";
+        private const string Version = "7.4.4";
 
         [JsonIgnore]
         public readonly string ArchivePathOrDefault => ArchivePath ?? string.Empty;
@@ -15,8 +17,8 @@ namespace Winp.Configuration
 
         [JsonIgnore]
         public readonly Uri DownloadUrlOrDefault =>
-            DownloadUrl ?? new Uri("https://windows.php.net/downloads/releases/archives/" + Package +
-                                   "-Win32-vc15-x64.zip");
+            DownloadUrl ??
+            new Uri($"https://windows.php.net/downloads/releases/archives/{Identifier}-{Version}-{Variant}.zip");
 
         [JsonProperty(PropertyName = "downloadUrl")]
         public Uri? DownloadUrl;

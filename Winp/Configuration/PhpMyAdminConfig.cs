@@ -1,21 +1,23 @@
 using System;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace Winp.Configuration
 {
     public struct PhpMyAdminConfig
     {
-        private const string Package = "phpMyAdmin";
+        private const string Identifier = "phpMyAdmin";
         private const string Variant = "all-languages";
         private const string Version = "5.0.2";
 
         [JsonIgnore]
-        public readonly string ArchivePathOrDefault => ArchivePath ?? Package + "-" + Version + "-" + Variant;
+        public readonly string ArchivePathOrDefault =>
+            ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
 
         [JsonIgnore]
-        public Uri DownloadUrlOrDefault => DownloadUrl ??
-                                           new Uri("https://files.phpmyadmin.net/" + Package + "/" + Version + "/" +
-                                                   Package + "-" + Version + "-" + Variant + ".zip");
+        public readonly Uri DownloadUrlOrDefault =>
+            DownloadUrl ??
+            new Uri($"https://files.phpmyadmin.net/{Identifier}/{Version}/{Identifier}-{Version}-{Variant}.zip");
 
         [JsonProperty(PropertyName = "archivePath")]
         public string? ArchivePath;

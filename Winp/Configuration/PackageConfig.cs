@@ -2,9 +2,9 @@ using Newtonsoft.Json;
 
 namespace Winp.Configuration
 {
-    public struct ServiceConfig
+    public struct PackageConfig
     {
-        [JsonProperty(PropertyName = "mariadb")]
+        [JsonProperty(PropertyName = "mariaDb")]
         public MariaDbConfig MariaDb;
 
         [JsonProperty(PropertyName = "nginx")]
