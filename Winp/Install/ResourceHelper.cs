@@ -24,6 +24,9 @@ namespace Winp.Install
                 throw new ArgumentOutOfRangeException(nameof(resourceName), resourceName, @"invalid resource name");
 
             using var reader = new StreamReader(stream, Encoding.UTF8);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
             await using var writer = new StreamWriter(File.Create(path));
 
             var documentResult = Document.CreateDefault(reader, Configuration);
