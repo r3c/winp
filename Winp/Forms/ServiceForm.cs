@@ -18,7 +18,7 @@ namespace Winp.Forms
                 Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".json");
 
         private readonly IReadOnlyList<Instance> _instances = new[]
-            {new Instance(new NginxService()), new Instance(new PhpService())};
+            {new Instance(new MariaDbService()), new Instance(new NginxService()), new Instance(new PhpService())};
 
         private Configuration.ApplicationConfig _configuration;
 

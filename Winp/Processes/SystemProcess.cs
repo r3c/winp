@@ -1,11 +1,45 @@
 using System;
 using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Winp.Processes
 {
     internal class SystemProcess : IProcess
     {
+        private static readonly Regex EscapeQuote = new Regex(@"(\\*)(""|$)", RegexOptions.Compiled);
+        private static readonly Regex InvalidCharacters = new Regex("[\x00\x0a\x0d]", RegexOptions.Compiled);
+        private static readonly Regex NeedsQuotes = new Regex(@"\s|""", RegexOptions.Compiled);
+
+        /// <summary>
+        /// http://csharptest.net/529/how-to-correctly-escape-command-line-arguments-in-c/index.html
+        /// </summary>
+        public static string EscapeArgument(string argument)
+        {
+            var arguments = new StringBuilder();
+
+            if (InvalidCharacters.IsMatch(argument))
+                throw new ArgumentOutOfRangeException(nameof(argument), argument);
+
+            if (argument == string.Empty)
+                arguments.Append("\"\"");
+            else if (!NeedsQuotes.IsMatch(argument))
+                arguments.Append(argument);
+            else
+            {
+                arguments
+                    .Append('"')
+                    .Append(EscapeQuote.Replace(argument, m =>
+                        m.Groups[1].Value + m.Groups[1].Value +
+                        (m.Groups[2].Value == "\"" ? "\\\"" : "")
+                    ))
+                    .Append('"');
+            }
+
+            return arguments.ToString();
+        }
+
         public static SystemProcess? Start(ProcessStartInfo startInfo)
         {
             var process = new Process {StartInfo = startInfo, EnableRaisingEvents = true};

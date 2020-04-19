@@ -1,0 +1,4 @@
+[mysqld]
+datadir={{dataDirectory}}
+
+port={{serverPort}}

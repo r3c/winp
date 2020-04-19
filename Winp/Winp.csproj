@@ -20,6 +20,8 @@
       <EmbeddedResource Include="Services\Nginx\nginx.conf" />
       <None Remove="Services\Php\php.ini" />
       <EmbeddedResource Include="Services\Php\php.ini" />
+      <None Remove="Services\MariaDb\mysqld.cnf" />
+      <EmbeddedResource Include="Services\MariaDb\mysqld.cnf" />
     </ItemGroup>
 
 </Project>
