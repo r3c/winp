@@ -77,14 +77,21 @@ namespace Winp.Processes
 
             return Task.Run<int?>(() =>
             {
-                if (_process.WaitForExit((int) duration.TotalMilliseconds))
-                    return _process.ExitCode;
+                try
+                {
+                    if (_process.WaitForExit((int) duration.TotalMilliseconds))
+                        return _process.ExitCode;
 
-                _process.Kill();
-                _process.Dispose();
-                _process = null;
+                    _process.Kill();
+                    _process.Dispose();
+                    _process = null;
 
-                return null;
+                    return null;
+                }
+                catch
+                {
+                    return null;
+                }
             });
         }
 
