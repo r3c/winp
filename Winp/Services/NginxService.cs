@@ -29,7 +29,7 @@ namespace Winp.Services
         public async Task<string?> Install(ApplicationConfig application)
         {
             var environment = application.Environment;
-            var locations = application.Locations ?? Array.Empty<LocationConfig>();
+            var locations = application.LocationsOrDefault;
             var nginx = application.Service.Nginx;
             var php = application.Service.Php;
 
