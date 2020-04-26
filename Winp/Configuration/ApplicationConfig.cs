@@ -17,7 +17,7 @@ namespace Winp.Configuration
             {
                 Alias = new Uri(Path.Combine(Base, "Root")),
                 Base = "/",
-                Index = "index.php",
+                Index = true,
                 List = true,
                 Type = LocationType.PhpFileName
             },
@@ -25,7 +25,7 @@ namespace Winp.Configuration
             {
                 Alias = new Uri(Path.Combine(Base, Environment.InstallDirectoryOrDefault.AbsolutePath, "phpmyadmin")),
                 Base = "/phpmyadmin/",
-                Index = "index.php",
+                Index = true,
                 List = true,
                 Type = LocationType.PhpFileName
             }

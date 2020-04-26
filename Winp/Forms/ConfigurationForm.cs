@@ -11,9 +11,6 @@ namespace Winp.Forms
 {
     public partial class ConfigurationForm : Form
     {
-        private static readonly IReadOnlyList<string> LocationIndexNames = new[] {"index.html", "index.php"};
-        private static readonly IEnumerable<string> LocationIndexOptions = new[] {"<none>"}.Concat(LocationIndexNames);
-
         private ApplicationConfig _application;
         private readonly List<LocationConfig> _locations;
         private readonly Action<ApplicationConfig> _save;
@@ -31,8 +28,6 @@ namespace Winp.Forms
             _application = application;
             _installDirectoryTextBox.Text = environment.InstallDirectoryOrDefault.AbsolutePath;
             _locations = application.LocationsOrDefault.ToList();
-            _locationIndexComboBox.Items.AddRange(LocationIndexOptions.Cast<object>().ToArray());
-            _locationIndexComboBox.SelectedIndex = 0;
             _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
             _locationTypeComboBox.SelectedIndex = 0;
             _save = save;
@@ -88,9 +83,7 @@ namespace Winp.Forms
                     ? aliasDirectory
                     : null,
                 Base = _locationBaseTextBox.Text,
-                Index = _locationIndexComboBox.SelectedIndex == 0
-                    ? null
-                    : LocationIndexNames[_locationIndexComboBox.SelectedIndex - 1],
+                Index = _locationIndexCheckBox.Checked,
                 List = _locationListCheckBox.Checked,
                 Type = (LocationType) _locationTypeComboBox.SelectedIndex
             };
@@ -116,8 +109,7 @@ namespace Winp.Forms
 
             _locationAliasTextBox.Text = location.AliasOrDefault.AbsolutePath;
             _locationBaseTextBox.Text = location.BaseOrDefault;
-            _locationIndexComboBox.SelectedIndex =
-                LocationIndexNames.ToList().IndexOf(location.Index ?? string.Empty) + 1; 
+            _locationIndexCheckBox.Checked = location.Index;
             _locationListCheckBox.Checked = location.List;
             _locationTypeComboBox.SelectedIndex = (int) location.Type;
         }
@@ -137,10 +129,9 @@ namespace Winp.Forms
                     _locationAliasButton.Visible = true;
                     _locationAliasLabel.Visible = true;
                     _locationAliasTextBox.Visible = true;
-                    _locationIndexComboBox.Visible = true;
+                    _locationIndexCheckBox.Visible = true;
                     _locationIndexLabel.Visible = true;
                     _locationListCheckBox.Visible = true;
-                    _locationListLabel.Visible = true;
 
                     break;
 
@@ -148,10 +139,9 @@ namespace Winp.Forms
                     _locationAliasButton.Visible = true;
                     _locationAliasLabel.Visible = true;
                     _locationAliasTextBox.Visible = true;
-                    _locationIndexComboBox.Visible = false;
+                    _locationIndexCheckBox.Visible = false;
                     _locationIndexLabel.Visible = false;
                     _locationListCheckBox.Visible = false;
-                    _locationListLabel.Visible = false;
 
                     break;
 
@@ -159,10 +149,9 @@ namespace Winp.Forms
                     _locationAliasButton.Visible = false;
                     _locationAliasLabel.Visible = false;
                     _locationAliasTextBox.Visible = false;
-                    _locationIndexComboBox.Visible = false;
+                    _locationIndexCheckBox.Visible = false;
                     _locationIndexLabel.Visible = false;
                     _locationListCheckBox.Visible = false;
-                    _locationListLabel.Visible = false;
 
                     break;
             }
