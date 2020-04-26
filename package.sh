@@ -1,33 +1,42 @@
 #!/bin/sh -e
 
+# Package configuration
+artifact=winp
+framework=netcoreapp3.1
+project=Winp
+runtimes=win-x64
+
+# Retreive latest version tag from current HEAD
 base="$(dirname "$0")"
-root=winp
+tag="$(git --work-tree "$base" tag --points-at HEAD)"
 
-# Retreive latest version from current HEAD
-version="$(git --work-tree "$base" tag --points-at HEAD)"
+if [ -n "$tag" ]; then
+	version="v$tag"
+else
+	echo >&2 "warning: missing tag on HEAD, will assume draft version"
 
-if [ -z "$version" ]; then
-	echo >&2 "warning: current HEAD doesn't point to a tag"
-
-	version=.draft
+	version=draft
 fi
 
 # Create archive for each target runtime
-framework=netcoreapp3.1
 source="$(mktemp -d)"
 
-for runtime in win-x64; do
-	dotnet publish -c Release -r "$runtime" -v quiet "$base/Winp"
+for runtime in $runtimes; do
+    archive="$artifact-$version-$runtime.zip"
 
-	ln -s "$(realpath "$base/Winp/bin/Release/$framework/$runtime/publish")" "$source/$root"
+    echo >&2 "publishing $archive..."
 
-	archive="$root-v$version-$runtime.zip"
+	dotnet publish --nologo -c Release -f "$framework" -r "$runtime" -v quiet "$base/$project"
 
-	( cd "$source" && zip -qr "$archive" "$root" )
+	ln -s "$(realpath "$base/$project/bin/Release/$framework/$runtime/publish")" "$source/$artifact"
+
+	( cd "$source" && zip -qr "$archive" "$artifact" )
 
 	mv "$source/$archive" "$base/$archive"
-	rm "$source/$root"
+	rm "$source/$artifact"
 done
+
+echo >&2 "done."
 
 # Cleanup
 rm -r "$source"
