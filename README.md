@@ -6,8 +6,16 @@ Winp: Windows Nginx PHP development server
 Overview
 --------
 
-Winp is an open-source (MIT) Nginx/PHP server for Windows. It allows one-click
-portable install of Nginx and PHP and is suitable for development.
+Winp is an open-source (MIT) Nginx/PHP server for Windows. It provides a
+one-click portable install of required software for PHP development:
+
+* [Nginx](https://nginx.org/)
+* [PHP](https://www.php.net/)
+* [MariaDB](https://mariadb.org/)
+* [PhpMyAdmin](https://www.phpmyadmin.net/)
+
+Please note Winp is a development tool and is not suitable for production
+usage.
 
 
 Installation
@@ -16,11 +24,17 @@ Installation
 Download latest [Winp release](https://github.com/r3c/winp/releases) from
 GitHub or compile from source and run `Winp.exe`. Optionally click
 "Configure" button to change default options then click "Install" to download
-and install Nginx & PHP with options you previously defined.
+and install required software with options you previously defined. Only
+portable packages will be downloaded and extracted in a sub-directory which
+you can change in configuration options.
 
-Once install is complete click "Start services" to start Nginx and PHP and
-open your browser to `http://localhost/` (or whatever local address if you
-changed it).
+Once install is complete click "Start services" button and point your browser
+to either:
+
+* http://localhost/ to browse your local web directory
+* http://localhost/phpmyadmin/ to open PhpMyAdmin
+
+Local directories and URLs can be changed through configuration options.
 
 
 Licence
