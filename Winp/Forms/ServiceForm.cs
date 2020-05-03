@@ -152,7 +152,7 @@ namespace Winp.Forms
 
             foreach (var package in _packages)
             {
-                var message = await package.Install(_configuration);
+                var message = await Task.Run(() => package.Install(_configuration));
 
                 if (message != null)
                     return $"{package.Name}: {message}";
@@ -188,11 +188,11 @@ namespace Winp.Forms
             {
                 var instance = _instances[i];
 
-                if (await instance.Start(_configuration, () => Task.Run(ExecuteRefresh)))
+                if (await Task.Run(() => instance.Start(_configuration, () => Task.Run(ExecuteRefresh))))
                     continue;
 
                 for (var j = 0; j < i; ++j)
-                    await _instances[j].Stop(_configuration);
+                    await Task.Run(() => _instances[j].Stop(_configuration));
 
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure,
                     $"Failed starting process {instance.Package.Name}");
@@ -208,7 +208,7 @@ namespace Winp.Forms
             SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Loading, "Stopping services...");
 
             foreach (var instance in _instances)
-                await instance.Stop(_configuration);
+                await Task.Run(() => instance.Stop(_configuration));
 
             ExecuteRefresh();
         }
