@@ -1,4 +1,6 @@
 [mysqld]
 datadir={{dataDirectory}}
 
+log-error=error.log
+
 port={{serverPort}}
