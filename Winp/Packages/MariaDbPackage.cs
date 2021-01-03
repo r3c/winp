@@ -38,11 +38,15 @@ namespace Winp.Packages
                     return $"configuration failure with '{name}'";
             }
 
-            var process = SystemProcess.Start(CreateProcessStartInfo(environment.InstallDirectoryOrDefault,
-                "mysql_install_db.exe", SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectoryOrDefault)));
+            // Initialize data directory
+            if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectoryOrDefault, "my.ini")))
+            {
+                var process = SystemProcess.Start(CreateProcessStartInfo(environment.InstallDirectoryOrDefault,
+                    "mysql_install_db.exe", SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectoryOrDefault)));
 
-            if (process == null || await process.Stop(TimeSpan.FromSeconds(15)) != 0)
-                return "could not initialize data directory";
+                if (process == null || await process.Stop(TimeSpan.FromSeconds(15)) != 0)
+                    return "could not initialize data directory";
+            }
 
             return null;
         }
