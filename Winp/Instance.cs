@@ -10,11 +10,11 @@ namespace Winp
     {
         public bool IsRunning => _process != null && _process.IsRunning;
 
-        public IPackage Package { get; }
+        public IExecutablePackage Package { get; }
 
         private SystemProcess? _process;
 
-        public Instance(IPackage package)
+        public Instance(IExecutablePackage package)
         {
             Package = package;
 
@@ -26,7 +26,7 @@ namespace Winp
             if (_process != null)
                 await Stop(application);
 
-            var process = SystemProcess.Start(Package.ConfigureStart(application));
+            var process = SystemProcess.Start(Package.CreateProcessStart(application));
 
             if (process == null)
                 return false;
@@ -47,7 +47,7 @@ namespace Winp
                 var tasks = new List<Task<int?>>(2) {_process.Stop(duration)};
 
                 // Execute "stop" command
-                var stopStartInfo = Package.ConfigureStop(application, _process.Id);
+                var stopStartInfo = Package.CreateProcessStop(application, _process.Id);
                 var stopProcess = SystemProcess.Start(stopStartInfo);
 
                 if (stopProcess != null)

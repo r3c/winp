@@ -9,13 +9,33 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    public class PhpPackage : IPackage
+    public class PhpPackage : IExecutablePackage, IInstallablePackage
     {
         private const string ConfigurationPhp = "php.ini";
 
         public string Name => "PHP";
 
-        public ProcessStartInfo ConfigureStart(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application)
+        {
+            var environment = application.Environment;
+
+            // Write configuration files
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var context = Context.Empty;
+
+            foreach (var name in new[] { ConfigurationPhp })
+            {
+                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
+                var success = await ResourceHelper.WriteToFile<PhpPackage>($"Php.{name}", context, destinationPath);
+
+                if (!success)
+                    return $"configuration failure with '{name}'";
+            }
+
+            return null;
+        }
+
+        public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
             var php = application.Package.Php;
@@ -24,7 +44,7 @@ namespace Winp.Packages
                 $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}", "-c", "php.ini");
         }
 
-        public ProcessStartInfo ConfigureStop(ApplicationConfig application, int pid)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid)
         {
             return new ProcessStartInfo
             {
@@ -47,22 +67,10 @@ namespace Winp.Packages
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
 
-            // Write configuration files
-            var context = Context.Empty;
-
-            foreach (var name in new[] {ConfigurationPhp})
-            {
-                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
-                var success = await ResourceHelper.WriteToFile<PhpPackage>($"Php.{name}", context, destinationPath);
-
-                if (!success)
-                    return $"configuration failure with '{name}'";
-            }
-
             return null;
         }
 
-        public bool IsReady(ApplicationConfig application)
+        public bool IsInstalled(ApplicationConfig application)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
 

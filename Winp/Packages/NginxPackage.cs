@@ -9,39 +9,22 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    public class NginxPackage : IPackage
+    public class NginxPackage : IExecutablePackage, IInstallablePackage
     {
         private const string ConfigurationFastCgi = "fastcgi-php.conf";
         private const string ConfigurationNginx = "nginx.conf";
 
         public string Name => "Nginx";
 
-        public ProcessStartInfo ConfigureStart(ApplicationConfig application)
-        {
-            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault);
-        }
-
-        public ProcessStartInfo ConfigureStop(ApplicationConfig application, int pid)
-        {
-            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault, "-s", "quit");
-        }
-
-        public async Task<string?> Install(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application)
         {
             var environment = application.Environment;
             var locations = application.LocationsOrDefault;
             var nginx = application.Package.Nginx;
             var php = application.Package.Php;
 
-            // Download and extract archive
-            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
-                nginx.ArchivePathOrDefault, installDirectory);
-
-            if (downloadMessage != null)
-                return $"download failure ({downloadMessage})";
-
             // Write configuration files
+            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
             var locationValues = new List<Value>();
 
             foreach (var location in locations)
@@ -54,7 +37,7 @@ namespace Winp.Packages
                     ["base"] = location.BaseOrDefault,
                     ["index"] = location.Index,
                     ["list"] = location.List,
-                    ["type"] = (int) location.Type
+                    ["type"] = (int)location.Type
                 });
             }
 
@@ -67,7 +50,7 @@ namespace Winp.Packages
                 ["serverPort"] = nginx.ServerPortOrDefault
             });
 
-            foreach (var name in new[] {ConfigurationFastCgi, ConfigurationNginx})
+            foreach (var name in new[] { ConfigurationFastCgi, ConfigurationNginx })
             {
                 var destinationPath = Path.Combine(installDirectory.AbsolutePath, "conf", name);
                 var success = await ResourceHelper.WriteToFile<NginxPackage>($"Nginx.{name}", context, destinationPath);
@@ -79,7 +62,33 @@ namespace Winp.Packages
             return null;
         }
 
-        public bool IsReady(ApplicationConfig application)
+        public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
+        {
+            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault);
+        }
+
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid)
+        {
+            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault, "-s", "quit");
+        }
+
+        public async Task<string?> Install(ApplicationConfig application)
+        {
+            var environment = application.Environment;
+            var nginx = application.Package.Nginx;
+
+            // Download and extract archive
+            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
+                nginx.ArchivePathOrDefault, installDirectory);
+
+            if (downloadMessage != null)
+                return $"download failure ({downloadMessage})";
+
+            return null;
+        }
+
+        public bool IsInstalled(ApplicationConfig application)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
 

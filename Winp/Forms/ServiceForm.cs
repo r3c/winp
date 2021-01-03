@@ -20,7 +20,7 @@ namespace Winp.Forms
         private readonly IReadOnlyList<Instance> _instances = new[]
             {new Instance(new MariaDbPackage()), new Instance(new NginxPackage()), new Instance(new PhpPackage())};
 
-        private readonly IReadOnlyList<IPackage> _packages = new IPackage[]
+        private readonly IReadOnlyList<IInstallablePackage> _packages = new IInstallablePackage[]
             {new MariaDbPackage(), new NginxPackage(), new PhpPackage(), new PhpMyAdminPackage()};
 
         private Configuration.ApplicationConfig _configuration;
@@ -82,27 +82,10 @@ namespace Winp.Forms
             var imageList = _statusImageList;
             var label = _installStatusLabel;
 
-            InstallRun().ContinueWith(install =>
-            {
-                TimeSpan pause;
-
-                if (install.IsFaulted && install.Exception != null)
-                {
-                    SetStatusLabel(label, imageList, Status.Failure, "Installation failed: " + install.Exception.Message);
-
-                    pause = TimeSpan.FromSeconds(3);
-                }
-                else if (install.Result != null)
-                {
-                    SetStatusLabel(label, imageList, Status.Failure, "Installation failed: " + install.Result);
-
-                    pause = TimeSpan.FromSeconds(3);
-                }
-                else
-                    pause = TimeSpan.Zero;
-
-                Task.Delay(pause).ContinueWith(delay => InstallRefresh(), _scheduler);
-            }, _scheduler);
+            InstallRun()
+                .ContinueWith(install => StatusDisplayError(install, "Installation failed: "), _scheduler)
+                .Unwrap()
+                .ContinueWith(success => InstallRefresh(), _scheduler);
         }
 
         private void ServiceForm_Shown(object sender, EventArgs e)
@@ -113,12 +96,44 @@ namespace Winp.Forms
 
         private void ExecuteStartButton_Click(object sender, EventArgs e)
         {
-            Task.Run(ExecuteStart);
+            var imageList = _statusImageList;
+            var label = _installStatusLabel;
+
+            ConfigureRun()
+                .ContinueWith(configure => StatusDisplayError(configure, "Configuration failed: "), _scheduler)
+                .Unwrap()
+                .ContinueWith(success =>
+                {
+                    if (success.IsCompletedSuccessfully && success.Result)
+                        Task.Run(ExecuteStart);
+
+                    InstallRefresh();
+                }, _scheduler);
         }
 
         private void ExecuteStopButton_Click(object sender, EventArgs e)
         {
             Task.Run(ExecuteStop);
+        }
+
+        private async Task<string?> ConfigureRun()
+        {
+            var imageList = _statusImageList;
+            var label = _installStatusLabel;
+
+            await ExecuteStop();
+
+            SetStatusLabel(label, imageList, Status.Loading, "Configuring packages...");
+
+            foreach (var package in _packages)
+            {
+                var message = await Task.Run(() => package.Configure(_configuration));
+
+                if (message != null)
+                    return $"{package.Name}: {message}";
+            }
+
+            return null;
         }
 
         private void InstallRefresh()
@@ -127,7 +142,7 @@ namespace Winp.Forms
 
             foreach (var package in _packages)
             {
-                if (!package.IsReady(_configuration))
+                if (!package.IsInstalled(_configuration))
                     missing.Add(package.Name);
             }
 
@@ -148,7 +163,7 @@ namespace Winp.Forms
 
             await ExecuteStop();
 
-            SetStatusLabel(label, imageList, Status.Loading, "Downloading and configuring packages...");
+            SetStatusLabel(label, imageList, Status.Loading, "Downloading and installing packages...");
 
             foreach (var package in _packages)
             {
@@ -236,6 +251,23 @@ namespace Winp.Forms
                 else
                     label.Visible = false;
             }).Start(_scheduler);
+        }
+
+        private async Task<bool> StatusDisplayError(Task<string?> previous, string prefix)
+        {
+            var imageList = _statusImageList;
+            var label = _installStatusLabel;
+
+            if (previous.IsFaulted && previous.Exception != null)
+                SetStatusLabel(label, imageList, Status.Failure, prefix + previous.Exception.Message);
+            else if (previous.Result != null)
+                SetStatusLabel(label, imageList, Status.Failure, prefix + previous.Result);
+            else
+                return true;
+
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
+            return false;
         }
     }
 }

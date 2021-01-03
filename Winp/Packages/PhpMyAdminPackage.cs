@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Cottle;
@@ -8,20 +7,32 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    internal class PhpMyAdminPackage : IPackage
+    internal class PhpMyAdminPackage : IInstallablePackage
     {
         private const string ConfigurationPhpMyAdmin = "config.inc.php";
+        private const string IndexPhpMyAdmin = "index.php";
 
         public string Name => "PhpMyAdmin";
 
-        public ProcessStartInfo ConfigureStart(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application)
         {
-            throw new InvalidOperationException();
-        }
+            var environment = application.Environment;
 
-        public ProcessStartInfo ConfigureStop(ApplicationConfig application, int pid)
-        {
-            throw new InvalidOperationException();
+            // Write configuration files
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var context = Context.Empty;
+
+            foreach (var name in new[] { ConfigurationPhpMyAdmin })
+            {
+                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
+                var success =
+                    await ResourceHelper.WriteToFile<PhpMyAdminPackage>($"PhpMyAdmin.{name}", context, destinationPath);
+
+                if (!success)
+                    return $"configuration failure with '{name}'";
+            }
+
+            return null;
         }
 
         public async Task<string?> Install(ApplicationConfig application)
@@ -37,27 +48,14 @@ namespace Winp.Packages
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
 
-            // Write configuration files
-            var context = Context.Empty;
-
-            foreach (var name in new[] {ConfigurationPhpMyAdmin})
-            {
-                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
-                var success =
-                    await ResourceHelper.WriteToFile<PhpMyAdminPackage>($"PhpMyAdmin.{name}", context, destinationPath);
-
-                if (!success)
-                    return $"configuration failure with '{name}'";
-            }
-
             return null;
         }
 
-        public bool IsReady(ApplicationConfig application)
+        public bool IsInstalled(ApplicationConfig application)
         {
             var packageDirectory = GetInstallDirectory(application.Environment.InstallDirectoryOrDefault);
 
-            return File.Exists(Path.Combine(packageDirectory.AbsolutePath, ConfigurationPhpMyAdmin));
+            return File.Exists(Path.Combine(packageDirectory.AbsolutePath, IndexPhpMyAdmin));
         }
 
         private static Uri GetInstallDirectory(Uri installDirectory)

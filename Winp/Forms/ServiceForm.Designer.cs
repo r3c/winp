@@ -33,40 +33,44 @@ namespace Winp.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ServiceForm));
-            this._executionGroupBox = new System.Windows.Forms.GroupBox();
+            this._executeGroupBox = new System.Windows.Forms.GroupBox();
             this._executeStatusLabel = new System.Windows.Forms.Label();
             this._statusImageList = new System.Windows.Forms.ImageList(this.components);
             this._executeStopButton = new System.Windows.Forms.Button();
             this._executeStartButton = new System.Windows.Forms.Button();
-            this._configurationGroupBox = new System.Windows.Forms.GroupBox();
+            this._installGroupBox = new System.Windows.Forms.GroupBox();
             this._configureButton = new System.Windows.Forms.Button();
             this._installStatusLabel = new System.Windows.Forms.Label();
             this._installButton = new System.Windows.Forms.Button();
-            this._executionGroupBox.SuspendLayout();
-            this._configurationGroupBox.SuspendLayout();
+            this._executeGroupBox.SuspendLayout();
+            this._installGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // _executionGroupBox
+            // _executeGroupBox
             // 
-            this._executionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this._executionGroupBox.Controls.Add(this._executeStatusLabel);
-            this._executionGroupBox.Controls.Add(this._executeStopButton);
-            this._executionGroupBox.Controls.Add(this._executeStartButton);
-            this._executionGroupBox.Location = new System.Drawing.Point(10, 64);
-            this._executionGroupBox.Name = "_executionGroupBox";
-            this._executionGroupBox.Size = new System.Drawing.Size(513, 49);
-            this._executionGroupBox.TabIndex = 3;
-            this._executionGroupBox.TabStop = false;
-            this._executionGroupBox.Text = "Execution";
+            this._executeGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._executeGroupBox.Controls.Add(this._executeStatusLabel);
+            this._executeGroupBox.Controls.Add(this._executeStopButton);
+            this._executeGroupBox.Controls.Add(this._executeStartButton);
+            this._executeGroupBox.Location = new System.Drawing.Point(12, 74);
+            this._executeGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this._executeGroupBox.Name = "_executeGroupBox";
+            this._executeGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this._executeGroupBox.Size = new System.Drawing.Size(598, 57);
+            this._executeGroupBox.TabIndex = 3;
+            this._executeGroupBox.TabStop = false;
+            this._executeGroupBox.Text = "Execution";
             // 
             // _executeStatusLabel
             // 
             this._executeStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this._executeStatusLabel.ImageIndex = 0;
             this._executeStatusLabel.ImageList = this._statusImageList;
-            this._executeStatusLabel.Location = new System.Drawing.Point(187, 19);
+            this._executeStatusLabel.Location = new System.Drawing.Point(218, 22);
+            this._executeStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this._executeStatusLabel.Name = "_executeStatusLabel";
-            this._executeStatusLabel.Size = new System.Drawing.Size(321, 20);
+            this._executeStatusLabel.Size = new System.Drawing.Size(374, 23);
             this._executeStatusLabel.TabIndex = 7;
             this._executeStatusLabel.Text = "serviceStatusLabel";
             this._executeStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -74,7 +78,8 @@ namespace Winp.Forms
             // 
             // _statusImageList
             // 
-            this._statusImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("_statusImageList.ImageStream")));
+            this._statusImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this._statusImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_statusImageList.ImageStream")));
             this._statusImageList.TransparentColor = System.Drawing.Color.Transparent;
             this._statusImageList.Images.SetKeyName(0, "error.png");
             this._statusImageList.Images.SetKeyName(1, "information.png");
@@ -83,9 +88,10 @@ namespace Winp.Forms
             // 
             // _executeStopButton
             // 
-            this._executeStopButton.Location = new System.Drawing.Point(96, 19);
+            this._executeStopButton.Location = new System.Drawing.Point(112, 22);
+            this._executeStopButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._executeStopButton.Name = "_executeStopButton";
-            this._executeStopButton.Size = new System.Drawing.Size(86, 20);
+            this._executeStopButton.Size = new System.Drawing.Size(100, 23);
             this._executeStopButton.TabIndex = 3;
             this._executeStopButton.Text = "Stop services";
             this._executeStopButton.UseVisualStyleBackColor = true;
@@ -93,32 +99,37 @@ namespace Winp.Forms
             // 
             // _executeStartButton
             // 
-            this._executeStartButton.Location = new System.Drawing.Point(5, 19);
+            this._executeStartButton.Location = new System.Drawing.Point(6, 22);
+            this._executeStartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._executeStartButton.Name = "_executeStartButton";
-            this._executeStartButton.Size = new System.Drawing.Size(86, 20);
+            this._executeStartButton.Size = new System.Drawing.Size(100, 23);
             this._executeStartButton.TabIndex = 2;
             this._executeStartButton.Text = "Start services";
             this._executeStartButton.UseVisualStyleBackColor = true;
             this._executeStartButton.Click += new System.EventHandler(this.ExecuteStartButton_Click);
             // 
-            // _configurationGroupBox
+            // _installGroupBox
             // 
-            this._configurationGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this._configurationGroupBox.Controls.Add(this._configureButton);
-            this._configurationGroupBox.Controls.Add(this._installStatusLabel);
-            this._configurationGroupBox.Controls.Add(this._installButton);
-            this._configurationGroupBox.Location = new System.Drawing.Point(10, 10);
-            this._configurationGroupBox.Name = "_configurationGroupBox";
-            this._configurationGroupBox.Size = new System.Drawing.Size(513, 49);
-            this._configurationGroupBox.TabIndex = 2;
-            this._configurationGroupBox.TabStop = false;
-            this._configurationGroupBox.Text = "Configuration";
+            this._installGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._installGroupBox.Controls.Add(this._configureButton);
+            this._installGroupBox.Controls.Add(this._installStatusLabel);
+            this._installGroupBox.Controls.Add(this._installButton);
+            this._installGroupBox.Location = new System.Drawing.Point(12, 12);
+            this._installGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this._installGroupBox.Name = "_installGroupBox";
+            this._installGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this._installGroupBox.Size = new System.Drawing.Size(598, 57);
+            this._installGroupBox.TabIndex = 2;
+            this._installGroupBox.TabStop = false;
+            this._installGroupBox.Text = "Installation";
             // 
             // _configureButton
             // 
-            this._configureButton.Location = new System.Drawing.Point(5, 19);
+            this._configureButton.Location = new System.Drawing.Point(6, 22);
+            this._configureButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._configureButton.Name = "_configureButton";
-            this._configureButton.Size = new System.Drawing.Size(86, 20);
+            this._configureButton.Size = new System.Drawing.Size(100, 23);
             this._configureButton.TabIndex = 0;
             this._configureButton.Text = "Configure";
             this._configureButton.UseVisualStyleBackColor = true;
@@ -129,9 +140,10 @@ namespace Winp.Forms
             this._installStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this._installStatusLabel.ImageIndex = 0;
             this._installStatusLabel.ImageList = this._statusImageList;
-            this._installStatusLabel.Location = new System.Drawing.Point(187, 19);
+            this._installStatusLabel.Location = new System.Drawing.Point(218, 22);
+            this._installStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this._installStatusLabel.Name = "_installStatusLabel";
-            this._installStatusLabel.Size = new System.Drawing.Size(321, 20);
+            this._installStatusLabel.Size = new System.Drawing.Size(374, 23);
             this._installStatusLabel.TabIndex = 5;
             this._installStatusLabel.Text = "installStatusLabel";
             this._installStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -139,9 +151,10 @@ namespace Winp.Forms
             // 
             // _installButton
             // 
-            this._installButton.Location = new System.Drawing.Point(96, 19);
+            this._installButton.Location = new System.Drawing.Point(112, 22);
+            this._installButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._installButton.Name = "_installButton";
-            this._installButton.Size = new System.Drawing.Size(86, 20);
+            this._installButton.Size = new System.Drawing.Size(100, 23);
             this._installButton.TabIndex = 1;
             this._installButton.Text = "Install";
             this._installButton.UseVisualStyleBackColor = true;
@@ -149,26 +162,28 @@ namespace Winp.Forms
             // 
             // ServiceForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(535, 127);
-            this.Controls.Add(this._executionGroupBox);
-            this.Controls.Add(this._configurationGroupBox);
+            this.ClientSize = new System.Drawing.Size(624, 147);
+            this.Controls.Add(this._executeGroupBox);
+            this.Controls.Add(this._installGroupBox);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "ServiceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Winp Service";
             this.Shown += new System.EventHandler(this.ServiceForm_Shown);
-            this._executionGroupBox.ResumeLayout(false);
-            this._configurationGroupBox.ResumeLayout(false);
+            this._executeGroupBox.ResumeLayout(false);
+            this._installGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
-        private System.Windows.Forms.GroupBox _configurationGroupBox;
+        private System.Windows.Forms.GroupBox _installGroupBox;
         private System.Windows.Forms.Button _configureButton;
         private System.Windows.Forms.Button _executeStartButton;
         private System.Windows.Forms.Label _executeStatusLabel;
         private System.Windows.Forms.Button _executeStopButton;
-        private System.Windows.Forms.GroupBox _executionGroupBox;
+        private System.Windows.Forms.GroupBox _executeGroupBox;
         private System.Windows.Forms.Button _installButton;
         private System.Windows.Forms.Label _installStatusLabel;
         private System.Windows.Forms.ImageList _statusImageList;
