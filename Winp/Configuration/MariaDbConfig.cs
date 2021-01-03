@@ -8,7 +8,7 @@ namespace Winp.Configuration
     {
         private const string Identifier = "mariadb";
         private const string Variant = "winx64";
-        private const string Version = "10.4.12";
+        private const string Version = "10.5.8";
 
         [JsonIgnore]
         public readonly string ArchivePathOrDefault =>

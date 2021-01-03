@@ -7,7 +7,7 @@ namespace Winp.Configuration
     public struct NginxConfig
     {
         private const string Identifier = "nginx";
-        private const string Version = "1.17.9";
+        private const string Version = "1.19.6";
 
         [JsonIgnore]
         public readonly string ArchivePathOrDefault =>

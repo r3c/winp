@@ -7,7 +7,7 @@ namespace Winp.Configuration
     {
         private const string Identifier = "php";
         private const string Variant = "Win32-vc15-x64";
-        private const string Version = "7.4.4";
+        private const string Version = "7.4.9";
 
         [JsonIgnore]
         public readonly string ArchivePathOrDefault => ArchivePath ?? string.Empty;
