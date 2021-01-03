@@ -3,7 +3,7 @@ using Winp.Configuration;
 
 namespace Winp
 {
-    public interface IInstallablePackage
+    public interface IInstallable
     {
         string Name { get; }
 

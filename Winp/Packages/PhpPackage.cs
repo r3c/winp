@@ -9,7 +9,7 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    public class PhpPackage : IExecutablePackage, IInstallablePackage
+    public class PhpPackage : IExecutable, IInstallable
     {
         private const string ConfigurationPhp = "php.ini";
 
@@ -44,11 +44,11 @@ namespace Winp.Packages
                 $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}", "-c", "php.ini");
         }
 
-        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
             return new ProcessStartInfo
             {
-                ArgumentList = {"/F", "/PID", pid.ToString(CultureInfo.InvariantCulture)},
+                ArgumentList = {"/F", "/PID", processId.ToString(CultureInfo.InvariantCulture)},
                 CreateNoWindow = true,
                 FileName = "taskkill.exe"
             };

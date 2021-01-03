@@ -7,7 +7,7 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    internal class PhpMyAdminPackage : IInstallablePackage
+    internal class PhpMyAdminPackage : IInstallable
     {
         private const string ConfigurationPhpMyAdmin = "config.inc.php";
         private const string IndexPhpMyAdmin = "index.php";

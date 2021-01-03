@@ -10,7 +10,7 @@ using Winp.Processes;
 
 namespace Winp.Packages
 {
-    public class MariaDbPackage : IExecutablePackage, IInstallablePackage
+    public class MariaDbPackage : IExecutable, IInstallable
     {
         private const string ConfigurationMysqld = "mysqld.cnf";
 
@@ -55,7 +55,7 @@ namespace Winp.Packages
                 SystemProcess.EscapeArgument("--defaults-file=config/" + ConfigurationMysqld));
         }
 
-        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
             var installDirectory = application.Environment.InstallDirectoryOrDefault;
 

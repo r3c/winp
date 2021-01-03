@@ -20,7 +20,7 @@ namespace Winp.Forms
         private readonly IReadOnlyList<Instance> _instances = new[]
             {new Instance(new MariaDbPackage()), new Instance(new NginxPackage()), new Instance(new PhpPackage())};
 
-        private readonly IReadOnlyList<IInstallablePackage> _packages = new IInstallablePackage[]
+        private readonly IReadOnlyList<IInstallable> _packages = new IInstallable[]
             {new MariaDbPackage(), new NginxPackage(), new PhpPackage(), new PhpMyAdminPackage()};
 
         private Configuration.ApplicationConfig _configuration;

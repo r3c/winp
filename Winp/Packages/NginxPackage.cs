@@ -9,7 +9,7 @@ using Winp.Install;
 
 namespace Winp.Packages
 {
-    public class NginxPackage : IExecutablePackage, IInstallablePackage
+    public class NginxPackage : IExecutable, IInstallable
     {
         private const string ConfigurationFastCgi = "fastcgi-php.conf";
         private const string ConfigurationNginx = "nginx.conf";
@@ -67,7 +67,7 @@ namespace Winp.Packages
             return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault);
         }
 
-        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
             return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault, "-s", "quit");
         }

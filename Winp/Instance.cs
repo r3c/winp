@@ -10,11 +10,11 @@ namespace Winp
     {
         public bool IsRunning => _process != null && _process.IsRunning;
 
-        public IExecutablePackage Package { get; }
+        public IExecutable Package { get; }
 
         private SystemProcess? _process;
 
-        public Instance(IExecutablePackage package)
+        public Instance(IExecutable package)
         {
             Package = package;
 

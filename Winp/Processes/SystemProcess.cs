@@ -17,18 +17,18 @@ namespace Winp.Processes
         /// </summary>
         public static string EscapeArgument(string argument)
         {
-            var arguments = new StringBuilder();
+            var characters = new StringBuilder();
 
             if (InvalidCharacters.IsMatch(argument))
                 throw new ArgumentOutOfRangeException(nameof(argument), argument);
 
             if (argument == string.Empty)
-                arguments.Append("\"\"");
+                characters.Append("\"\"");
             else if (!NeedsQuotes.IsMatch(argument))
-                arguments.Append(argument);
+                characters.Append(argument);
             else
             {
-                arguments
+                characters
                     .Append('"')
                     .Append(EscapeQuote.Replace(argument, m =>
                         m.Groups[1].Value + m.Groups[1].Value +
@@ -37,7 +37,7 @@ namespace Winp.Processes
                     .Append('"');
             }
 
-            return arguments.ToString();
+            return characters.ToString();
         }
 
         public static SystemProcess? Start(ProcessStartInfo startInfo)

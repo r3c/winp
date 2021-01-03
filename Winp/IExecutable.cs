@@ -3,11 +3,11 @@ using Winp.Configuration;
 
 namespace Winp
 {
-    interface IExecutablePackage
+    interface IExecutable
     {
         string Name { get; }
 
         ProcessStartInfo CreateProcessStart(ApplicationConfig application);
-        ProcessStartInfo CreateProcessStop(ApplicationConfig application, int pid);
+        ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId);
     }
 }
