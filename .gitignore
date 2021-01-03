@@ -1,4 +1,6 @@
 /.idea/
-/winp-v*.zip
+/.vs/
+/winp-*.zip
 bin/
 obj/
+*.user
