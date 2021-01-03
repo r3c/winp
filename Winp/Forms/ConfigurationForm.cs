@@ -65,14 +65,12 @@ namespace Winp.Forms
 
         private void LocationDeleteButton_Click(object sender, EventArgs e)
         {
-            var index = _locations.FindIndex(l => l.Base == _locationBaseTextBox.Text);
+            if (_locationListBox.SelectedItem is LocationItem item)
+            {
+                _locations.RemoveAt(item.Index);
 
-            if (index < 0)
-                return;
-
-            _locations.RemoveAt(index);
-
-            LocationRefresh();
+                LocationRefresh();
+            }
         }
 
         private void LocationUpdateButton_Click(object sender, EventArgs e)
@@ -88,30 +86,52 @@ namespace Winp.Forms
                 Type = (LocationType) _locationTypeComboBox.SelectedIndex
             };
 
-            var replace = _locations.FindIndex(l => l.Base == location.Base);
+            if (_locationListBox.SelectedItem is LocationItem item)
+            {
+                _locations[item.Index] = location;
 
-            if (replace < 0)
-                _locations.Add(location);
+                LocationRefresh();
+
+                _locationListBox.SelectedIndex = item.Index;
+            }
             else
-                _locations[replace] = location;
+            {
+                _locations.Add(location);
 
-            LocationRefresh();
+                LocationRefresh();
 
-            _locationListBox.SelectedIndex = replace < 0 ? _locations.Count - 1 : replace;
+                _locationListBox.SelectedIndex = _locations.Count - 1;
+            }
         }
 
         private void LocationListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!(_locationListBox.SelectedItem is string locationBase))
-                locationBase = string.Empty;
+            if (_locationListBox.SelectedItem is LocationItem item)
+            {
+                var location = _locations[item.Index];
 
-            var location = _locations.FirstOrDefault(l => l.Base == locationBase);
+                _locationAliasTextBox.Text = location.AliasOrDefault.IsAbsoluteUri
+                    ? location.AliasOrDefault.AbsolutePath
+                    : string.Empty;
+                _locationBaseTextBox.Text = location.BaseOrDefault;
+                _locationIndexCheckBox.Checked = location.Index;
+                _locationListCheckBox.Checked = location.List;
+                _locationTypeComboBox.SelectedIndex = (int) location.Type;
 
-            _locationAliasTextBox.Text = location.AliasOrDefault.AbsolutePath;
-            _locationBaseTextBox.Text = location.BaseOrDefault;
-            _locationIndexCheckBox.Checked = location.Index;
-            _locationListCheckBox.Checked = location.List;
-            _locationTypeComboBox.SelectedIndex = (int) location.Type;
+                _locationDeleteButton.Enabled = true;
+                _locationUpdateButton.Text = @"Update";
+            }
+            else
+            {
+                _locationAliasTextBox.Text = string.Empty;
+                _locationBaseTextBox.Text = string.Empty;
+                _locationIndexCheckBox.Checked = false;
+                _locationListCheckBox.Checked = false;
+                _locationTypeComboBox.SelectedIndex = default;
+
+                _locationDeleteButton.Enabled = false;
+                _locationUpdateButton.Text = @"Insert";
+            }
         }
 
         private void LocationAliasButton_Click(object sender, EventArgs e)
@@ -160,7 +180,29 @@ namespace Winp.Forms
         private void LocationRefresh()
         {
             _locationListBox.Items.Clear();
-            _locationListBox.Items.AddRange(_locations.Select(l => l.BaseOrDefault as object).ToArray());
+            _locationListBox.Items.AddRange(_locations
+                .Select((location, index) => new LocationItem(index, location.BaseOrDefault))
+                .Cast<object>()
+                .ToArray());
+            _locationListBox.Items.Add("<new location>");
+        }
+
+        private class LocationItem
+        {
+            public readonly int Index;
+
+            private readonly string _label;
+
+            public LocationItem(int index, string label)
+            {
+                Index = index;
+                _label = label;
+            }
+
+            public override string ToString()
+            {
+                return _label;
+            }
         }
     }
 }
