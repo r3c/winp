@@ -2,9 +2,8 @@
 
 # Package configuration
 artifact=winp
-framework=netcoreapp3.1
 project=Winp
-runtimes=win-x64
+runtimes='win-x64'
 
 # Retreive latest version tag from current HEAD
 base="$(dirname "$0")"
@@ -23,16 +22,14 @@ source="$(mktemp -d)"
 
 for runtime in $runtimes; do
     archive="$artifact-$version-$runtime.zip"
-	target="$base/$project/bin/Release/$framework/$runtime/publish"
 
-	# Empty target directory and publish archive
+	# Publish archive for requested runtime
     echo >&2 "publishing $archive..."
 
-	rm -r "$target"
-	dotnet publish --nologo -c Release -f "$framework" -r "$runtime" -v quiet "$base/$project"
+	dotnet publish --nologo -c Release -r "$runtime" -v quiet "$base/$project"
 
 	# Create temporary directory to get desired archive path
-	ln -s "$(realpath "$target")" "$source/$artifact"
+	ln -s "$(realpath "$base/$project/bin/Release/"*"/$runtime/publish")" "$source/$artifact"
 
 	( cd "$source" && zip -qr "$archive" "$artifact" )
 
