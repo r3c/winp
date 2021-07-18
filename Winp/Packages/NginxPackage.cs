@@ -24,7 +24,7 @@ namespace Winp.Packages
             var php = application.Package.Php;
 
             // Write configuration files
-            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
             var locationValues = new List<Value>();
 
             foreach (var location in locations)
@@ -64,12 +64,18 @@ namespace Winp.Packages
 
         public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
-            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault);
+            var environment = application.Environment;
+            var nginx = application.Package.Nginx;
+
+            return GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, Array.Empty<string>());
         }
 
         public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
-            return GetProcessStartInfo(application.Environment.InstallDirectoryOrDefault, "-s", "quit");
+            var environment = application.Environment;
+            var nginx = application.Package.Nginx;
+
+            return GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, new[] { "-s", "quit" });
         }
 
         public async Task<string?> Install(ApplicationConfig application)
@@ -78,7 +84,7 @@ namespace Winp.Packages
             var nginx = application.Package.Nginx;
 
             // Download and extract archive
-            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
                 nginx.ArchivePathOrDefault, installDirectory);
 
@@ -90,19 +96,20 @@ namespace Winp.Packages
 
         public bool IsInstalled(ApplicationConfig application)
         {
-            var installDirectory = application.Environment.InstallDirectoryOrDefault;
+            var environment = application.Environment;
+            var nginx = application.Package.Nginx;
 
-            return File.Exists(GetProcessStartInfo(installDirectory).FileName);
+            return File.Exists(GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, Array.Empty<string>()).FileName);
         }
 
-        private static Uri GetInstallDirectory(Uri installDirectory)
+        private static Uri GetInstallDirectory(Uri installDirectory, string variant)
         {
-            return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx"));
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx", variant));
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, params string[] arguments)
+        private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, string variant, string[] arguments)
         {
-            var packageDirectory = GetInstallDirectory(installDirectory).AbsolutePath;
+            var packageDirectory = GetInstallDirectory(installDirectory, variant).AbsolutePath;
             var processStartInfo = new ProcessStartInfo
             {
                 CreateNoWindow = true,

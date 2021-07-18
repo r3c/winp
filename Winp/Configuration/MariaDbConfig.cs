@@ -6,22 +6,20 @@ namespace Winp.Configuration
 {
     public struct MariaDbConfig
     {
-        private const string Identifier = "mariadb";
-        private const string Variant = "winx64";
-        private const string Version = "10.5.8";
+        private const string Platform = "winx64";
+        private const string Version = "10.5.9";
 
         [JsonIgnore]
-        public readonly string ArchivePathOrDefault =>
-            ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
+        public readonly string ArchivePathOrDefault => ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
 
         [JsonIgnore]
         public readonly string DataDirectoryOrDefault => DataDirectory ?? "data";
 
         [JsonIgnore]
-        public readonly Uri DownloadUrlOrDefault =>
-            DownloadUrl ??
-            new Uri(
-                $"https://downloads.mariadb.com/MariaDB/{Identifier}-{Version}/{Variant}-packages/{Identifier}-{Version}-{Variant}.zip");
+        public readonly Uri DownloadUrlOrDefault => DownloadUrl ?? new Uri($"https://downloads.mariadb.com/MariaDB/mariadb-{Version}/{Platform}-packages/mariadb-{Version}-{Platform}.zip");
+
+        [JsonIgnore]
+        public readonly string VariantOrDefault => Variant ?? $"{Version}-{Platform}";
 
         [JsonProperty(PropertyName = "archivePath")]
         public string? ArchivePath;
@@ -37,5 +35,8 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "serverPort")]
         public int? ServerPort;
+
+        [JsonProperty(PropertyName = "variant")]
+        public string? Variant;
     }
 }

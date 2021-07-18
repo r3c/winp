@@ -17,9 +17,10 @@ namespace Winp.Packages
         public async Task<string?> Configure(ApplicationConfig application)
         {
             var environment = application.Environment;
+            var phpMyAdmin = application.Package.PhpMyAdmin;
 
             // Write configuration files
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
             var context = Context.Empty;
 
             foreach (var name in new[] { ConfigurationPhpMyAdmin })
@@ -41,7 +42,7 @@ namespace Winp.Packages
             var phpMyAdmin = application.Package.PhpMyAdmin;
 
             // Download and extract archive
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault);
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(phpMyAdmin.DownloadUrlOrDefault,
                 phpMyAdmin.ArchivePathOrDefault, packageDirectory);
 
@@ -53,14 +54,16 @@ namespace Winp.Packages
 
         public bool IsInstalled(ApplicationConfig application)
         {
-            var packageDirectory = GetInstallDirectory(application.Environment.InstallDirectoryOrDefault);
+            var environment = application.Environment;
+            var phpMyAdmin = application.Package.PhpMyAdmin;
+            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
 
             return File.Exists(Path.Combine(packageDirectory.AbsolutePath, IndexPhpMyAdmin));
         }
 
-        private static Uri GetInstallDirectory(Uri installDirectory)
+        public static Uri GetInstallDirectory(Uri installDirectory, string variant)
         {
-            return new Uri(Path.Combine(installDirectory.AbsolutePath, "phpmyadmin"));
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "phpmyadmin", variant));
         }
     }
 }

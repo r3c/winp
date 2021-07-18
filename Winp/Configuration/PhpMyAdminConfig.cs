@@ -6,23 +6,25 @@ namespace Winp.Configuration
 {
     public struct PhpMyAdminConfig
     {
-        private const string Identifier = "phpMyAdmin";
-        private const string Variant = "all-languages";
-        private const string Version = "5.0.4";
+        private const string Language = "all-languages";
+        private const string Version = "5.1.1";
 
         [JsonIgnore]
-        public readonly string ArchivePathOrDefault =>
-            ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
+        public readonly string ArchivePathOrDefault => ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
 
         [JsonIgnore]
-        public readonly Uri DownloadUrlOrDefault =>
-            DownloadUrl ??
-            new Uri($"https://files.phpmyadmin.net/{Identifier}/{Version}/{Identifier}-{Version}-{Variant}.zip");
+        public readonly Uri DownloadUrlOrDefault => DownloadUrl ?? new Uri($"https://files.phpmyadmin.net/phpMyAdmin/{Version}/phpMyAdmin-{Version}-{Language}.zip");
+
+        [JsonIgnore]
+        public readonly string VariantOrDefault => Variant ?? $"{Version}-{Language}";
 
         [JsonProperty(PropertyName = "archivePath")]
         public string? ArchivePath;
 
         [JsonProperty(PropertyName = "downloadUrl")]
         public Uri? DownloadUrl;
+
+        [JsonProperty(PropertyName = "variant")]
+        public string? Variant;
     }
 }

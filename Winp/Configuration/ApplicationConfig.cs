@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Winp.Packages;
 
 namespace Winp.Configuration
 {
     public struct ApplicationConfig
     {
-        public static readonly string Base = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) ??
-                                             string.Empty;
+        public static readonly string Base = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) ?? string.Empty;
 
         [JsonIgnore]
         public IReadOnlyList<LocationConfig> LocationsOrDefault => Locations ?? new[]
@@ -23,7 +23,7 @@ namespace Winp.Configuration
             },
             new LocationConfig
             {
-                Alias = new Uri(Path.Combine(Base, Environment.InstallDirectoryOrDefault.AbsolutePath, "phpmyadmin")),
+                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetInstallDirectory(Environment.InstallDirectoryOrDefault, Package.PhpMyAdmin.VariantOrDefault).AbsolutePath)),
                 Base = "/phpmyadmin/",
                 Index = true,
                 List = true,

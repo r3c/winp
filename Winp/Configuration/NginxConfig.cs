@@ -6,19 +6,19 @@ namespace Winp.Configuration
 {
     public struct NginxConfig
     {
-        private const string Identifier = "nginx";
-        private const string Version = "1.19.6";
+        private const string Version = "1.19.9";
 
         [JsonIgnore]
-        public readonly string ArchivePathOrDefault =>
-            ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
+        public readonly string ArchivePathOrDefault => ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
 
         [JsonProperty(PropertyName = "archivePath")]
         public string? ArchivePath;
 
         [JsonIgnore]
-        public readonly Uri DownloadUrlOrDefault =>
-            DownloadUrl ?? new Uri($"https://nginx.org/download/{Identifier}-{Version}.zip");
+        public readonly Uri DownloadUrlOrDefault => DownloadUrl ?? new Uri($"https://nginx.org/download/nginx-{Version}.zip");
+
+        [JsonIgnore]
+        public readonly string VariantOrDefault => Variant ?? $"{Version}";
 
         [JsonProperty(PropertyName = "downloadUrl")]
         public Uri? DownloadUrl;
@@ -34,5 +34,8 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "serverPort")]
         public int? ServerPort;
+
+        [JsonProperty(PropertyName = "variant")]
+        public string? Variant;
     }
 }

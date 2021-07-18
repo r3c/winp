@@ -7,8 +7,7 @@ namespace Winp.Configuration
     public struct LocationConfig
     {
         [JsonIgnore]
-        public readonly Uri AliasOrDefault =>
-            Alias ?? new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
+        public readonly Uri AliasOrDefault => Alias ?? new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
 
         [JsonIgnore]
         public readonly string BaseOrDefault => Base ?? "/";
