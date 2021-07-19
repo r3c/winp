@@ -23,7 +23,7 @@ namespace Winp.Configuration
             },
             new LocationConfig
             {
-                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetInstallDirectory(Environment.InstallDirectoryOrDefault, Package.PhpMyAdmin.VariantOrDefault).AbsolutePath)),
+                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(Environment.InstallDirectoryOrDefault, Package.PhpMyAdmin.VariantOrDefault).AbsolutePath)),
                 Base = "/phpmyadmin/",
                 Index = true,
                 List = true,

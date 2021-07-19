@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
 using Winp.Install;
+using Winp.Processes;
 
 namespace Winp.Packages
 {
@@ -21,7 +22,7 @@ namespace Winp.Packages
             var php = application.Package.Php;
 
             // Write configuration files
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
             var context = Context.Empty;
 
             foreach (var name in new[] { ConfigurationPhp })
@@ -38,11 +39,10 @@ namespace Winp.Packages
 
         public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
-            var installDirectory = application.Environment.InstallDirectoryOrDefault;
             var php = application.Package.Php;
+            var binding = $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}";
 
-            return GetProcessStartInfo(installDirectory, php.VariantOrDefault,
-                new[] { "-b", $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}", "-c", "php.ini" });
+            return CreateProcessStartInfo(application, new[] { "-b", binding, "-c", "php.ini" });
         }
 
         public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
@@ -61,7 +61,7 @@ namespace Winp.Packages
             var php = application.Package.Php;
 
             // Download and extract archive
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadUrlOrDefault,
                 php.ArchivePathOrDefault, packageDirectory);
 
@@ -73,31 +73,21 @@ namespace Winp.Packages
 
         public bool IsInstalled(ApplicationConfig application)
         {
-            var environment = application.Environment;
-            var php = application.Package.Php;
-
-            return File.Exists(GetProcessStartInfo(environment.InstallDirectoryOrDefault, php.VariantOrDefault, Array.Empty<string>()).FileName);
+            return File.Exists(CreateProcessStartInfo(application, Array.Empty<string>()).FileName);
         }
 
-        private static Uri GetInstallDirectory(Uri installDirectory, string variant)
+        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
         {
-            return new Uri(Path.Combine(installDirectory.AbsolutePath, "php", variant));
+            var identifier = application.Package.Php.VariantOrDefault;
+            var installDirectory = application.Environment.InstallDirectoryOrDefault;
+            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+
+            return SystemProcess.CreateStartInfo(packageDirectory, "php-cgi.exe", arguments);
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, string variant, string[] arguments)
+        private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
         {
-            var packageDirectory = GetInstallDirectory(installDirectory, variant).AbsolutePath;
-            var startInfo = new ProcessStartInfo
-            {
-                CreateNoWindow = true,
-                FileName = Path.Combine(packageDirectory, "php-cgi.exe"),
-                WorkingDirectory = packageDirectory
-            };
-
-            foreach (var argument in arguments)
-                startInfo.ArgumentList.Add(argument);
-
-            return startInfo;
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "php", identifier));
         }
     }
 }

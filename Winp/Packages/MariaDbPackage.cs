@@ -22,7 +22,7 @@ namespace Winp.Packages
             var mariadb = application.Package.MariaDb;
 
             // Write configuration file
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
                 ["dataDirectory"] = mariadb.DataDirectoryOrDefault,
@@ -41,8 +41,8 @@ namespace Winp.Packages
             // Initialize data directory
             if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectoryOrDefault, "my.ini")))
             {
-                var process = SystemProcess.Start(CreateProcessStartInfo(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault,
-                    "mysql_install_db.exe", new[] { SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectoryOrDefault) }));
+                var arguments = new[] { SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectoryOrDefault) };
+                var process = SystemProcess.Start(CreateProcessStartInfo(application, "mysql_install_db.exe", arguments));
 
                 if (process == null || await process.Stop(TimeSpan.FromSeconds(15)) != 0)
                     return "could not initialize data directory";
@@ -53,20 +53,16 @@ namespace Winp.Packages
 
         public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
-            var environment = application.Environment;
-            var mariadb = application.Package.MariaDb;
+            var arguments = new[] { SystemProcess.EscapeArgument("--defaults-file=config/" + ConfigurationMysqld) };
 
-            return CreateProcessStartInfo(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault, "mysqld.exe",
-                new[] { SystemProcess.EscapeArgument("--defaults-file=config/" + ConfigurationMysqld) });
+            return CreateProcessStartInfo(application, "mysqld.exe", arguments);
         }
 
         public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
-            var environment = application.Environment;
-            var mariadb = application.Package.MariaDb;
+            var arguments = new[] { "-u", "root", "shutdown" };
 
-            return CreateProcessStartInfo(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault, "mysqladmin.exe",
-                new[] { "-u", "root", "shutdown" });
+            return CreateProcessStartInfo(application, "mysqladmin.exe", arguments);
         }
 
         public async Task<string?> Install(ApplicationConfig application)
@@ -75,7 +71,7 @@ namespace Winp.Packages
             var mariadb = application.Package.MariaDb;
 
             // Download and extract archive
-            var packageDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(mariadb.DownloadUrlOrDefault,
                 mariadb.ArchivePathOrDefault, packageDirectory);
 
@@ -87,32 +83,21 @@ namespace Winp.Packages
 
         public bool IsInstalled(ApplicationConfig application)
         {
-            var environment = application.Environment;
-            var mariadb = application.Package.MariaDb;
-
-            return File.Exists(CreateProcessStartInfo(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault, "mysqld.exe",
-                Array.Empty<string>()).FileName);
+            return File.Exists(CreateProcessStartInfo(application, "mysqld.exe", Array.Empty<string>()).FileName);
         }
 
-        private static Uri GetInstallDirectory(Uri installDirectory, string variant)
+        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string executable, string[] arguments)
         {
-            return new Uri(Path.Combine(installDirectory.AbsolutePath, "mariadb", variant));
+            var identifier = application.Package.MariaDb.VariantOrDefault;
+            var installDirectory = application.Environment.InstallDirectoryOrDefault;
+            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+
+            return SystemProcess.CreateStartInfo(packageDirectory, Path.Combine("bin", executable), arguments);
         }
 
-        private static ProcessStartInfo CreateProcessStartInfo(Uri installDirectory, string variant, string binary, string[] arguments)
+        private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
         {
-            var packageDirectory = GetInstallDirectory(installDirectory, variant).AbsolutePath;
-            var startInfo = new ProcessStartInfo
-            {
-                CreateNoWindow = true,
-                FileName = Path.Combine(packageDirectory, "bin", binary),
-                WorkingDirectory = packageDirectory
-            };
-
-            foreach (var argument in arguments)
-                startInfo.ArgumentList.Add(argument);
-
-            return startInfo;
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "mariadb", identifier));
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,6 +13,21 @@ namespace Winp.Processes
         private static readonly Regex EscapeQuote = new Regex(@"(\\*)(""|$)", RegexOptions.Compiled);
         private static readonly Regex InvalidCharacters = new Regex("[\x00\x0a\x0d]", RegexOptions.Compiled);
         private static readonly Regex NeedsQuotes = new Regex(@"\s|""", RegexOptions.Compiled);
+
+        public static ProcessStartInfo CreateStartInfo(Uri workingDirectory, string executable, IEnumerable<string> arguments)
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                CreateNoWindow = true,
+                FileName = Path.Combine(workingDirectory.AbsolutePath, executable),
+                WorkingDirectory = workingDirectory.AbsolutePath
+            };
+
+            foreach (var argument in arguments)
+                processStartInfo.ArgumentList.Add(argument);
+
+            return processStartInfo;
+        }
 
         /// <summary>
         /// http://csharptest.net/529/how-to-correctly-escape-command-line-arguments-in-c/index.html

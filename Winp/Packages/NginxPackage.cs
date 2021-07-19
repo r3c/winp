@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
 using Winp.Install;
+using Winp.Processes;
 
 namespace Winp.Packages
 {
@@ -24,7 +25,7 @@ namespace Winp.Packages
             var php = application.Package.Php;
 
             // Write configuration files
-            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
             var locationValues = new List<Value>();
 
             foreach (var location in locations)
@@ -52,7 +53,7 @@ namespace Winp.Packages
 
             foreach (var name in new[] { ConfigurationFastCgi, ConfigurationNginx })
             {
-                var destinationPath = Path.Combine(installDirectory.AbsolutePath, "conf", name);
+                var destinationPath = Path.Combine(packageDirectory.AbsolutePath, "conf", name);
                 var success = await ResourceHelper.WriteToFile<NginxPackage>($"Nginx.{name}", context, destinationPath);
 
                 if (!success)
@@ -64,18 +65,12 @@ namespace Winp.Packages
 
         public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
-            var environment = application.Environment;
-            var nginx = application.Package.Nginx;
-
-            return GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, Array.Empty<string>());
+            return CreateProcessStartInfo(application, Array.Empty<string>());
         }
 
         public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
         {
-            var environment = application.Environment;
-            var nginx = application.Package.Nginx;
-
-            return GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, new[] { "-s", "quit" });
+            return CreateProcessStartInfo(application, new[] { "-s", "quit" });
         }
 
         public async Task<string?> Install(ApplicationConfig application)
@@ -84,7 +79,7 @@ namespace Winp.Packages
             var nginx = application.Package.Nginx;
 
             // Download and extract archive
-            var installDirectory = GetInstallDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
+            var installDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
             var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
                 nginx.ArchivePathOrDefault, installDirectory);
 
@@ -96,31 +91,21 @@ namespace Winp.Packages
 
         public bool IsInstalled(ApplicationConfig application)
         {
-            var environment = application.Environment;
-            var nginx = application.Package.Nginx;
-
-            return File.Exists(GetProcessStartInfo(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault, Array.Empty<string>()).FileName);
+            return File.Exists(CreateProcessStartInfo(application, Array.Empty<string>()).FileName);
         }
 
-        private static Uri GetInstallDirectory(Uri installDirectory, string variant)
+        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
         {
-            return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx", variant));
+            var identifier = application.Package.Nginx.VariantOrDefault;
+            var installDirectory = application.Environment.InstallDirectoryOrDefault;
+            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+
+            return SystemProcess.CreateStartInfo(packageDirectory, "nginx.exe", arguments);
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(Uri installDirectory, string variant, string[] arguments)
+        private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
         {
-            var packageDirectory = GetInstallDirectory(installDirectory, variant).AbsolutePath;
-            var processStartInfo = new ProcessStartInfo
-            {
-                CreateNoWindow = true,
-                FileName = Path.Combine(packageDirectory, "nginx.exe"),
-                WorkingDirectory = packageDirectory
-            };
-
-            foreach (var argument in arguments)
-                processStartInfo.ArgumentList.Add(argument);
-
-            return processStartInfo;
+            return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx", identifier));
         }
     }
 }
