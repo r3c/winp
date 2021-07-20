@@ -25,7 +25,10 @@ namespace Winp.Install
 
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var directory = Path.GetDirectoryName(path);
+
+            if (!string.IsNullOrEmpty(directory))
+                Directory.CreateDirectory(directory);
 
             await using var writer = new StreamWriter(File.Create(path));
 
