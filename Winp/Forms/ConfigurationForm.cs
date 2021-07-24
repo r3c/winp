@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 using Winp.Configuration;
@@ -26,26 +27,44 @@ namespace Winp.Forms
             var package = application.Package;
 
             _application = application;
-            _installDirectoryTextBox.Text = environment.InstallDirectoryOrDefault.AbsolutePath;
-            _locations = application.LocationsOrDefault.ToList();
+            _installDirectoryTextBox.Text = environment.InstallDirectory.AbsolutePath;
+            _locations = application.Locations.ToList();
             _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
             _locationTypeComboBox.SelectedIndex = 0;
             _save = save;
-            _serverAddressTextBox.Text = package.Nginx.ServerAddressOrDefault;
-            _serverPortTextBox.Text = package.Nginx.ServerPortOrDefault.ToString(CultureInfo.InvariantCulture);
+            _serverAddressTextBox.Text = package.Nginx.ServerAddress;
+            _serverPortTextBox.Text = package.Nginx.ServerPort.ToString(CultureInfo.InvariantCulture);
 
             LocationRefresh();
         }
 
         private void AcceptButton_Click(object sender, EventArgs e)
         {
-            _application.Environment.InstallDirectory = new Uri(_installDirectoryTextBox.Text);
+            if (!Uri.TryCreate(_installDirectoryTextBox.Text, UriKind.Absolute, out var installDirectory))
+            {
+                MessageBox.Show(this, "Install directory is not a valid path", "Error", MessageBoxButtons.OK);
+
+                return;
+            }
+
+            if (!IPAddress.TryParse(_serverAddressTextBox.Text, out var serverAddress))
+            {
+                MessageBox.Show(this, "Server address is not a valid IP", "Error", MessageBoxButtons.OK);
+
+                return;
+            }
+
+            if (!int.TryParse(_serverPortTextBox.Text, out var serverPort) || serverPort < 1 || serverPort > 65535)
+            {
+                MessageBox.Show(this, "Server port is not a valid integer between 1 and 65535", "Error", MessageBoxButtons.OK);
+
+                return;
+            }
+
+            _application.Environment.InstallDirectory = installDirectory;
             _application.Locations = _locations.ToArray();
-            _application.Package.Nginx.ServerAddress =
-                _serverAddressTextBox.Text.Length > 0 ? _serverAddressTextBox.Text : null;
-            _application.Package.Nginx.ServerPort = int.TryParse(_serverPortTextBox.Text, out var serverPort)
-                ? (int?) serverPort
-                : null;
+            _application.Package.Nginx.ServerAddress = serverAddress.ToString();
+            _application.Package.Nginx.ServerPort = serverPort;
 
             _save(_application);
 
@@ -75,11 +94,16 @@ namespace Winp.Forms
 
         private void LocationUpdateButton_Click(object sender, EventArgs e)
         {
+            if (!Uri.TryCreate(_locationAliasTextBox.Text, UriKind.Absolute, out var aliasDirectory))
+            {
+                MessageBox.Show(this, "Root directory is not a valid path", "Error", MessageBoxButtons.OK);
+
+                return;
+            }
+
             var location = new LocationConfig
             {
-                Alias = Uri.TryCreate(_locationAliasTextBox.Text, UriKind.RelativeOrAbsolute, out var aliasDirectory)
-                    ? aliasDirectory
-                    : null,
+                Alias = aliasDirectory,
                 Base = _locationBaseTextBox.Text,
                 Index = _locationIndexCheckBox.Checked,
                 List = _locationListCheckBox.Checked,
@@ -110,10 +134,10 @@ namespace Winp.Forms
             {
                 var location = _locations[item.Index];
 
-                _locationAliasTextBox.Text = location.AliasOrDefault.IsAbsoluteUri
-                    ? location.AliasOrDefault.AbsolutePath
+                _locationAliasTextBox.Text = location.Alias.IsAbsoluteUri
+                    ? location.Alias.AbsolutePath
                     : string.Empty;
-                _locationBaseTextBox.Text = location.BaseOrDefault;
+                _locationBaseTextBox.Text = location.Base;
                 _locationIndexCheckBox.Checked = location.Index;
                 _locationListCheckBox.Checked = location.List;
                 _locationTypeComboBox.SelectedIndex = (int) location.Type;
@@ -181,7 +205,7 @@ namespace Winp.Forms
         {
             _locationListBox.Items.Clear();
             _locationListBox.Items.AddRange(_locations
-                .Select((location, index) => new LocationItem(index, location.BaseOrDefault))
+                .Select((location, index) => new LocationItem(index, location.Base))
                 .Cast<object>()
                 .ToArray());
             _locationListBox.Items.Add("<new location>");

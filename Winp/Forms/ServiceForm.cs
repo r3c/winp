@@ -49,7 +49,7 @@ namespace Winp.Forms
         private static Configuration.ApplicationConfig ConfigurationLoad()
         {
             if (!File.Exists(ConfigurationPath))
-                return default;
+                return new Configuration.ApplicationConfig();
 
             using var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
             using var reader = new StreamReader(stream, Encoding.UTF8);
@@ -72,6 +72,9 @@ namespace Winp.Forms
                 ConfigurationSave(configuration);
 
                 _configuration = configuration;
+
+                InstallRefresh();
+                ExecuteRefresh();
             });
 
             form.Show(this);

@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Winp.Packages;
 
 namespace Winp.Configuration
 {
-    public struct ApplicationConfig
+    public record ApplicationConfig
     {
         public static readonly string Base = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) ?? string.Empty;
 
-        [JsonIgnore]
-        public IReadOnlyList<LocationConfig> LocationsOrDefault => Locations ?? new[]
+        [JsonProperty(PropertyName = "environment")]
+        public EnvironmentConfig Environment = new EnvironmentConfig();
+
+        [JsonProperty(PropertyName = "locations")]
+        public IReadOnlyList<LocationConfig> Locations = new[]
         {
             new LocationConfig
             {
@@ -23,7 +27,7 @@ namespace Winp.Configuration
             },
             new LocationConfig
             {
-                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(Environment.InstallDirectoryOrDefault, Package.PhpMyAdmin.VariantOrDefault).AbsolutePath)),
+                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(new EnvironmentConfig().InstallDirectory, new PhpMyAdminConfig().Variants.First().Identifier).AbsolutePath)),
                 Base = "/phpmyadmin/",
                 Index = true,
                 List = true,
@@ -31,13 +35,7 @@ namespace Winp.Configuration
             }
         };
 
-        [JsonProperty(PropertyName = "environment")]
-        public EnvironmentConfig Environment;
-
-        [JsonProperty(PropertyName = "locations")]
-        public LocationConfig[]? Locations;
-
         [JsonProperty(PropertyName = "package")]
-        public PackageConfig Package;
+        public PackageConfig Package = new PackageConfig();
     }
 }

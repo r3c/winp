@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -18,9 +19,10 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var phpMyAdmin = application.Package.PhpMyAdmin;
+            var variant = phpMyAdmin.Variants.First();
 
             // Write configuration files
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
             var context = Context.Empty;
 
             foreach (var name in new[] { ConfigurationPhpMyAdmin })
@@ -40,11 +42,11 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var phpMyAdmin = application.Package.PhpMyAdmin;
+            var variant = phpMyAdmin.Variants.First();
 
             // Download and extract archive
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(phpMyAdmin.DownloadUrlOrDefault,
-                phpMyAdmin.ArchivePathOrDefault, packageDirectory);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -55,8 +57,8 @@ namespace Winp.Packages
         public bool IsInstalled(ApplicationConfig application)
         {
             var environment = application.Environment;
-            var phpMyAdmin = application.Package.PhpMyAdmin;
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, phpMyAdmin.VariantOrDefault);
+            var variant = application.Package.PhpMyAdmin.Variants.First();
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
 
             return File.Exists(Path.Combine(packageDirectory.AbsolutePath, IndexPhpMyAdmin));
         }

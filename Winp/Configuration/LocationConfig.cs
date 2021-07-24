@@ -4,27 +4,21 @@ using Newtonsoft.Json;
 
 namespace Winp.Configuration
 {
-    public struct LocationConfig
+    public record LocationConfig
     {
-        [JsonIgnore]
-        public readonly Uri AliasOrDefault => Alias ?? new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
-
-        [JsonIgnore]
-        public readonly string BaseOrDefault => Base ?? "/";
-
         [JsonProperty(PropertyName = "alias")]
-        public Uri? Alias;
+        public Uri Alias = new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
 
         [JsonProperty(PropertyName = "base")]
-        public string? Base;
+        public string Base = "/";
 
         [JsonProperty(PropertyName = "index")]
-        public bool Index;
+        public bool Index = false;
 
         [JsonProperty(PropertyName = "list")]
-        public bool List;
+        public bool List = false;
 
         [JsonProperty(PropertyName = "type")]
-        public LocationType Type;
+        public LocationType Type = LocationType.Deny;
     }
 }

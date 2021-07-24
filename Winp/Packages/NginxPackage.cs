@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -20,22 +21,23 @@ namespace Winp.Packages
         public async Task<string?> Configure(ApplicationConfig application)
         {
             var environment = application.Environment;
-            var locations = application.LocationsOrDefault;
+            var locations = application.Locations;
             var nginx = application.Package.Nginx;
             var php = application.Package.Php;
+            var variant = nginx.Variants.First();
 
             // Write configuration files
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
             var locationValues = new List<Value>();
 
             foreach (var location in locations)
             {
-                Directory.CreateDirectory(location.AliasOrDefault.AbsolutePath);
+                Directory.CreateDirectory(location.Alias.AbsolutePath);
 
                 locationValues.Add(new Dictionary<Value, Value>
                 {
-                    ["alias"] = location.AliasOrDefault.AbsolutePath,
-                    ["base"] = location.BaseOrDefault,
+                    ["alias"] = location.Alias.AbsolutePath,
+                    ["base"] = location.Base,
                     ["index"] = location.Index,
                     ["list"] = location.List,
                     ["type"] = (int)location.Type
@@ -45,10 +47,10 @@ namespace Winp.Packages
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
                 ["locations"] = locationValues,
-                ["phpServerAddress"] = php.ServerAddressOrDefault,
-                ["phpServerPort"] = php.ServerPortOrDefault,
-                ["serverAddress"] = nginx.ServerAddressOrDefault,
-                ["serverPort"] = nginx.ServerPortOrDefault
+                ["phpServerAddress"] = php.ServerAddress,
+                ["phpServerPort"] = php.ServerPort,
+                ["serverAddress"] = nginx.ServerAddress,
+                ["serverPort"] = nginx.ServerPort
             });
 
             foreach (var name in new[] { ConfigurationFastCgi, ConfigurationNginx })
@@ -77,11 +79,11 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var nginx = application.Package.Nginx;
+            var variant = nginx.Variants.First();
 
             // Download and extract archive
-            var installDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, nginx.VariantOrDefault);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(nginx.DownloadUrlOrDefault,
-                nginx.ArchivePathOrDefault, installDirectory);
+            var installDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, installDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -96,9 +98,9 @@ namespace Winp.Packages
 
         private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
         {
-            var identifier = application.Package.Nginx.VariantOrDefault;
-            var installDirectory = application.Environment.InstallDirectoryOrDefault;
-            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+            var installDirectory = application.Environment.InstallDirectory;
+            var variant = application.Package.Nginx.Variants.First();
+            var packageDirectory = GetPackageDirectory(installDirectory, variant.Identifier);
 
             return SystemProcess.CreateStartInfo(packageDirectory, "nginx.exe", arguments);
         }

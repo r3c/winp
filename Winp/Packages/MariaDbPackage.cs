@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -20,13 +21,14 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var mariadb = application.Package.MariaDb;
+            var variant = mariadb.Variants.First();
 
             // Write configuration file
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
-                ["dataDirectory"] = mariadb.DataDirectoryOrDefault,
-                ["serverPort"] = mariadb.ServerPortOrDefault
+                ["dataDirectory"] = mariadb.DataDirectory,
+                ["serverPort"] = mariadb.ServerPort
             });
 
             foreach (var name in new[] { ConfigurationMysqld })
@@ -39,9 +41,9 @@ namespace Winp.Packages
             }
 
             // Initialize data directory
-            if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectoryOrDefault, "my.ini")))
+            if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectory, "my.ini")))
             {
-                var arguments = new[] { SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectoryOrDefault) };
+                var arguments = new[] { SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectory) };
                 var process = SystemProcess.Start(CreateProcessStartInfo(application, "mysql_install_db.exe", arguments));
 
                 if (process == null || await process.Stop(TimeSpan.FromSeconds(15)) != 0)
@@ -69,11 +71,11 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var mariadb = application.Package.MariaDb;
+            var variant = mariadb.Variants.First();
 
             // Download and extract archive
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, mariadb.VariantOrDefault);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(mariadb.DownloadUrlOrDefault,
-                mariadb.ArchivePathOrDefault, packageDirectory);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -88,9 +90,9 @@ namespace Winp.Packages
 
         private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string executable, string[] arguments)
         {
-            var identifier = application.Package.MariaDb.VariantOrDefault;
-            var installDirectory = application.Environment.InstallDirectoryOrDefault;
-            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+            var installDirectory = application.Environment.InstallDirectory;
+            var variant = application.Package.MariaDb.Variants.First();
+            var packageDirectory = GetPackageDirectory(installDirectory, variant.Identifier);
 
             return SystemProcess.CreateStartInfo(packageDirectory, Path.Combine("bin", executable), arguments);
         }

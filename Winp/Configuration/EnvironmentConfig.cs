@@ -4,12 +4,9 @@ using Newtonsoft.Json;
 
 namespace Winp.Configuration
 {
-    public struct EnvironmentConfig
+    public record EnvironmentConfig
     {
-        [JsonIgnore]
-        public readonly Uri InstallDirectoryOrDefault => InstallDirectory ?? new Uri(Path.Combine(ApplicationConfig.Base, "Install"));
-
         [JsonProperty(PropertyName = "installDirectory")]
-        public Uri? InstallDirectory;
+        public Uri InstallDirectory = new Uri(Path.Combine(ApplicationConfig.Base, "Install"));
     }
 }

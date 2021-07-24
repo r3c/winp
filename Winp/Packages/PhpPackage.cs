@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -20,9 +21,10 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var php = application.Package.Php;
+            var variant = php.Variants.First();
 
             // Write configuration files
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
             var context = Context.Empty;
 
             foreach (var name in new[] { ConfigurationPhp })
@@ -40,7 +42,7 @@ namespace Winp.Packages
         public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
         {
             var php = application.Package.Php;
-            var binding = $"{php.ServerAddressOrDefault}:{php.ServerPortOrDefault}";
+            var binding = $"{php.ServerAddress}:{php.ServerPort}";
 
             return CreateProcessStartInfo(application, new[] { "-b", binding, "-c", "php.ini" });
         }
@@ -59,11 +61,11 @@ namespace Winp.Packages
         {
             var environment = application.Environment;
             var php = application.Package.Php;
+            var variant = php.Variants.First();
 
             // Download and extract archive
-            var packageDirectory = GetPackageDirectory(environment.InstallDirectoryOrDefault, php.VariantOrDefault);
-            var downloadMessage = await ArchiveHelper.DownloadAndExtract(php.DownloadUrlOrDefault,
-                php.ArchivePathOrDefault, packageDirectory);
+            var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+            var downloadMessage = await ArchiveHelper.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
 
             if (downloadMessage != null)
                 return $"download failure ({downloadMessage})";
@@ -78,9 +80,9 @@ namespace Winp.Packages
 
         private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
         {
-            var identifier = application.Package.Php.VariantOrDefault;
-            var installDirectory = application.Environment.InstallDirectoryOrDefault;
-            var packageDirectory = GetPackageDirectory(installDirectory, identifier);
+            var installDirectory = application.Environment.InstallDirectory;
+            var variant = application.Package.Php.Variants.First();
+            var packageDirectory = GetPackageDirectory(installDirectory, variant.Identifier);
 
             return SystemProcess.CreateStartInfo(packageDirectory, "php-cgi.exe", arguments);
         }

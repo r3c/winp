@@ -1,41 +1,28 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Winp.Configuration
 {
-    public struct NginxConfig
+    public record NginxConfig
     {
         private const string Version = "1.19.9";
 
-        [JsonIgnore]
-        public readonly string ArchivePathOrDefault => ArchivePath ?? Path.GetFileNameWithoutExtension(DownloadUrlOrDefault.AbsolutePath);
-
-        [JsonProperty(PropertyName = "archivePath")]
-        public string? ArchivePath;
-
-        [JsonIgnore]
-        public readonly Uri DownloadUrlOrDefault => DownloadUrl ?? new Uri($"https://nginx.org/download/nginx-{Version}.zip");
-
-        [JsonIgnore]
-        public readonly string VariantOrDefault => Variant ?? $"{Version}";
-
-        [JsonProperty(PropertyName = "downloadUrl")]
-        public Uri? DownloadUrl;
-
-        [JsonIgnore]
-        public readonly string ServerAddressOrDefault => ServerAddress ?? "127.0.0.1";
-
         [JsonProperty(PropertyName = "serverAddress")]
-        public string? ServerAddress;
-
-        [JsonIgnore]
-        public readonly int ServerPortOrDefault => ServerPort ?? 80;
+        public string ServerAddress = "127.0.0.1";
 
         [JsonProperty(PropertyName = "serverPort")]
-        public int? ServerPort;
+        public int ServerPort = 80;
 
-        [JsonProperty(PropertyName = "variant")]
-        public string? Variant;
+        [JsonProperty(PropertyName = "variants")]
+        public IReadOnlyList<PackageVariantConfig> Variants = new[]
+        {
+            new PackageVariantConfig
+            {
+                DownloadUrl = new Uri($"https://nginx.org/download/nginx-{Version}.zip"),
+                Identifier = Version,
+                PathInArchive = $"nginx-{Version}"
+            }
+        };
     }
 }
