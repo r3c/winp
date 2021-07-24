@@ -15,27 +15,37 @@ namespace Winp.Configuration
         public EnvironmentConfig Environment = new EnvironmentConfig();
 
         [JsonProperty(PropertyName = "locations")]
-        public IReadOnlyList<LocationConfig> Locations = new[]
-        {
-            new LocationConfig
-            {
-                Alias = new Uri(Path.Combine(Base, "Root")),
-                Base = "/",
-                Index = true,
-                List = true,
-                Type = LocationType.PhpFileName
-            },
-            new LocationConfig
-            {
-                Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(new EnvironmentConfig().InstallDirectory, new PhpMyAdminConfig().Variants.First().Identifier).AbsolutePath)),
-                Base = "/phpmyadmin/",
-                Index = true,
-                List = true,
-                Type = LocationType.PhpFileName
-            }
-        };
+        public IReadOnlyList<LocationConfig> Locations;
 
         [JsonProperty(PropertyName = "package")]
-        public PackageConfig Package = new PackageConfig();
+        public PackageConfig Package;
+
+        public ApplicationConfig()
+        {
+            var environment = new EnvironmentConfig();
+            var package = new PackageConfig();
+
+            Environment = environment;
+            Locations = new[]
+            {
+                new LocationConfig
+                {
+                    Alias = new Uri(Path.Combine(Base, "Root")),
+                    Base = "/",
+                    Index = true,
+                    List = true,
+                    Type = LocationType.PhpFileName
+                },
+                new LocationConfig
+                {
+                    Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(environment.InstallDirectory, package.PhpMyAdmin.Variants.First().Identifier).AbsolutePath)),
+                    Base = "/phpmyadmin/",
+                    Index = true,
+                    List = true,
+                    Type = LocationType.PhpFileName
+                }
+            };
+            Package = package;
+        }
     }
 }
