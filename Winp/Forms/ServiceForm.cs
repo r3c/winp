@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,20 @@ namespace Winp.Forms
         {
             InitializeComponent();
 
-            _configuration = ConfigurationLoad();
+            Configuration.ApplicationConfig configuration;
+
+            try
+            {
+                configuration = ConfigurationLoad();
+            }
+            catch (JsonException exception)
+            {
+                MessageBox.Show(this, $"Could not load configuration file '{ConfigurationPath}', defaults will be used." + Environment.NewLine + Environment.NewLine + "Error was: " + exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                configuration = new Configuration.ApplicationConfig();
+            }
+
+            _configuration = configuration;
             _scheduler = TaskScheduler.FromCurrentSynchronizationContext();
         }
 
@@ -179,7 +193,7 @@ namespace Winp.Forms
             return null;
         }
 
-        private void ExecuteRefresh()
+        private bool ExecuteRefresh()
         {
             var allExited = true;
             var anyExited = false;
@@ -196,6 +210,8 @@ namespace Winp.Forms
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure, "Process faulted");
             else
                 SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Success, "Services running");
+
+            return !anyExited;
         }
 
         private async Task ExecuteStart()
@@ -218,7 +234,16 @@ namespace Winp.Forms
                 return;
             }
 
-            ExecuteRefresh();
+            if (ExecuteRefresh() && _configuration.Locations.Count > 0)
+            {
+                var nginx = _configuration.Package.Nginx;
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = $"http://{nginx.ServerAddress}:{nginx.ServerPort}{_configuration.Locations[0].Base}",
+                    UseShellExecute = true
+                });
+            }
         }
 
         private async Task ExecuteStop()
