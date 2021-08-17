@@ -12,7 +12,7 @@ namespace Winp.Install
     internal static class ResourceHelper
     {
         private static readonly DocumentConfiguration Configuration = new DocumentConfiguration
-            {BlockBegin = "{{", BlockContinue = "}|{", BlockEnd = "}}"};
+        { BlockBegin = "{{", BlockContinue = "}|{", BlockEnd = "}}" };
 
         public static async Task<bool> WriteToFile<TOrigin>(string resourceName, IContext extraContext, string path)
         {

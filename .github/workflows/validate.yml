@@ -1,0 +1,19 @@
+name: Validate
+
+on:
+  - push
+
+jobs:
+  check:
+    name: Check code style
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_NOLOGO: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - run: dotnet tool install --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json -g dotnet-format
+      - run: dotnet-format --check Winp.sln

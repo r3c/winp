@@ -59,7 +59,7 @@ namespace Winp.Processes
 
         public static SystemProcess? Start(ProcessStartInfo startInfo)
         {
-            var process = new Process {StartInfo = startInfo, EnableRaisingEvents = true};
+            var process = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
 
             if (process.Start())
                 return new SystemProcess(process);
@@ -88,7 +88,7 @@ namespace Winp.Processes
             _signal = false;
 
             if (_process == null)
-                return Task.FromResult((int?) null);
+                return Task.FromResult((int?)null);
 
             _process.CloseMainWindow();
 
@@ -96,7 +96,7 @@ namespace Winp.Processes
             {
                 try
                 {
-                    if (_process.WaitForExit((int) duration.TotalMilliseconds))
+                    if (_process.WaitForExit((int)duration.TotalMilliseconds))
                         return _process.ExitCode;
 
                     _process.Kill();

@@ -264,7 +264,7 @@ namespace Winp.Forms
 
                 if (status.HasValue)
                 {
-                    label.ImageIndex = (int) status.Value;
+                    label.ImageIndex = (int)status.Value;
                     label.Text = text;
 
                     label.AutoSize = true;
