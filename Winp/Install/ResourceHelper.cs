@@ -47,10 +47,9 @@ namespace Winp.Install
 
             var context = Context.CreateCascade(extraContext, Context.CreateBuiltin(new Dictionary<Value, Value>
             {
-                ["replace"] = new FunctionValue(Function.CreatePure(
-                    (state, arguments) => arguments[0].AsString.Replace(arguments[1].AsString, arguments[2].AsString),
-                    3)),
-                ["trim"] = new FunctionValue(Function.CreatePure2((state, input, remove) =>
+                ["replace"] = Value.FromFunction(Function.CreatePure3(
+                    (state, source, from, to) => source.AsString.Replace(from.AsString, to.AsString))),
+                ["trim"] = Value.FromFunction(Function.CreatePure2((state, input, remove) =>
                     remove.AsString.Length > 0 ? input.AsString.Trim(remove.AsString[0]) : string.Empty))
             }));
 
