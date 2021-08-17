@@ -61,8 +61,19 @@ namespace Winp.Forms
                 return;
             }
 
+            var previousInstallDirectory = _application.Environment.InstallDirectory;
+
+            if (installDirectory != previousInstallDirectory)
+            {
+                _locations.ForEach(location =>
+                {
+                    if (location.Alias.AbsolutePath.StartsWith(previousInstallDirectory.AbsolutePath) && Uri.TryCreate(installDirectory.AbsolutePath + location.Alias.AbsolutePath[previousInstallDirectory.AbsolutePath.Length..], UriKind.Absolute, out var movedAlias))
+                        location.Alias = movedAlias;
+                });
+            }
+
             _application.Environment.InstallDirectory = installDirectory;
-            _application.Locations = _locations.ToArray();
+            _application.Locations = _locations;
             _application.Package.Nginx.ServerAddress = serverAddress.ToString();
             _application.Package.Nginx.ServerPort = serverPort;
 
@@ -107,7 +118,7 @@ namespace Winp.Forms
                 Base = _locationBaseTextBox.Text,
                 Index = _locationIndexCheckBox.Checked,
                 List = _locationListCheckBox.Checked,
-                Type = (LocationType) _locationTypeComboBox.SelectedIndex
+                Type = (LocationType)_locationTypeComboBox.SelectedIndex
             };
 
             if (_locationListBox.SelectedItem is LocationItem item)
@@ -140,7 +151,7 @@ namespace Winp.Forms
                 _locationBaseTextBox.Text = location.Base;
                 _locationIndexCheckBox.Checked = location.Index;
                 _locationListCheckBox.Checked = location.List;
-                _locationTypeComboBox.SelectedIndex = (int) location.Type;
+                _locationTypeComboBox.SelectedIndex = (int)location.Type;
 
                 _locationDeleteButton.Enabled = true;
                 _locationUpdateButton.Text = @"Update";
@@ -166,7 +177,7 @@ namespace Winp.Forms
 
         private void LocationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch ((LocationType) _locationTypeComboBox.SelectedIndex)
+            switch ((LocationType)_locationTypeComboBox.SelectedIndex)
             {
                 case LocationType.PhpFileName:
                 case LocationType.Static:
