@@ -44,7 +44,7 @@ namespace Winp
             {
                 // Stop running process
                 var duration = TimeSpan.FromSeconds(5);
-                var tasks = new List<Task<int?>>(2) {_process.Stop(duration)};
+                var tasks = new List<Task<int?>>(2) { _process.Stop(duration) };
 
                 // Execute "stop" command
                 var stopStartInfo = Package.CreateProcessStop(application, _process.Id);

@@ -51,7 +51,7 @@ namespace Winp.Packages
         {
             return new ProcessStartInfo
             {
-                ArgumentList = {"/F", "/PID", processId.ToString(CultureInfo.InvariantCulture)},
+                ArgumentList = { "/F", "/PID", processId.ToString(CultureInfo.InvariantCulture) },
                 CreateNoWindow = true,
                 FileName = "taskkill.exe"
             };
