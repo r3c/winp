@@ -68,7 +68,7 @@ namespace Winp.Forms
             using var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            return JsonConvert.DeserializeObject<Configuration.ApplicationConfig>(reader.ReadToEnd());
+            return JsonConvert.DeserializeObject<Configuration.ApplicationConfig>(reader.ReadToEnd())!;
         }
 
         private static void ConfigurationSave(Configuration.ApplicationConfig configuration)
