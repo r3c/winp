@@ -1,30 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <ApplicationIcon>Winp.ico</ApplicationIcon>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net5.0-windows</TargetFramework>
-        <UseWindowsForms>true</UseWindowsForms>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Winp.ico</ApplicationIcon>
+    <Authors>Remi Caput</Authors>
+    <Description>Portable Nginx/PHP/MySQL development server for Windows.</Description>
+    <Nullable>enable</Nullable>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Version>0.2.5</Version>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Cottle" Version="2.0.4" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Cottle" Version="2.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <None Remove="Services\Nginx\custom.conf" />
-      <None Remove="Services\Nginx\fastcgi-php.conf" />
-      <EmbeddedResource Include="Packages\Nginx\fastcgi-php.conf" />
-      <None Remove="Services\Nginx\nginx.conf" />
-      <EmbeddedResource Include="Packages\Nginx\nginx.conf" />
-      <None Remove="Services\Php\php.ini" />
-      <EmbeddedResource Include="Packages\Php\php.ini" />
-      <None Remove="Services\MariaDb\mysqld.cnf" />
-      <EmbeddedResource Include="Packages\MariaDb\mysqld.cnf" />
-      <None Remove="Services\PhpMyAdmin\config.inc.php" />
-      <EmbeddedResource Include="Packages\PhpMyAdmin\config.inc.php" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Remove="Services\Nginx\custom.conf" />
+    <None Remove="Services\Nginx\fastcgi-php.conf" />
+    <EmbeddedResource Include="Packages\Nginx\fastcgi-php.conf" />
+    <None Remove="Services\Nginx\nginx.conf" />
+    <EmbeddedResource Include="Packages\Nginx\nginx.conf" />
+    <None Remove="Services\Php\php.ini" />
+    <EmbeddedResource Include="Packages\Php\php.ini" />
+    <None Remove="Services\MariaDb\mysqld.cnf" />
+    <EmbeddedResource Include="Packages\MariaDb\mysqld.cnf" />
+    <None Remove="Services\PhpMyAdmin\config.inc.php" />
+    <EmbeddedResource Include="Packages\PhpMyAdmin\config.inc.php" />
+  </ItemGroup>
 
 </Project>
