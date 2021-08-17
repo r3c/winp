@@ -23,13 +23,21 @@ namespace Winp.Install
             if (stream == null)
                 throw new ArgumentOutOfRangeException(nameof(resourceName), resourceName, @"invalid resource name");
 
-            using var reader = new StreamReader(stream, Encoding.UTF8);
-
             var directory = Path.GetDirectoryName(path);
 
             if (!string.IsNullOrEmpty(directory))
                 Directory.CreateDirectory(directory);
 
+            var templatePath = path + ".template";
+
+            if (!File.Exists(templatePath))
+            {
+                using var template = File.Create(templatePath);
+
+                await stream.CopyToAsync(template);
+            }
+
+            using var reader = new StreamReader(templatePath, Encoding.UTF8);
             await using var writer = new StreamWriter(File.Create(path));
 
             var documentResult = Document.CreateDefault(reader, Configuration);
