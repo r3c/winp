@@ -28,9 +28,11 @@ namespace Winp.Install
             if (!string.IsNullOrEmpty(directory))
                 Directory.CreateDirectory(directory);
 
+            // Constant `Builtin.CompileTime` is generated before build, see project file
+            var compileDateTime = new DateTime(Builtin.CompileTicks, DateTimeKind.Local);
             var templatePath = path + ".template";
 
-            if (!File.Exists(templatePath))
+            if (!File.Exists(templatePath) || File.GetLastWriteTime(templatePath) < compileDateTime)
             {
                 using var template = File.Create(templatePath);
 
