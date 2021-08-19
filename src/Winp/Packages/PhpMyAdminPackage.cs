@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -15,11 +14,9 @@ namespace Winp.Packages
 
         public string Name => "PhpMyAdmin";
 
-        public async Task<string?> Configure(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var phpMyAdmin = application.Package.PhpMyAdmin;
-            var variant = phpMyAdmin.Variants.First();
 
             // Write configuration files
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -38,11 +35,9 @@ namespace Winp.Packages
             return null;
         }
 
-        public async Task<string?> Install(ApplicationConfig application)
+        public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var phpMyAdmin = application.Package.PhpMyAdmin;
-            var variant = phpMyAdmin.Variants.First();
 
             // Download and extract archive
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -54,10 +49,9 @@ namespace Winp.Packages
             return null;
         }
 
-        public bool IsInstalled(ApplicationConfig application)
+        public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var variant = application.Package.PhpMyAdmin.Variants.First();
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
 
             return File.Exists(Path.Combine(packageDirectory.AbsolutePath, IndexPhpMyAdmin));

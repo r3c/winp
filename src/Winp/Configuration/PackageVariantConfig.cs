@@ -15,5 +15,13 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "pathInArchive")]
         public string PathInArchive = string.Empty;
+
+        /// <summary>
+        /// Note: quick hack because PackageVariantConfig is used as a combobox item.
+        /// </summary>
+        public override string ToString()
+        {
+            return Identifier;
+        }
     }
 }

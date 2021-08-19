@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -18,13 +17,12 @@ namespace Winp.Packages
 
         public string Name => "Nginx";
 
-        public async Task<string?> Configure(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
             var locations = application.Locations;
             var nginx = application.Package.Nginx;
             var php = application.Package.Php;
-            var variant = nginx.Variants.First();
 
             // Write configuration files
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -65,21 +63,19 @@ namespace Winp.Packages
             return null;
         }
 
-        public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
+        public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
         {
-            return CreateProcessStartInfo(application, Array.Empty<string>());
+            return CreateProcessStartInfo(application, variantIdentifier, Array.Empty<string>());
         }
 
-        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
         {
-            return CreateProcessStartInfo(application, new[] { "-s", "quit" });
+            return CreateProcessStartInfo(application, variantIdentifier, new[] { "-s", "quit" });
         }
 
-        public async Task<string?> Install(ApplicationConfig application)
+        public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var nginx = application.Package.Nginx;
-            var variant = nginx.Variants.First();
 
             // Download and extract archive
             var installDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -91,16 +87,15 @@ namespace Winp.Packages
             return null;
         }
 
-        public bool IsInstalled(ApplicationConfig application)
+        public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
         {
-            return File.Exists(CreateProcessStartInfo(application, Array.Empty<string>()).FileName);
+            return File.Exists(CreateProcessStartInfo(application, variant.Identifier, Array.Empty<string>()).FileName);
         }
 
-        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
+        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string[] arguments)
         {
             var installDirectory = application.Environment.InstallDirectory;
-            var variant = application.Package.Nginx.Variants.First();
-            var packageDirectory = GetPackageDirectory(installDirectory, variant.Identifier);
+            var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
 
             return SystemProcess.CreateStartInfo(packageDirectory, "nginx.exe", arguments);
         }

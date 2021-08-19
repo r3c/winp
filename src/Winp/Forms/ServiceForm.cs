@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Winp.Configuration;
 using Winp.Packages;
 
 namespace Winp.Forms
@@ -18,20 +19,16 @@ namespace Winp.Forms
             Path.Combine(Path.GetDirectoryName(Application.ExecutablePath) ?? string.Empty,
                 Path.GetFileNameWithoutExtension(Application.ExecutablePath) + ".json");
 
-        private readonly IReadOnlyList<Instance> _instances = new[]
-            {new Instance(new MariaDbPackage()), new Instance(new NginxPackage()), new Instance(new PhpPackage())};
+        private ApplicationConfig _configuration;
 
-        private readonly IReadOnlyList<IInstallable> _packages = new IInstallable[]
-            {new MariaDbPackage(), new NginxPackage(), new PhpPackage(), new PhpMyAdminPackage()};
-
-        private Configuration.ApplicationConfig _configuration;
+        private readonly IReadOnlyList<Package> _packages;
         private readonly TaskScheduler _scheduler;
 
         public ServiceForm()
         {
             InitializeComponent();
 
-            Configuration.ApplicationConfig configuration;
+            ApplicationConfig configuration;
 
             try
             {
@@ -41,37 +38,62 @@ namespace Winp.Forms
             {
                 MessageBox.Show(this, $"Could not load configuration file '{ConfigurationPath}', defaults will be used." + Environment.NewLine + Environment.NewLine + "Error was: " + exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                configuration = new Configuration.ApplicationConfig();
+                configuration = new ApplicationConfig();
             }
 
+            var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
+            var mariaDbPackage = new MariaDbPackage();
+            var mariaDbInstance = new Instance(mariaDbPackage);
+            var mariaDbService = new Package(mariaDbPackage, mariaDbInstance, scheduler, _packageMariaDbVariantComboBox, _packageMariaDbStatusLabel, configuration.Package.MariaDb.Variants, PackageRefresh);
+            var nginxPackage = new NginxPackage();
+            var nginxInstance = new Instance(nginxPackage);
+            var nginxService = new Package(nginxPackage, nginxInstance, scheduler, _packageNginxVariantComboBox, _packageNginxStatusLabel, configuration.Package.Nginx.Variants, PackageRefresh);
+            var phpPackage = new PhpPackage();
+            var phpInstance = new Instance(phpPackage);
+            var phpService = new Package(phpPackage, phpInstance, scheduler, _packagePhpVariantComboBox, _packagePhpStatusLabel, configuration.Package.Php.Variants, PackageRefresh);
+            var phpMyAdminPackage = new PhpMyAdminPackage();
+            var phpMyAdminService = new Package(phpMyAdminPackage, null, scheduler, _packagePhpMyAdminVariantComboBox, _packagePhpMyAdminStatusLabel, configuration.Package.PhpMyAdmin.Variants, PackageRefresh);
+
             _configuration = configuration;
-            _scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            _packages = new[] { mariaDbService, nginxService, phpService, phpMyAdminService };
+            _scheduler = scheduler;
+
+            mariaDbService.Initialize();
+            nginxService.Initialize();
+            phpService.Initialize();
+            phpMyAdminService.Initialize();
+        }
+
+        private void ServiceForm_Shown(object sender, EventArgs e)
+        {
+            PackageRefreshAll();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             // Allow closing form is all services are stopped
-            if (!_instances.Any(instance => instance.IsRunning))
+            if (!_packages.Any(package => package.Instance?.IsRunning ?? false))
                 return;
 
             // Otherwise stop them before closing form
-            ExecuteStop().ContinueWith(task => Close(), _scheduler);
+            ControlStopExecute().ContinueWith(task => Close(), _scheduler);
 
             e.Cancel = true;
         }
 
-        private static Configuration.ApplicationConfig ConfigurationLoad()
+        private static ApplicationConfig ConfigurationLoad()
         {
             if (!File.Exists(ConfigurationPath))
-                return new Configuration.ApplicationConfig();
+                return new ApplicationConfig();
 
             using var stream = new FileStream(ConfigurationPath, FileMode.Open, FileAccess.Read);
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
-            return JsonConvert.DeserializeObject<Configuration.ApplicationConfig>(reader.ReadToEnd())!;
+            return JsonConvert.DeserializeObject<ApplicationConfig>(reader.ReadToEnd())!;
         }
 
-        private static void ConfigurationSave(Configuration.ApplicationConfig configuration)
+        private static void ConfigurationSave(ApplicationConfig configuration)
         {
             using var stream = new FileStream(ConfigurationPath, FileMode.Create, FileAccess.Write);
             using var writer = new StreamWriter(stream, Encoding.UTF8);
@@ -79,7 +101,7 @@ namespace Winp.Forms
             writer.Write(JsonConvert.SerializeObject(configuration, Formatting.Indented));
         }
 
-        private void ConfigureButton_Click(object sender, EventArgs e)
+        private void ControlConfigureButton_Click(object sender, EventArgs e)
         {
             var form = new ConfigurationForm(_configuration, configuration =>
             {
@@ -87,154 +109,51 @@ namespace Winp.Forms
 
                 _configuration = configuration;
 
-                InstallRefresh();
-                ExecuteRefresh();
+                PackageRefreshAll();
             });
 
             form.Show(this);
         }
 
-        private void InstallButton_Click(object sender, EventArgs e)
+        private void ControlInstallButton_Click(object sender, EventArgs e)
         {
-            var imageList = _statusImageList;
-            var label = _installStatusLabel;
-
-            InstallRun()
-                .ContinueWith(install => StatusDisplayError(install, "Installation failed: "), _scheduler)
-                .Unwrap()
-                .ContinueWith(success => InstallRefresh(), _scheduler);
+            Task.Run(ControlInstallExecute);
         }
 
-        private void ServiceForm_Shown(object sender, EventArgs e)
+        private void ControlStartButton_Click(object sender, EventArgs e)
         {
-            InstallRefresh();
-            ExecuteRefresh();
+            Task.Run(ControlStartExecute);
         }
 
-        private void ExecuteStartButton_Click(object sender, EventArgs e)
+        private void ControlStopButton_Click(object sender, EventArgs e)
         {
-            var imageList = _statusImageList;
-            var label = _installStatusLabel;
-
-            ConfigureRun()
-                .ContinueWith(configure => StatusDisplayError(configure, "Configuration failed: "), _scheduler)
-                .Unwrap()
-                .ContinueWith(success =>
-                {
-                    if (success.IsCompletedSuccessfully && success.Result)
-                        Task.Run(ExecuteStart);
-
-                    InstallRefresh();
-                }, _scheduler);
+            Task.Run(ControlStopExecute);
         }
 
-        private void ExecuteStopButton_Click(object sender, EventArgs e)
+        private async Task ControlInstallExecute()
         {
-            Task.Run(ExecuteStop);
-        }
-
-        private async Task<string?> ConfigureRun()
-        {
-            var imageList = _statusImageList;
-            var label = _installStatusLabel;
-
-            await ExecuteStop();
-
-            SetStatusLabel(label, imageList, Status.Loading, "Configuring packages...");
+            await ControlStopExecute();
 
             foreach (var package in _packages)
-            {
-                var message = await Task.Run(() => package.Configure(_configuration));
-
-                if (message != null)
-                    return $"{package.Name}: {message}";
-            }
-
-            return null;
+                await PackageInstall(package);
         }
 
-        private void InstallRefresh()
+        private async Task ControlStartExecute()
         {
-            var missing = new List<string>();
-
-            foreach (var package in _packages)
+            for (var i = 0; i < _packages.Count; ++i)
             {
-                if (!package.IsInstalled(_configuration))
-                    missing.Add(package.Name);
-            }
+                var started = await PackageStart(_packages[i]);
 
-            if (missing.Count > 0)
-            {
-                var message = "Missing packages: " + string.Join(", ", missing) + $" (click '{_installButton.Text}')";
-
-                SetStatusLabel(_installStatusLabel, _statusImageList, Status.Notice, message);
-            }
-            else
-                SetStatusLabel(_installStatusLabel, _statusImageList, Status.Success, "Packages installed");
-        }
-
-        private async Task<string?> InstallRun()
-        {
-            var imageList = _statusImageList;
-            var label = _installStatusLabel;
-
-            await ExecuteStop();
-
-            SetStatusLabel(label, imageList, Status.Loading, "Downloading and installing packages...");
-
-            foreach (var package in _packages)
-            {
-                var message = await Task.Run(() => package.Install(_configuration));
-
-                if (message != null)
-                    return $"{package.Name}: {message}";
-            }
-
-            return null;
-        }
-
-        private bool ExecuteRefresh()
-        {
-            var allExited = true;
-            var anyExited = false;
-
-            foreach (var instance in _instances)
-            {
-                allExited = allExited && !instance.IsRunning;
-                anyExited = anyExited || !instance.IsRunning;
-            }
-
-            if (allExited)
-                SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Notice, "Services stopped");
-            else if (anyExited)
-                SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure, "Process faulted");
-            else
-                SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Success, "Services running");
-
-            return !anyExited;
-        }
-
-        private async Task ExecuteStart()
-        {
-            SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Loading, "Starting services...");
-
-            for (var i = 0; i < _instances.Count; ++i)
-            {
-                var instance = _instances[i];
-
-                if (await Task.Run(() => instance.Start(_configuration, () => Task.Run(ExecuteRefresh))))
+                if (started)
                     continue;
 
                 for (var j = 0; j < i; ++j)
-                    await Task.Run(() => _instances[j].Stop(_configuration));
-
-                SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Failure,
-                    $"Failed starting process {instance.Package.Name}");
+                    await PackageStop(_packages[j]);
 
                 return;
             }
 
-            if (ExecuteRefresh() && _configuration.Locations.Count > 0)
+            if (_configuration.Locations.Count > 0)
             {
                 var nginx = _configuration.Package.Nginx;
 
@@ -246,56 +165,119 @@ namespace Winp.Forms
             }
         }
 
-        private async Task ExecuteStop()
+        private async Task ControlStopExecute()
         {
-            SetStatusLabel(_executeStatusLabel, _statusImageList, Status.Loading, "Stopping services...");
-
-            foreach (var instance in _instances)
-                await Task.Run(() => instance.Stop(_configuration));
-
-            ExecuteRefresh();
+            foreach (var package in _packages)
+                await PackageStop(package);
         }
 
-        private void SetStatusLabel(Label label, ImageList imageList, Status? status, string text)
+        private async Task<bool> PackageInstall(Package package)
         {
-            new Task(() =>
+            package.SetText(Status.Loading, "Downloading and installing...");
+
+            if (package.Variant is null)
             {
-                const int space = 4;
+                PackageRefresh(package);
 
-                if (status.HasValue)
-                {
-                    label.ImageIndex = (int)status.Value;
-                    label.Text = text;
+                return false;
+            }
 
-                    label.AutoSize = true;
+            var message = await Task.Run(() => package.Installable.Install(_configuration, package.Variant));
 
-                    var width = label.Width;
+            if (message != null)
+            {
+                package.SetText(Status.Failure, message);
 
-                    label.AutoSize = false;
+                return false;
+            }
 
-                    label.Width = imageList.ImageSize.Width + space + width;
-                    label.Visible = true;
-                }
-                else
-                    label.Visible = false;
-            }).Start(_scheduler);
+            PackageRefresh(package);
+
+            return true;
         }
 
-        private async Task<bool> StatusDisplayError(Task<string?> previous, string prefix)
+        private void PackageRefresh(Package package)
         {
-            var imageList = _statusImageList;
-            var label = _installStatusLabel;
-
-            if (previous.IsFaulted && previous.Exception != null)
-                SetStatusLabel(label, imageList, Status.Failure, prefix + previous.Exception.Message);
-            else if (previous.Result != null)
-                SetStatusLabel(label, imageList, Status.Failure, prefix + previous.Result);
+            if (package.Variant is null)
+                package.SetText(Status.Notice, "No selection");
+            else if (!package.Installable.IsInstalled(_configuration, package.Variant))
+                package.SetText(Status.Notice, "Not installed");
+            else if (package.Instance is null)
+                package.SetText(Status.Success, "Ready");
+            else if (package.Instance.IsRunning)
+                package.SetText(Status.Success, "Running");
             else
-                return true;
+                package.SetText(Status.Notice, "Not running");
+        }
 
-            await Task.Delay(TimeSpan.FromSeconds(3));
+        private void PackageRefreshAll()
+        {
+            foreach (var service in _packages)
+                PackageRefresh(service);
+        }
 
-            return false;
+        private async Task<bool> PackageStart(Package package)
+        {
+            await PackageStop(package);
+
+            package.SetText(Status.Loading, "Configuring package...");
+
+            var variant = package.Variant;
+
+            if (variant is null)
+            {
+                package.SetText(Status.Notice, "No selection");
+
+                return false;
+            }
+
+            var message = await Task.Run(() => package.Installable.Configure(_configuration, variant));
+
+            if (message != null)
+            {
+                package.SetText(Status.Failure, message);
+
+                return false;
+            }
+
+            var instance = package.Instance;
+
+            if (instance is not null)
+            {
+                package.SetText(Status.Failure, "Starting...");
+
+                var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier, () => PackageRefresh(package)));
+
+                if (!success)
+                {
+                    package.SetText(Status.Failure, "Could not start");
+
+                    return false;
+                }
+            }
+
+            PackageRefresh(package);
+
+            package.VersionLock();
+
+            return true;
+        }
+
+        private async Task PackageStop(Package package)
+        {
+            package.VersionUnlock();
+
+            var instance = package.Instance;
+            var variant = package.Variant;
+
+            if (instance is null || variant is null)
+                return;
+
+            package.SetText(Status.Failure, "Stopping...");
+
+            await Task.Run(() => instance.Stop(_configuration, variant.Identifier));
+
+            PackageRefresh(package);
         }
     }
 }

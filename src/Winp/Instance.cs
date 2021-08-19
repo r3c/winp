@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Winp.Configuration;
 using Winp.Processes;
 
@@ -21,12 +22,12 @@ namespace Winp
             _process = null;
         }
 
-        public async Task<bool> Start(ApplicationConfig application, Action refresh)
+        public async Task<bool> Start(ApplicationConfig application, string variantIdentifier, Action refresh)
         {
             if (_process != null)
-                await Stop(application);
+                await Stop(application, variantIdentifier);
 
-            var process = SystemProcess.Start(Package.CreateProcessStart(application));
+            var process = SystemProcess.Start(Package.CreateProcessStart(application, variantIdentifier));
 
             if (process == null)
                 return false;
@@ -38,7 +39,7 @@ namespace Winp
             return true;
         }
 
-        public async Task Stop(ApplicationConfig application)
+        public async Task Stop(ApplicationConfig application, string variantIdentifier)
         {
             if (_process != null)
             {
@@ -47,7 +48,7 @@ namespace Winp
                 var tasks = new List<Task<int?>>(2) { _process.Stop(duration) };
 
                 // Execute "stop" command
-                var stopStartInfo = Package.CreateProcessStop(application, _process.Id);
+                var stopStartInfo = Package.CreateProcessStop(application, variantIdentifier, _process.Id);
                 var stopProcess = SystemProcess.Start(stopStartInfo);
 
                 if (stopProcess != null)

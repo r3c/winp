@@ -7,8 +7,8 @@ namespace Winp
     {
         string Name { get; }
 
-        Task<string?> Configure(ApplicationConfig application);
-        Task<string?> Install(ApplicationConfig application);
-        bool IsInstalled(ApplicationConfig application);
+        Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant);
+        Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant);
+        bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant);
     }
 }
