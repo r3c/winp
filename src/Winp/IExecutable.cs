@@ -7,7 +7,7 @@ namespace Winp
     {
         string Name { get; }
 
-        ProcessStartInfo CreateProcessStart(ApplicationConfig application);
-        ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId);
+        ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variant);
+        ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variant, int processId);
     }
 }

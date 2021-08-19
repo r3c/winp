@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -17,11 +16,9 @@ namespace Winp.Packages
 
         public string Name => "PHP";
 
-        public async Task<string?> Configure(ApplicationConfig application)
+        public async Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var php = application.Package.Php;
-            var variant = php.Variants.First();
 
             // Write configuration files
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -39,15 +36,15 @@ namespace Winp.Packages
             return null;
         }
 
-        public ProcessStartInfo CreateProcessStart(ApplicationConfig application)
+        public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
         {
             var php = application.Package.Php;
             var binding = $"{php.ServerAddress}:{php.ServerPort}";
 
-            return CreateProcessStartInfo(application, new[] { "-b", binding, "-c", "php.ini" });
+            return CreateProcessStartInfo(application, variantIdentifier, new[] { "-b", binding, "-c", "php.ini" });
         }
 
-        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, int processId)
+        public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
         {
             return new ProcessStartInfo
             {
@@ -57,11 +54,9 @@ namespace Winp.Packages
             };
         }
 
-        public async Task<string?> Install(ApplicationConfig application)
+        public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
         {
             var environment = application.Environment;
-            var php = application.Package.Php;
-            var variant = php.Variants.First();
 
             // Download and extract archive
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -73,16 +68,15 @@ namespace Winp.Packages
             return null;
         }
 
-        public bool IsInstalled(ApplicationConfig application)
+        public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
         {
-            return File.Exists(CreateProcessStartInfo(application, Array.Empty<string>()).FileName);
+            return File.Exists(CreateProcessStartInfo(application, variant.Identifier, Array.Empty<string>()).FileName);
         }
 
-        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string[] arguments)
+        private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string[] arguments)
         {
             var installDirectory = application.Environment.InstallDirectory;
-            var variant = application.Package.Php.Variants.First();
-            var packageDirectory = GetPackageDirectory(installDirectory, variant.Identifier);
+            var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
 
             return SystemProcess.CreateStartInfo(packageDirectory, "php-cgi.exe", arguments);
         }
