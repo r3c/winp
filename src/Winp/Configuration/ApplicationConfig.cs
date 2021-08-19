@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
-using Winp.Packages;
 
 namespace Winp.Configuration
 {
@@ -38,11 +36,8 @@ namespace Winp.Configuration
                 },
                 new LocationConfig
                 {
-                    Alias = new Uri(Path.Combine(Base, PhpMyAdminPackage.GetPackageDirectory(environment.InstallDirectory, package.PhpMyAdmin.Variants.First().Identifier).AbsolutePath)),
                     Base = "/phpmyadmin/",
-                    Index = true,
-                    List = true,
-                    Type = LocationType.PhpFileName
+                    Type = LocationType.PhpMyAdmin
                 }
             };
             Package = package;
