@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -23,6 +24,7 @@ namespace Winp.Packages
             var locations = application.Locations;
             var nginx = application.Package.Nginx;
             var php = application.Package.Php;
+            var phpMyAdmin = application.Package.PhpMyAdmin;
 
             // Write configuration files
             var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -45,6 +47,10 @@ namespace Winp.Packages
             var context = Context.CreateCustom(new Dictionary<Value, Value>
             {
                 ["locations"] = locationValues,
+                ["phpMyAdmin"] = new Dictionary<Value, Value>
+                {
+                    ["directory"] = PhpMyAdminPackage.GetPackageDirectory(environment.InstallDirectory, phpMyAdmin.Variants.First().Identifier).AbsolutePath,
+                },
                 ["phpServerAddress"] = php.ServerAddress,
                 ["phpServerPort"] = php.ServerPort,
                 ["serverAddress"] = nginx.ServerAddress,

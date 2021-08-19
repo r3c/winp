@@ -10,10 +10,13 @@ namespace Winp.Configuration
         [Description("Execute PHP files by URL")]
         PhpFileName,
 
-        [Description("Pass all requests to PHP")]
+        [Description("Pass all requests to index.php")]
         PhpOnly,
 
         [Description("Static files only")]
-        Static
+        Static,
+
+        [Description("Use PhpMyAdmin")]
+        PhpMyAdmin
     }
 }

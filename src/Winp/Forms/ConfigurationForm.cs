@@ -61,6 +61,7 @@ namespace Winp.Forms
                 return;
             }
 
+            // Move aliases pointing to previous install directory to new one
             var previousInstallDirectory = _application.Environment.InstallDirectory;
 
             if (installDirectory != previousInstallDirectory)
