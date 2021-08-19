@@ -45,4 +45,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- See: https://stackoverflow.com/a/50905092 -->
+  <Target Name="BuiltinGen" BeforeTargets="BeforeBuild">
+    <WriteLinesToFile File="$(IntermediateOutputPath)gen.cs" Lines="static partial class Builtin { public static long CompileTicks = $([System.DateTime]::Now.Ticks) %3B }" Overwrite="true" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)gen.cs" />
+    </ItemGroup>
+  </Target>
 </Project>
