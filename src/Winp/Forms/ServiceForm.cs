@@ -199,7 +199,7 @@ namespace Winp.Forms
         private void PackageRefresh(Package package)
         {
             if (package.Variant is null)
-                package.SetText(Status.Notice, "No selection");
+                package.SetText(Status.Failure, "No selection");
             else if (!package.Installable.IsInstalled(_configuration, package.Variant))
                 package.SetText(Status.Notice, "Not installed");
             else if (package.Instance is null)
@@ -207,7 +207,7 @@ namespace Winp.Forms
             else if (package.Instance.IsRunning)
                 package.SetText(Status.Success, "Running");
             else
-                package.SetText(Status.Notice, "Not running");
+                package.SetText(Status.Notice, "Ready, not running");
         }
 
         private void PackageRefreshAll()
@@ -226,7 +226,7 @@ namespace Winp.Forms
 
             if (variant is null)
             {
-                package.SetText(Status.Notice, "No selection");
+                package.SetText(Status.Failure, "Nothing to start");
 
                 return false;
             }
@@ -235,7 +235,7 @@ namespace Winp.Forms
 
             if (message != null)
             {
-                package.SetText(Status.Failure, message);
+                package.SetText(Status.Failure, $"Error: {message}");
 
                 return false;
             }
@@ -244,7 +244,7 @@ namespace Winp.Forms
 
             if (instance is not null)
             {
-                package.SetText(Status.Failure, "Starting...");
+                package.SetText(Status.Loading, "Starting...");
 
                 var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier, () => PackageRefresh(package)));
 
@@ -273,7 +273,7 @@ namespace Winp.Forms
             if (instance is null || variant is null)
                 return;
 
-            package.SetText(Status.Failure, "Stopping...");
+            package.SetText(Status.Loading, "Stopping...");
 
             await Task.Run(() => instance.Stop(_configuration, variant.Identifier));
 
