@@ -44,7 +44,7 @@ namespace Winp.Packages
                 var arguments = new[] { SystemProcess.EscapeArgument("--datadir=" + mariadb.DataDirectory) };
                 var process = SystemProcess.Start(CreateProcessStartInfo(application, variant.Identifier, "mysql_install_db.exe", arguments));
 
-                if (process == null || await process.Stop(TimeSpan.FromSeconds(15)) != 0)
+                if (process == null || await process.Stop(TimeSpan.FromSeconds(60)) != 0)
                     return "could not initialize data directory";
             }
 
