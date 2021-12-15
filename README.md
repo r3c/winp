@@ -2,6 +2,9 @@
 
 [![license](https://img.shields.io/github/license/r3c/winp.svg)](https://opensource.org/licenses/MIT)
 
+![image](https://user-images.githubusercontent.com/979446/146273057-3ba16417-a2cc-44b5-aa68-c6a570e97049.png)
+![image](https://user-images.githubusercontent.com/979446/146273072-fc8b4859-94c5-458a-9195-c3081c0d2dd5.png)
+
 ## Overview
 
 Winp is an open-source (MIT) Nginx/PHP server for Windows. It provides a
