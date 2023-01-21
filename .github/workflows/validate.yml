@@ -1,7 +1,14 @@
 name: Validate
 
 on:
-  - push
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "50 4 * * *"
 
 jobs:
   check:
