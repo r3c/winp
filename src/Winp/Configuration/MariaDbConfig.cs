@@ -7,7 +7,7 @@ namespace Winp.Configuration
     public record MariaDbConfig
     {
         private const string Platform = "winx64";
-        private const string Version = "10.5.9";
+        private const string Version = "10.10.2";
 
         [JsonProperty(PropertyName = "dataDirectory")]
         public string DataDirectory = "data";
