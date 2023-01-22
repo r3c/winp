@@ -7,7 +7,7 @@ namespace Winp.Configuration
     public record PhpConfig
     {
         private const string Platform = "Win32-vs16-x64";
-        private const string Version = "8.0.7";
+        private const string Version = "8.2.0";
 
         [JsonProperty(PropertyName = "serverAddress")]
         public string ServerAddress = "127.0.0.1";
