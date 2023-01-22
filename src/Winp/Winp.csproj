@@ -4,9 +4,10 @@
     <ApplicationIcon>Winp.ico</ApplicationIcon>
     <Authors>Remi Caput</Authors>
     <Description>Portable Nginx/PHP/MySQL development server for Windows.</Description>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.3.0</Version>
   </PropertyGroup>

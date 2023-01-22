@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Winp.Configuration;
@@ -23,17 +22,18 @@ namespace Winp
         {
             var variantChange = new Action(() =>
             {
-                Variant = variantComboBox.SelectedItem is PackageVariantConfig variant ? variant : null;
+                Variant = variantComboBox.SelectedItem as PackageVariantConfig;
 
                 onVariantChange(this);
             });
 
-            variantComboBox.Items.AddRange(variants.ToArray());
+            foreach (var variant in variants)
+                variantComboBox.Items.Add(variant);
 
             if (variants.Count > 0)
                 variantComboBox.SelectedIndex = 0;
 
-            variantComboBox.SelectedIndexChanged += new EventHandler((source, args) => variantChange());
+            variantComboBox.SelectedIndexChanged += (_, _) => variantChange();
 
             _scheduler = scheduler;
             _statusLabel = statusLabel;
@@ -63,11 +63,11 @@ namespace Winp
 
                 _statusLabel.AutoSize = true;
 
-                var width = _statusLabel.Width;
+                var imageWidth = _statusLabel.ImageList is not null ? _statusLabel.ImageList.ImageSize.Width : 0;
+                var labelWidth = _statusLabel.Width;
 
                 _statusLabel.AutoSize = false;
-
-                _statusLabel.Width = _statusLabel.ImageList.ImageSize.Width + space + width;
+                _statusLabel.Width = imageWidth + space + labelWidth;
             });
         }
 
