@@ -1,5 +1,6 @@
 # Winp: Windows Nginx PHP development server
 
+[![Build Status](https://img.shields.io/github/actions/workflow/status/r3c/winp/verify.yml?branch=master)](https://github.com/r3c/winp/actions/workflows/verify.yml)
 [![license](https://img.shields.io/github/license/r3c/winp.svg)](https://opensource.org/licenses/MIT)
 
 ![image](https://user-images.githubusercontent.com/979446/146273057-3ba16417-a2cc-44b5-aa68-c6a570e97049.png)
@@ -71,12 +72,8 @@ set to "{{", "{|}" and "}}".
 ## Credits
 
 - [Freepik](https://www.flaticon.com/fr/auteurs/freepik) for the nice Elephant icon
+- 
+## Resource
 
-## Licence
-
-This project is open-source, released under MIT licence. See `LICENSE.md` file
-for details.
-
-## Author
-
-[Rémi Caput](http://remi.caput.fr/) (v.github.com+winp [at] mirari [dot] fr)
+- Contact: v.github.com+winp [at] mirari [dot] fr
+- License: [license.md](license.md)
