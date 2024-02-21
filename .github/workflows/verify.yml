@@ -1,4 +1,4 @@
-name: Check & build
+name: Verify
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ env:
 
 jobs:
   check:
-    name: Check code style
+    name: Check style
     runs-on: ubuntu-latest
 
     steps:
