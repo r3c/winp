@@ -21,17 +21,17 @@ fi
 source="$(mktemp -d)"
 
 for runtime in $runtimes; do
-    archive="$artifact-$version-$runtime.zip"
+	archive="$artifact-$version-$runtime.zip"
 
 	# Publish archive for requested runtime
-    echo >&2 "publishing $archive..."
+	echo >&2 "publishing $archive..."
 
-	dotnet publish --nologo -c Release -r "$runtime" -v quiet "$base/$project"
+	dotnet publish --nologo --self-contained --configuration Release --runtime "$runtime" --verbosity quiet "$base/$project"
 
 	# Create temporary directory to get desired archive path
 	ln -s "$(realpath "$base/$project/bin/Release/"*"/$runtime/publish")" "$source/$artifact"
 
-	( cd "$source" && zip -qr "$archive" "$artifact" )
+	(cd "$source" && zip -qr "$archive" "$artifact")
 
 	# Move and erase temporary directory
 	mv "$source/$archive" "$base/$archive"
