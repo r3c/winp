@@ -100,11 +100,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
         form.Show(this);
     }
 
-    private void ControlInstallButton_Click(object sender, EventArgs e)
-    {
-        RunBackgroundAction(ControlInstallExecute);
-    }
-
     private void ControlStartButton_Click(object sender, EventArgs e)
     {
         RunBackgroundAction(ControlStartExecute);
@@ -113,14 +108,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
     private void ControlStopButton_Click(object sender, EventArgs e)
     {
         RunBackgroundAction(ControlStopExecute);
-    }
-
-    private async Task ControlInstallExecute()
-    {
-        await ControlStopExecute();
-
-        foreach (var package in _services)
-            await PackageInstall(package);
     }
 
     private async Task ControlStartExecute()
