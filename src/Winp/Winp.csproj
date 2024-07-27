@@ -7,28 +7,28 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cottle" Version="2.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Cottle" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Services\Nginx\custom.conf" />
     <None Remove="Services\Nginx\fastcgi-php.conf" />
-    <EmbeddedResource Include="Packages\Nginx\fastcgi-php.conf" />
+    <EmbeddedResource Include="Package\Nginx\fastcgi-php.conf" />
     <None Remove="Services\Nginx\nginx.conf" />
-    <EmbeddedResource Include="Packages\Nginx\nginx.conf" />
+    <EmbeddedResource Include="Package\Nginx\nginx.conf" />
     <None Remove="Services\Php\php.ini" />
-    <EmbeddedResource Include="Packages\Php\php.ini" />
+    <EmbeddedResource Include="Package\Php\php.ini" />
     <None Remove="Services\MariaDb\mysqld.cnf" />
-    <EmbeddedResource Include="Packages\MariaDb\mysqld.cnf" />
+    <EmbeddedResource Include="Package\MariaDb\mysqld.cnf" />
     <None Remove="Services\PhpMyAdmin\config.inc.php" />
-    <EmbeddedResource Include="Packages\PhpMyAdmin\config.inc.php" />
+    <EmbeddedResource Include="Package\PhpMyAdmin\config.inc.php" />
   </ItemGroup>
 
   <ItemGroup>

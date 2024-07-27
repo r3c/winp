@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Winp.Configuration
-{
-    public record PhpMyAdminConfig
-    {
-        private const string Language = "all-languages";
-        private const string Version = "5.2.1";
+namespace Winp.Configuration;
 
-        [JsonProperty(PropertyName = "variants")]
-        public IReadOnlyList<PackageVariantConfig> Variants = new[]
+public record PhpMyAdminConfig
+{
+    private const string Language = "all-languages";
+    private const string Version = "5.2.1";
+
+    [JsonProperty(PropertyName = "variants")]
+    public IReadOnlyList<PackageVariantConfig> Variants = new[]
         {
             new PackageVariantConfig
             {
@@ -19,5 +19,4 @@ namespace Winp.Configuration
                 PathInArchive = $"phpMyAdmin-{Version}-{Language}"
             }
         };
-    }
 }
