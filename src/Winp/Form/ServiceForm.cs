@@ -182,33 +182,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
         return service;
     }
 
-    private async Task<bool> PackageInstall(ServiceReference service)
-    {
-        service.SetStatus(new Status(StatusLevel.Loading, "Downloading and installing..."));
-
-        var variant = service.GetVariant();
-
-        if (variant is null)
-        {
-            PackageRefresh(service);
-
-            return false;
-        }
-
-        var message = await Task.Run(() => service.Package.Install(_configuration, variant));
-
-        if (message != null)
-        {
-            service.SetStatus(new Status(StatusLevel.Failure, message));
-
-            return false;
-        }
-
-        PackageRefresh(service);
-
-        return true;
-    }
-
     private void PackageRefresh(ServiceReference service)
     {
         var variant = service.GetVariant();
@@ -237,8 +210,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
     {
         await PackageStop(service);
 
-        service.SetStatus(new Status(StatusLevel.Loading, "Configuring package..."));
-
         var variant = service.GetVariant();
 
         if (variant is null)
@@ -248,11 +219,27 @@ public partial class ServiceForm : System.Windows.Forms.Form
             return false;
         }
 
-        var message = await Task.Run(() => service.Package.Configure(_configuration, variant));
-
-        if (message != null)
+        if (!service.Package.IsInstalled(_configuration, variant))
         {
-            service.SetStatus(new Status(StatusLevel.Failure, $"Error: {message}"));
+            service.SetStatus(new Status(StatusLevel.Loading, "Installing package..."));
+
+            var installMessage = await Task.Run(() => service.Package.Install(_configuration, variant));
+
+            if (installMessage != null)
+            {
+                service.SetStatus(new Status(StatusLevel.Failure, installMessage));
+
+                return false;
+            }
+        }
+
+        service.SetStatus(new Status(StatusLevel.Loading, "Configuring package..."));
+
+        var configureMessage = await Task.Run(() => service.Package.Configure(_configuration, variant));
+
+        if (configureMessage != null)
+        {
+            service.SetStatus(new Status(StatusLevel.Failure, $"Error: {configureMessage}"));
 
             return false;
         }
@@ -263,7 +250,8 @@ public partial class ServiceForm : System.Windows.Forms.Form
         {
             service.SetStatus(new Status(StatusLevel.Loading, "Starting..."));
 
-            var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier, () => PackageRefresh(service)));
+            var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier,
+                () => PackageRefresh(service)));
 
             if (!success)
             {
