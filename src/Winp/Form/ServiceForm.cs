@@ -163,6 +163,10 @@ public partial class ServiceForm : System.Windows.Forms.Form
             package,
             runner,
             () => variantComboBox.SelectedItem as PackageVariantConfig,
+            enabled => RunUiAction(() =>
+            {
+                variantComboBox.Enabled = enabled;
+            }),
             status => RunUiAction(() =>
             {
                 const int space = 4;
@@ -178,10 +182,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
                 statusLabel.AutoSize = false;
                 statusLabel.Width = imageWidth + space + labelWidth;
-            }),
-            isLocked => RunUiAction(() =>
-            {
-                variantComboBox.Enabled = isLocked;
             }));
 
         foreach (var variant in variants)
@@ -288,14 +288,14 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         PackageRefresh(service);
 
-        service.SetVariantLock(true);
+        service.SetEnabled(false);
 
         return true;
     }
 
     private async Task PackageStop(ServiceReference service)
     {
-        service.SetVariantLock(false);
+        service.SetEnabled(true);
 
         var runner = service.Runner;
         var variant = service.GetVariant();

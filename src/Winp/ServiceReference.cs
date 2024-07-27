@@ -7,8 +7,8 @@ internal class ServiceReference(
     IPackage package,
     ServiceRunner? runner,
     Func<PackageVariantConfig?> getVariant,
-    Action<Status> setStatus,
-    Action<bool> setVariantLock)
+    Action<bool> setEnabled,
+    Action<Status> setStatus)
 {
     public readonly IPackage Package = package;
     public readonly ServiceRunner? Runner = runner;
@@ -18,13 +18,13 @@ internal class ServiceReference(
         return getVariant();
     }
 
+    public void SetEnabled(bool enabled)
+    {
+        setEnabled(enabled);
+    }
+
     public void SetStatus(Status status)
     {
         setStatus(status);
-    }
-
-    public void SetVariantLock(bool isLocked)
-    {
-        setVariantLock(isLocked);
     }
 }
