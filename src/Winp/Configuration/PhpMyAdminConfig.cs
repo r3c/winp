@@ -7,7 +7,7 @@ namespace Winp.Configuration
     public record PhpMyAdminConfig
     {
         private const string Language = "all-languages";
-        private const string Version = "5.2.0";
+        private const string Version = "5.2.1";
 
         [JsonProperty(PropertyName = "variants")]
         public IReadOnlyList<PackageVariantConfig> Variants = new[]
