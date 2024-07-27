@@ -113,7 +113,13 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
 
     private void LocationUpdateButton_Click(object sender, EventArgs e)
     {
-        if (!Uri.TryCreate(_locationRootTextBox.Text, UriKind.Absolute, out var locationRoot))
+        Uri locationRoot;
+
+        if (!_locationRootTextBox.Visible)
+            locationRoot = new Uri(Environment.CurrentDirectory, UriKind.Absolute);
+        else if (Uri.TryCreate(_locationRootTextBox.Text, UriKind.Absolute, out var locationRootUri))
+            locationRoot = locationRootUri;
+        else
         {
             MessageBox.Show(this, "Root directory is not a valid path", "Error", MessageBoxButtons.OK);
 
