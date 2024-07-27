@@ -202,12 +202,10 @@ public partial class ServiceForm : Form
             service.SetText(Status.Failure, "No selection");
         else if (!service.Package.IsInstalled(_configuration, service.Variant))
             service.SetText(Status.Notice, "Not installed");
-        else if (service.Runner is null)
+        else if (service.Runner is null || service.Runner.IsRunning)
             service.SetText(Status.Success, "Ready");
-        else if (service.Runner.IsRunning)
-            service.SetText(Status.Success, "Running");
         else
-            service.SetText(Status.Notice, "Ready, not running");
+            service.SetText(Status.Notice, "Not running");
     }
 
     private void PackageRefreshAll()
