@@ -2,21 +2,21 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Winp.Configuration
+namespace Winp.Configuration;
+
+public record MariaDbConfig
 {
-    public record MariaDbConfig
-    {
-        private const string Platform = "winx64";
-        private const string Version = "11.5.1";
+    private const string Platform = "winx64";
+    private const string Version = "11.5.1";
 
-        [JsonProperty(PropertyName = "dataDirectory")]
-        public string DataDirectory = "data";
+    [JsonProperty(PropertyName = "dataDirectory")]
+    public string DataDirectory = "data";
 
-        [JsonProperty(PropertyName = "serverPort")]
-        public int ServerPort = 3306;
+    [JsonProperty(PropertyName = "serverPort")]
+    public int ServerPort = 3306;
 
-        [JsonProperty(PropertyName = "variants")]
-        public IReadOnlyList<PackageVariantConfig> Variants = new[]
+    [JsonProperty(PropertyName = "variants")]
+    public IReadOnlyList<PackageVariantConfig> Variants = new[]
         {
             new PackageVariantConfig
             {
@@ -25,5 +25,4 @@ namespace Winp.Configuration
                 Identifier = $"{Version}-{Platform}"
             }
         };
-    }
 }

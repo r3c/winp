@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Winp.Configuration
+namespace Winp.Configuration;
+
+public record NginxConfig
 {
-    public record NginxConfig
-    {
-        private const string Version = "1.27.0";
+    private const string Version = "1.27.0";
 
-        [JsonProperty(PropertyName = "serverAddress")]
-        public string ServerAddress = "127.0.0.1";
+    [JsonProperty(PropertyName = "serverAddress")]
+    public string ServerAddress = "127.0.0.1";
 
-        [JsonProperty(PropertyName = "serverPort")]
-        public int ServerPort = 80;
+    [JsonProperty(PropertyName = "serverPort")]
+    public int ServerPort = 80;
 
-        [JsonProperty(PropertyName = "variants")]
-        public IReadOnlyList<PackageVariantConfig> Variants = new[]
+    [JsonProperty(PropertyName = "variants")]
+    public IReadOnlyList<PackageVariantConfig> Variants = new[]
         {
             new PackageVariantConfig
             {
@@ -24,5 +24,4 @@ namespace Winp.Configuration
                 PathInArchive = $"nginx-{Version}"
             }
         };
-    }
 }
