@@ -24,9 +24,9 @@ usage.
 Download latest [Winp release](https://github.com/r3c/winp/releases) from
 GitHub or compile from source, unpack anywhere you want then run `Winp.exe`.
 
-- Click "Install" button to download required packages ;
-- Click "Configure" button to change server bindings or locations (optional) ;
-- Click "Start services" button and accept Windows network prompts if need be.
+- Click "Configure" button to change server bindings or locations (optional).
+- Click "Start services" button to download and start required packages (accept
+  Windows network prompts if need be).
 
 You should see all packages in "Running" status (or "Ready" for phpMyAdmin
 which doesn't execute as a background service). A new browser windows will also
