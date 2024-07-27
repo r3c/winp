@@ -61,15 +61,22 @@ namespace Winp.Forms
                 return;
             }
 
-            // Move aliases pointing to previous install directory to new one
+            // Move every root path pointing to previous install directory to new one
             var previousInstallDirectory = _application.Environment.InstallDirectory;
 
             if (installDirectory != previousInstallDirectory)
             {
                 _locations.ForEach(location =>
                 {
-                    if (location.Alias.AbsolutePath.StartsWith(previousInstallDirectory.AbsolutePath) && Uri.TryCreate(installDirectory.AbsolutePath + location.Alias.AbsolutePath[previousInstallDirectory.AbsolutePath.Length..], UriKind.Absolute, out var movedAlias))
-                        location.Alias = movedAlias;
+                    if (location.Root.AbsolutePath.StartsWith(previousInstallDirectory.AbsolutePath) &&
+                        Uri.TryCreate(
+                            installDirectory.AbsolutePath +
+                            location.Root.AbsolutePath[previousInstallDirectory.AbsolutePath.Length..],
+                            UriKind.Absolute,
+                            out var relocatedRoot))
+                    {
+                        location.Root = relocatedRoot;
+                    }
                 });
             }
 
@@ -106,7 +113,7 @@ namespace Winp.Forms
 
         private void LocationUpdateButton_Click(object sender, EventArgs e)
         {
-            if (!Uri.TryCreate(_locationAliasTextBox.Text, UriKind.Absolute, out var aliasDirectory))
+            if (!Uri.TryCreate(_locationRootTextBox.Text, UriKind.Absolute, out var locationRoot))
             {
                 MessageBox.Show(this, "Root directory is not a valid path", "Error", MessageBoxButtons.OK);
 
@@ -115,10 +122,10 @@ namespace Winp.Forms
 
             var location = new LocationConfig
             {
-                Alias = aliasDirectory,
                 Base = _locationBaseTextBox.Text,
                 Index = _locationIndexCheckBox.Checked,
                 List = _locationListCheckBox.Checked,
+                Root = locationRoot,
                 Type = (LocationType)_locationTypeComboBox.SelectedIndex
             };
 
@@ -146,12 +153,12 @@ namespace Winp.Forms
             {
                 var location = _locations[item.Index];
 
-                _locationAliasTextBox.Text = location.Alias.IsAbsoluteUri
-                    ? location.Alias.AbsolutePath
-                    : string.Empty;
                 _locationBaseTextBox.Text = location.Base;
                 _locationIndexCheckBox.Checked = location.Index;
                 _locationListCheckBox.Checked = location.List;
+                _locationRootTextBox.Text = location.Root.IsAbsoluteUri
+                    ? location.Root.AbsolutePath
+                    : string.Empty;
                 _locationTypeComboBox.SelectedIndex = (int)location.Type;
 
                 _locationDeleteButton.Enabled = true;
@@ -159,10 +166,10 @@ namespace Winp.Forms
             }
             else
             {
-                _locationAliasTextBox.Text = string.Empty;
                 _locationBaseTextBox.Text = string.Empty;
                 _locationIndexCheckBox.Checked = false;
                 _locationListCheckBox.Checked = false;
+                _locationRootTextBox.Text = string.Empty;
                 _locationTypeComboBox.SelectedIndex = default;
 
                 _locationDeleteButton.Enabled = false;
@@ -170,10 +177,10 @@ namespace Winp.Forms
             }
         }
 
-        private void LocationAliasButton_Click(object sender, EventArgs e)
+        private void LocationRootButton_Click(object sender, EventArgs e)
         {
             if (_folderBrowserDialog.ShowDialog(this) == DialogResult.OK)
-                _locationAliasTextBox.Text = _folderBrowserDialog.SelectedPath;
+                _locationRootTextBox.Text = _folderBrowserDialog.SelectedPath;
         }
 
         private void LocationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -182,9 +189,9 @@ namespace Winp.Forms
             {
                 case LocationType.PhpFileName:
                 case LocationType.Static:
-                    _locationAliasButton.Visible = true;
-                    _locationAliasLabel.Visible = true;
-                    _locationAliasTextBox.Visible = true;
+                    _locationRootButton.Visible = true;
+                    _locationRootLabel.Visible = true;
+                    _locationRootTextBox.Visible = true;
                     _locationIndexCheckBox.Visible = true;
                     _locationIndexLabel.Visible = true;
                     _locationListCheckBox.Visible = true;
@@ -192,9 +199,9 @@ namespace Winp.Forms
                     break;
 
                 case LocationType.PhpOnly:
-                    _locationAliasButton.Visible = true;
-                    _locationAliasLabel.Visible = true;
-                    _locationAliasTextBox.Visible = true;
+                    _locationRootButton.Visible = true;
+                    _locationRootLabel.Visible = true;
+                    _locationRootTextBox.Visible = true;
                     _locationIndexCheckBox.Visible = false;
                     _locationIndexLabel.Visible = false;
                     _locationListCheckBox.Visible = false;
@@ -202,9 +209,9 @@ namespace Winp.Forms
                     break;
 
                 default:
-                    _locationAliasButton.Visible = false;
-                    _locationAliasLabel.Visible = false;
-                    _locationAliasTextBox.Visible = false;
+                    _locationRootButton.Visible = false;
+                    _locationRootLabel.Visible = false;
+                    _locationRootTextBox.Visible = false;
                     _locationIndexCheckBox.Visible = false;
                     _locationIndexLabel.Visible = false;
                     _locationListCheckBox.Visible = false;

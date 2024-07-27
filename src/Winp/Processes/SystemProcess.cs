@@ -20,7 +20,7 @@ namespace Winp.Processes
             {
                 CreateNoWindow = true,
                 FileName = Path.Combine(workingDirectory.AbsolutePath, executable),
-                WorkingDirectory = workingDirectory.AbsolutePath
+                WorkingDirectory = workingDirectory.AbsolutePath,
             };
 
             foreach (var argument in arguments)

@@ -32,14 +32,14 @@ namespace Winp.Packages
 
             foreach (var location in locations)
             {
-                Directory.CreateDirectory(location.Alias.AbsolutePath);
+                Directory.CreateDirectory(location.Root.AbsolutePath);
 
                 locationValues.Add(new Dictionary<Value, Value>
                 {
-                    ["alias"] = location.Alias.AbsolutePath,
                     ["base"] = location.Base,
                     ["index"] = location.Index,
                     ["list"] = location.List,
+                    ["root"] = location.Root.AbsolutePath,
                     ["type"] = (int)location.Type
                 });
             }

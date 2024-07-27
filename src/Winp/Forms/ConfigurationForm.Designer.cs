@@ -45,11 +45,11 @@ namespace Winp.Forms
             this._locationIndexCheckBox = new System.Windows.Forms.CheckBox();
             this._locationIndexLabel = new System.Windows.Forms.Label();
             this._locationListCheckBox = new System.Windows.Forms.CheckBox();
-            this._locationAliasButton = new System.Windows.Forms.Button();
+            this._locationRootButton = new System.Windows.Forms.Button();
             this._locationDeleteButton = new System.Windows.Forms.Button();
             this._locationUpdateButton = new System.Windows.Forms.Button();
-            this._locationAliasTextBox = new System.Windows.Forms.TextBox();
-            this._locationAliasLabel = new System.Windows.Forms.Label();
+            this._locationRootTextBox = new System.Windows.Forms.TextBox();
+            this._locationRootLabel = new System.Windows.Forms.Label();
             this._locationTypeLabel = new System.Windows.Forms.Label();
             this._locationTypeComboBox = new System.Windows.Forms.ComboBox();
             this._locationBaseTextBox = new System.Windows.Forms.TextBox();
@@ -184,11 +184,11 @@ namespace Winp.Forms
             this._locationGroupBox.Controls.Add(this._locationIndexCheckBox);
             this._locationGroupBox.Controls.Add(this._locationIndexLabel);
             this._locationGroupBox.Controls.Add(this._locationListCheckBox);
-            this._locationGroupBox.Controls.Add(this._locationAliasButton);
+            this._locationGroupBox.Controls.Add(this._locationRootButton);
             this._locationGroupBox.Controls.Add(this._locationDeleteButton);
             this._locationGroupBox.Controls.Add(this._locationUpdateButton);
-            this._locationGroupBox.Controls.Add(this._locationAliasTextBox);
-            this._locationGroupBox.Controls.Add(this._locationAliasLabel);
+            this._locationGroupBox.Controls.Add(this._locationRootTextBox);
+            this._locationGroupBox.Controls.Add(this._locationRootLabel);
             this._locationGroupBox.Controls.Add(this._locationTypeLabel);
             this._locationGroupBox.Controls.Add(this._locationTypeComboBox);
             this._locationGroupBox.Controls.Add(this._locationBaseTextBox);
@@ -233,17 +233,17 @@ namespace Winp.Forms
             this._locationListCheckBox.Text = "Allow listing";
             this._locationListCheckBox.UseVisualStyleBackColor = true;
             // 
-            // _locationAliasButton
+            // _locationRootButton
             // 
-            this._locationAliasButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._locationAliasButton.Location = new System.Drawing.Point(1029, 165);
-            this._locationAliasButton.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this._locationAliasButton.Name = "_locationAliasButton";
-            this._locationAliasButton.Size = new System.Drawing.Size(63, 49);
-            this._locationAliasButton.TabIndex = 14;
-            this._locationAliasButton.Text = "...";
-            this._locationAliasButton.UseVisualStyleBackColor = true;
-            this._locationAliasButton.Click += new System.EventHandler(this.LocationAliasButton_Click);
+            this._locationRootButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._locationRootButton.Location = new System.Drawing.Point(1029, 165);
+            this._locationRootButton.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this._locationRootButton.Name = "_locationRootButton";
+            this._locationRootButton.Size = new System.Drawing.Size(63, 49);
+            this._locationRootButton.TabIndex = 14;
+            this._locationRootButton.Text = "...";
+            this._locationRootButton.UseVisualStyleBackColor = true;
+            this._locationRootButton.Click += new System.EventHandler(this.LocationRootButton_Click);
             // 
             // _locationDeleteButton
             // 
@@ -267,25 +267,25 @@ namespace Winp.Forms
             this._locationUpdateButton.UseVisualStyleBackColor = true;
             this._locationUpdateButton.Click += new System.EventHandler(this.LocationUpdateButton_Click);
             // 
-            // _locationAliasTextBox
+            // _locationRootTextBox
             // 
-            this._locationAliasTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._locationRootTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._locationAliasTextBox.Location = new System.Drawing.Point(608, 165);
-            this._locationAliasTextBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this._locationAliasTextBox.Name = "_locationAliasTextBox";
-            this._locationAliasTextBox.Size = new System.Drawing.Size(408, 39);
-            this._locationAliasTextBox.TabIndex = 8;
+            this._locationRootTextBox.Location = new System.Drawing.Point(608, 165);
+            this._locationRootTextBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this._locationRootTextBox.Name = "_locationRootTextBox";
+            this._locationRootTextBox.Size = new System.Drawing.Size(408, 39);
+            this._locationRootTextBox.TabIndex = 8;
             // 
-            // _locationAliasLabel
+            // _locationRootLabel
             // 
-            this._locationAliasLabel.AutoSize = true;
-            this._locationAliasLabel.Location = new System.Drawing.Point(394, 172);
-            this._locationAliasLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this._locationAliasLabel.Name = "_locationAliasLabel";
-            this._locationAliasLabel.Size = new System.Drawing.Size(169, 32);
-            this._locationAliasLabel.TabIndex = 7;
-            this._locationAliasLabel.Text = "Root directory:";
+            this._locationRootLabel.AutoSize = true;
+            this._locationRootLabel.Location = new System.Drawing.Point(394, 172);
+            this._locationRootLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this._locationRootLabel.Name = "_locationRootLabel";
+            this._locationRootLabel.Size = new System.Drawing.Size(169, 32);
+            this._locationRootLabel.TabIndex = 7;
+            this._locationRootLabel.Text = "Root directory:";
             // 
             // _locationTypeLabel
             // 
@@ -376,9 +376,9 @@ namespace Winp.Forms
         private System.Windows.Forms.Button _installDirectoryButton;
         private System.Windows.Forms.Label _installDirectoryLabel;
         private System.Windows.Forms.TextBox _installDirectoryTextBox;
-        private System.Windows.Forms.Button _locationAliasButton;
-        private System.Windows.Forms.Label _locationAliasLabel;
-        private System.Windows.Forms.TextBox _locationAliasTextBox;
+        private System.Windows.Forms.Button _locationRootButton;
+        private System.Windows.Forms.Label _locationRootLabel;
+        private System.Windows.Forms.TextBox _locationRootTextBox;
         private System.Windows.Forms.Label _locationBaseLabel;
         private System.Windows.Forms.TextBox _locationBaseTextBox;
         private System.Windows.Forms.Button _locationDeleteButton;

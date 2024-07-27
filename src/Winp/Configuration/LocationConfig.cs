@@ -6,9 +6,6 @@ namespace Winp.Configuration
 {
     public record LocationConfig
     {
-        [JsonProperty(PropertyName = "alias")]
-        public Uri Alias = new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
-
         [JsonProperty(PropertyName = "base")]
         public string Base = "/";
 
@@ -17,6 +14,9 @@ namespace Winp.Configuration
 
         [JsonProperty(PropertyName = "list")]
         public bool List = false;
+
+        [JsonProperty(PropertyName = "root")]
+        public Uri Root = new Uri(Path.Combine(ApplicationConfig.Base, "Root"));
 
         [JsonProperty(PropertyName = "type")]
         public LocationType Type = LocationType.Deny;
