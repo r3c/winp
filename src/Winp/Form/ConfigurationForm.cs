@@ -8,9 +8,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using Winp.Configuration;
 
-namespace Winp.Forms;
+namespace Winp.Form;
 
-public partial class ConfigurationForm : Form
+public partial class ConfigurationForm : System.Windows.Forms.Form
 {
     private ApplicationConfig _application;
     private readonly List<LocationConfig> _locations;
