@@ -37,7 +37,6 @@ namespace Winp.Form
             this._controlStopButton = new System.Windows.Forms.Button();
             this._controlStartButton = new System.Windows.Forms.Button();
             this._controlConfigureButton = new System.Windows.Forms.Button();
-            this._controlInstallButton = new System.Windows.Forms.Button();
             this._packageGroupBox = new System.Windows.Forms.GroupBox();
             this._packagePhpMyAdminStatusLabel = new System.Windows.Forms.Label();
             this._packagePhpMyAdminVariantComboBox = new System.Windows.Forms.ComboBox();
@@ -68,10 +67,10 @@ namespace Winp.Form
             // 
             // _controlStopButton
             // 
-            this._controlStopButton.Location = new System.Drawing.Point(328, 19);
+            this._controlStopButton.Location = new System.Drawing.Point(261, 19);
             this._controlStopButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._controlStopButton.Name = "_controlStopButton";
-            this._controlStopButton.Size = new System.Drawing.Size(100, 23);
+            this._controlStopButton.Size = new System.Drawing.Size(120, 23);
             this._controlStopButton.TabIndex = 3;
             this._controlStopButton.Text = "Stop services";
             this._controlStopButton.UseVisualStyleBackColor = true;
@@ -79,10 +78,10 @@ namespace Winp.Form
             // 
             // _controlStartButton
             // 
-            this._controlStartButton.Location = new System.Drawing.Point(221, 19);
+            this._controlStartButton.Location = new System.Drawing.Point(133, 19);
             this._controlStartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._controlStartButton.Name = "_controlStartButton";
-            this._controlStartButton.Size = new System.Drawing.Size(100, 23);
+            this._controlStartButton.Size = new System.Drawing.Size(120, 23);
             this._controlStartButton.TabIndex = 2;
             this._controlStartButton.Text = "Start services";
             this._controlStartButton.UseVisualStyleBackColor = true;
@@ -90,25 +89,14 @@ namespace Winp.Form
             // 
             // _controlConfigureButton
             // 
-            this._controlConfigureButton.Location = new System.Drawing.Point(113, 19);
+            this._controlConfigureButton.Location = new System.Drawing.Point(5, 19);
             this._controlConfigureButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this._controlConfigureButton.Name = "_controlConfigureButton";
-            this._controlConfigureButton.Size = new System.Drawing.Size(100, 23);
+            this._controlConfigureButton.Size = new System.Drawing.Size(120, 23);
             this._controlConfigureButton.TabIndex = 0;
             this._controlConfigureButton.Text = "Configure";
             this._controlConfigureButton.UseVisualStyleBackColor = true;
             this._controlConfigureButton.Click += new System.EventHandler(this.ControlConfigureButton_Click);
-            // 
-            // _controlInstallButton
-            // 
-            this._controlInstallButton.Location = new System.Drawing.Point(5, 19);
-            this._controlInstallButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this._controlInstallButton.Name = "_controlInstallButton";
-            this._controlInstallButton.Size = new System.Drawing.Size(100, 23);
-            this._controlInstallButton.TabIndex = 1;
-            this._controlInstallButton.Text = "Install";
-            this._controlInstallButton.UseVisualStyleBackColor = true;
-            this._controlInstallButton.Click += new System.EventHandler(this.ControlInstallButton_Click);
             // 
             // _packageGroupBox
             // 
@@ -273,7 +261,6 @@ namespace Winp.Form
             | System.Windows.Forms.AnchorStyles.Right)));
             this._controlGroupBox.Controls.Add(this._controlStartButton);
             this._controlGroupBox.Controls.Add(this._controlStopButton);
-            this._controlGroupBox.Controls.Add(this._controlInstallButton);
             this._controlGroupBox.Controls.Add(this._controlConfigureButton);
             this._controlGroupBox.Location = new System.Drawing.Point(9, 137);
             this._controlGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
@@ -305,7 +292,6 @@ namespace Winp.Form
         private System.Windows.Forms.Button _controlConfigureButton;
         private System.Windows.Forms.Button _controlStartButton;
         private System.Windows.Forms.Button _controlStopButton;
-        private System.Windows.Forms.Button _controlInstallButton;
         private System.Windows.Forms.ImageList _statusImageList;
 
         #endregion
