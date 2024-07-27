@@ -6,7 +6,7 @@ namespace Winp.Configuration
 {
     public record NginxConfig
     {
-        private const string Version = "1.23.3";
+        private const string Version = "1.27.0";
 
         [JsonProperty(PropertyName = "serverAddress")]
         public string ServerAddress = "127.0.0.1";
