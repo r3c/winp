@@ -28,10 +28,10 @@ namespace Winp.Configuration
             {
                 new LocationConfig
                 {
-                    Alias = new Uri(Path.Combine(Base, "Root")),
                     Base = "/",
                     Index = true,
                     List = true,
+                    Root = new Uri(Path.Combine(Base, "Root")),
                     Type = LocationType.PhpFileName
                 },
                 new LocationConfig
