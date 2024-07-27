@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Winp.Forms
+namespace Winp.Form
 {
     partial class ConfigurationForm
     {

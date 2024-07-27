@@ -8,13 +8,13 @@ namespace Winp;
 
 internal class ServiceRunner(IService service)
 {
-    public bool IsRunning => _process is { IsRunning: true };
+    public bool IsRunning => _executable is { IsRunning: true };
 
-    private Executable? _process;
+    private Executable? _executable;
 
     public async Task<bool> Start(ApplicationConfig application, string variantIdentifier, Action refresh)
     {
-        if (_process != null)
+        if (_executable != null)
             await Stop(application, variantIdentifier);
 
         var process = Executable.Start(service.CreateProcessStart(application, variantIdentifier));
@@ -24,21 +24,21 @@ internal class ServiceRunner(IService service)
 
         process.Exited += refresh;
 
-        _process = process;
+        _executable = process;
 
         return true;
     }
 
     public async Task Stop(ApplicationConfig application, string variantIdentifier)
     {
-        if (_process != null)
+        if (_executable != null)
         {
             // Stop running process
             var duration = TimeSpan.FromSeconds(5);
-            var tasks = new List<Task<int?>>(2) { _process.Stop(duration) };
+            var tasks = new List<Task<int?>>(2) { _executable.Stop(duration) };
 
             // Execute "stop" command
-            var stopStartInfo = service.CreateProcessStop(application, variantIdentifier, _process.Id);
+            var stopStartInfo = service.CreateProcessStop(application, variantIdentifier, _executable.Id);
             var stopProcess = Executable.Start(stopStartInfo);
 
             if (stopProcess != null)
@@ -48,6 +48,6 @@ internal class ServiceRunner(IService service)
             await Task.WhenAll(tasks);
         }
 
-        _process = null;
+        _executable = null;
     }
 }

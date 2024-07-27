@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-using Winp.Forms;
+using Winp.Form;
 
 namespace Winp;
 
