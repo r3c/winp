@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -77,7 +78,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _packageNginxStatusLabel.ImageList = statusImageList;
         _packagePhpStatusLabel.ImageList = statusImageList;
         _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
-        _services = new[] { mariaDbService, nginxService, phpService, phpMyAdminService };
+        _services = [mariaDbService, nginxService, phpService, phpMyAdminService];
         _scheduler = scheduler;
     }
 
@@ -190,13 +191,32 @@ public partial class ServiceForm : System.Windows.Forms.Form
                 statusLabel.Width = imageWidth + space + labelWidth;
             }));
 
+        if (runner is not null)
+            variantComboBox.Items.Add("Don't start");
+
+        var indexOffset = variantComboBox.Items.Count;
+
         foreach (var variant in variants)
             variantComboBox.Items.Add(variant);
 
-        if (variants.Count > 0)
-            variantComboBox.SelectedIndex = 0;
+        variantComboBox.SelectedIndex = variants
+            .Select<PackageVariantConfig, int?>((config, index) => config.IsSelected ? index + indexOffset : null)
+            .Where(index => index is not null)
+            .FirstOrDefault()
+            .GetValueOrDefault(variantComboBox.Items.Count > 0 ? 0 : -1);
 
-        variantComboBox.SelectedIndexChanged += (_, _) => _ = PackageRefresh(service);
+        variantComboBox.SelectedIndexChanged += (_, _) =>
+        {
+            foreach (var variant in variants)
+                variant.IsSelected = false;
+
+            if (variantComboBox.SelectedItem is PackageVariantConfig selectedVariant)
+                selectedVariant.IsSelected = true;
+
+            ApplicationConfig.Save(ConfigurationPath, _configuration);
+
+            _ = PackageRefresh(service);
+        };
 
         return service;
     }
@@ -208,7 +228,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         Status status;
 
         if (variant is null)
-            status = new Status(StatusLevel.Failure, "No selection");
+            status = new Status(StatusLevel.Success, "Ignored");
         else if (!service.Package.IsInstalled(_configuration, variant))
             status = new Status(StatusLevel.Notice, "Not installed");
         else if (service.Runner is null || service.Runner.IsRunning)
@@ -231,52 +251,48 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         var variant = await service.GetVariant();
 
-        if (variant is null)
+        if (variant is not null)
         {
-            service.SetStatus(new Status(StatusLevel.Failure, "Nothing to start"));
-
-            return false;
-        }
-
-        if (!service.Package.IsInstalled(_configuration, variant))
-        {
-            service.SetStatus(new Status(StatusLevel.Loading, "Installing package..."));
-
-            var installMessage = await Task.Run(() => service.Package.Install(_configuration, variant));
-
-            if (installMessage != null)
+            if (!service.Package.IsInstalled(_configuration, variant))
             {
-                service.SetStatus(new Status(StatusLevel.Failure, installMessage));
+                service.SetStatus(new Status(StatusLevel.Loading, "Installing package..."));
+
+                var installMessage = await Task.Run(() => service.Package.Install(_configuration, variant));
+
+                if (installMessage != null)
+                {
+                    service.SetStatus(new Status(StatusLevel.Failure, installMessage));
+
+                    return false;
+                }
+            }
+
+            service.SetStatus(new Status(StatusLevel.Loading, "Configuring package..."));
+
+            var configureMessage = await Task.Run(() => service.Package.Configure(_configuration, variant));
+
+            if (configureMessage != null)
+            {
+                service.SetStatus(new Status(StatusLevel.Failure, $"Error: {configureMessage}"));
 
                 return false;
             }
-        }
 
-        service.SetStatus(new Status(StatusLevel.Loading, "Configuring package..."));
+            var instance = service.Runner;
 
-        var configureMessage = await Task.Run(() => service.Package.Configure(_configuration, variant));
-
-        if (configureMessage != null)
-        {
-            service.SetStatus(new Status(StatusLevel.Failure, $"Error: {configureMessage}"));
-
-            return false;
-        }
-
-        var instance = service.Runner;
-
-        if (instance is not null)
-        {
-            service.SetStatus(new Status(StatusLevel.Loading, "Starting..."));
-
-            var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier,
-                () => _ = PackageRefresh(service)));
-
-            if (!success)
+            if (instance is not null)
             {
-                service.SetStatus(new Status(StatusLevel.Failure, "Could not start"));
+                service.SetStatus(new Status(StatusLevel.Loading, "Starting..."));
 
-                return false;
+                var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier,
+                    () => _ = PackageRefresh(service)));
+
+                if (!success)
+                {
+                    service.SetStatus(new Status(StatusLevel.Failure, "Could not start"));
+
+                    return false;
+                }
             }
         }
 

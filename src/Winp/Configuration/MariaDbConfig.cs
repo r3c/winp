@@ -20,9 +20,10 @@ public record MariaDbConfig
         {
             new PackageVariantConfig
             {
-                PathInArchive = $"mariadb-{Version}-{Platform}",
                 DownloadUrl = new Uri($"https://downloads.mariadb.com/MariaDB/mariadb-{Version}/{Platform}-packages/mariadb-{Version}-{Platform}.zip"),
-                Identifier = $"{Version}-{Platform}"
+                Identifier = $"{Version}-{Platform}",
+                IsSelected = true,
+                PathInArchive = $"mariadb-{Version}-{Platform}"
             }
         };
 }
