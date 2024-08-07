@@ -21,7 +21,8 @@ public record PhpConfig
             new PackageVariantConfig
             {
                 DownloadUrl = new Uri($"https://windows.php.net/downloads/releases/archives/php-{Version}-{Platform}.zip"),
-                Identifier = $"{Version}-{Platform}"
+                Identifier = $"{Version}-{Platform}",
+                IsSelected = true
             }
         };
 }

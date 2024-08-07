@@ -21,6 +21,7 @@ public record NginxConfig
             {
                 DownloadUrl = new Uri($"https://nginx.org/download/nginx-{Version}.zip"),
                 Identifier = Version,
+                IsSelected = true,
                 PathInArchive = $"nginx-{Version}"
             }
         };
