@@ -16,6 +16,7 @@ public record PhpMyAdminConfig
             {
                 DownloadUrl = new Uri($"https://files.phpmyadmin.net/phpMyAdmin/{Version}/phpMyAdmin-{Version}-{Language}.zip"),
                 Identifier = $"{Version}-{Language}",
+                IsSelected = true,
                 PathInArchive = $"phpMyAdmin-{Version}-{Language}"
             }
         };
