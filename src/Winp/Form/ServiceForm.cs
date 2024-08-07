@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Winp.Configuration;
 using Winp.Package;
+using Winp.Properties;
 
 namespace Winp.Form;
 
@@ -64,14 +65,25 @@ public partial class ServiceForm : System.Windows.Forms.Form
             configuration.Package.PhpMyAdmin.Variants, _packagePhpMyAdminVariantComboBox,
             _packagePhpMyAdminStatusLabel);
 
+        var statusImageList = new ImageList();
+
+        statusImageList.Images.Add(Resources.statusError);
+        statusImageList.Images.Add(Resources.statusInformation);
+        statusImageList.Images.Add(Resources.statusReady);
+        statusImageList.Images.Add(Resources.statusLoading);
+
         _configuration = configuration;
+        _packageMariaDbStatusLabel.ImageList = statusImageList;
+        _packageNginxStatusLabel.ImageList = statusImageList;
+        _packagePhpStatusLabel.ImageList = statusImageList;
+        _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
         _services = new[] { mariaDbService, nginxService, phpService, phpMyAdminService };
         _scheduler = scheduler;
     }
 
     private void ServiceForm_Shown(object sender, EventArgs e)
     {
-        PackageRefreshAll();
+        _ = PackageRefreshAll();
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -94,7 +106,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
             _configuration = configuration;
 
-            PackageRefreshAll();
+            _ = PackageRefreshAll();
         });
 
         form.Show(this);
@@ -149,7 +161,14 @@ public partial class ServiceForm : System.Windows.Forms.Form
         var service = new ServiceReference(
             package,
             runner,
-            () => variantComboBox.SelectedItem as PackageVariantConfig,
+            () =>
+            {
+                var task = new Task<PackageVariantConfig?>(() => variantComboBox.SelectedItem as PackageVariantConfig);
+
+                task.Start(_scheduler);
+
+                return task;
+            },
             enabled => RunUiAction(() =>
             {
                 variantComboBox.Enabled = enabled;
@@ -177,14 +196,14 @@ public partial class ServiceForm : System.Windows.Forms.Form
         if (variants.Count > 0)
             variantComboBox.SelectedIndex = 0;
 
-        variantComboBox.SelectedIndexChanged += (_, _) => PackageRefresh(service);
+        variantComboBox.SelectedIndexChanged += (_, _) => _ = PackageRefresh(service);
 
         return service;
     }
 
-    private void PackageRefresh(ServiceReference service)
+    private async Task PackageRefresh(ServiceReference service)
     {
-        var variant = service.GetVariant();
+        var variant = await service.GetVariant();
 
         Status status;
 
@@ -200,17 +219,17 @@ public partial class ServiceForm : System.Windows.Forms.Form
         service.SetStatus(status);
     }
 
-    private void PackageRefreshAll()
+    private async Task PackageRefreshAll()
     {
         foreach (var service in _services)
-            PackageRefresh(service);
+            await PackageRefresh(service);
     }
 
     private async Task<bool> PackageStart(ServiceReference service)
     {
         await PackageStop(service);
 
-        var variant = service.GetVariant();
+        var variant = await service.GetVariant();
 
         if (variant is null)
         {
@@ -251,7 +270,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
             service.SetStatus(new Status(StatusLevel.Loading, "Starting..."));
 
             var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier,
-                () => PackageRefresh(service)));
+                () => _ = PackageRefresh(service)));
 
             if (!success)
             {
@@ -261,7 +280,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
             }
         }
 
-        PackageRefresh(service);
+        await PackageRefresh(service);
 
         service.SetEnabled(false);
 
@@ -273,7 +292,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         service.SetEnabled(true);
 
         var runner = service.Runner;
-        var variant = service.GetVariant();
+        var variant = await service.GetVariant();
 
         if (runner is null || variant is null)
             return;
@@ -281,8 +300,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         service.SetStatus(new Status(StatusLevel.Loading, "Stopping..."));
 
         await Task.Run(() => runner.Stop(_configuration, variant.Identifier));
-
-        PackageRefresh(service);
+        await PackageRefresh(service);
     }
 
     private void RunBackgroundAction(Func<Task> action)

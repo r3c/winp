@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Winp.Configuration;
 
 namespace Winp;
@@ -6,14 +7,14 @@ namespace Winp;
 internal class ServiceReference(
     IPackage package,
     ServiceRunner? runner,
-    Func<PackageVariantConfig?> getVariant,
+    Func<Task<PackageVariantConfig?>> getVariant,
     Action<bool> setEnabled,
     Action<Status> setStatus)
 {
     public readonly IPackage Package = package;
     public readonly ServiceRunner? Runner = runner;
 
-    public PackageVariantConfig? GetVariant()
+    public Task<PackageVariantConfig?> GetVariant()
     {
         return getVariant();
     }
