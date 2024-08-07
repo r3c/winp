@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <ApplicationIcon>Winp.ico</ApplicationIcon>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <Authors>Remi Caput</Authors>
     <Description>Portable Nginx/PHP/MySQL development server for Windows.</Description>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
