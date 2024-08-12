@@ -48,16 +48,17 @@ namespace Winp.Form
             _packageNginxVariantComboBox = new System.Windows.Forms.ComboBox();
             _packageNginxLabel = new System.Windows.Forms.Label();
             _controlGroupBox = new System.Windows.Forms.GroupBox();
+            _controlBrowserButton = new System.Windows.Forms.Button();
             _packageGroupBox.SuspendLayout();
             _controlGroupBox.SuspendLayout();
             SuspendLayout();
             // 
             // _controlStopButton
             // 
-            _controlStopButton.Location = new System.Drawing.Point(485, 41);
-            _controlStopButton.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            _controlStopButton.Location = new System.Drawing.Point(222, 19);
+            _controlStopButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _controlStopButton.Name = "_controlStopButton";
-            _controlStopButton.Size = new System.Drawing.Size(223, 49);
+            _controlStopButton.Size = new System.Drawing.Size(100, 23);
             _controlStopButton.TabIndex = 3;
             _controlStopButton.Text = "Stop services";
             _controlStopButton.UseVisualStyleBackColor = true;
@@ -65,10 +66,10 @@ namespace Winp.Form
             // 
             // _controlStartButton
             // 
-            _controlStartButton.Location = new System.Drawing.Point(247, 41);
-            _controlStartButton.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            _controlStartButton.Location = new System.Drawing.Point(114, 19);
+            _controlStartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _controlStartButton.Name = "_controlStartButton";
-            _controlStartButton.Size = new System.Drawing.Size(223, 49);
+            _controlStartButton.Size = new System.Drawing.Size(100, 23);
             _controlStartButton.TabIndex = 2;
             _controlStartButton.Text = "Start services";
             _controlStartButton.UseVisualStyleBackColor = true;
@@ -76,10 +77,10 @@ namespace Winp.Form
             // 
             // _controlConfigureButton
             // 
-            _controlConfigureButton.Location = new System.Drawing.Point(9, 41);
-            _controlConfigureButton.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            _controlConfigureButton.Location = new System.Drawing.Point(6, 19);
+            _controlConfigureButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _controlConfigureButton.Name = "_controlConfigureButton";
-            _controlConfigureButton.Size = new System.Drawing.Size(223, 49);
+            _controlConfigureButton.Size = new System.Drawing.Size(100, 23);
             _controlConfigureButton.TabIndex = 0;
             _controlConfigureButton.Text = "Configure";
             _controlConfigureButton.UseVisualStyleBackColor = true;
@@ -100,11 +101,11 @@ namespace Winp.Form
             _packageGroupBox.Controls.Add(_packageNginxStatusLabel);
             _packageGroupBox.Controls.Add(_packageNginxVariantComboBox);
             _packageGroupBox.Controls.Add(_packageNginxLabel);
-            _packageGroupBox.Location = new System.Drawing.Point(17, 15);
-            _packageGroupBox.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            _packageGroupBox.Location = new System.Drawing.Point(9, 7);
+            _packageGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _packageGroupBox.Name = "_packageGroupBox";
-            _packageGroupBox.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            _packageGroupBox.Size = new System.Drawing.Size(763, 269);
+            _packageGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            _packageGroupBox.Size = new System.Drawing.Size(435, 126);
             _packageGroupBox.TabIndex = 2;
             _packageGroupBox.TabStop = false;
             _packageGroupBox.Text = "Packages";
@@ -114,10 +115,10 @@ namespace Winp.Form
             _packagePhpMyAdminStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpMyAdminStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packagePhpMyAdminStatusLabel.ImageIndex = 0;
-            _packagePhpMyAdminStatusLabel.Location = new System.Drawing.Point(448, 207);
-            _packagePhpMyAdminStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packagePhpMyAdminStatusLabel.Location = new System.Drawing.Point(265, 97);
+            _packagePhpMyAdminStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpMyAdminStatusLabel.Name = "_packagePhpMyAdminStatusLabel";
-            _packagePhpMyAdminStatusLabel.Size = new System.Drawing.Size(301, 32);
+            _packagePhpMyAdminStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packagePhpMyAdminStatusLabel.TabIndex = 11;
             _packagePhpMyAdminStatusLabel.Text = "Dummy";
             _packagePhpMyAdminStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -127,19 +128,19 @@ namespace Winp.Form
             _packagePhpMyAdminVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpMyAdminVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpMyAdminVariantComboBox.FormattingEnabled = true;
-            _packagePhpMyAdminVariantComboBox.Location = new System.Drawing.Point(180, 204);
-            _packagePhpMyAdminVariantComboBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            _packagePhpMyAdminVariantComboBox.Location = new System.Drawing.Point(97, 96);
+            _packagePhpMyAdminVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packagePhpMyAdminVariantComboBox.Name = "_packagePhpMyAdminVariantComboBox";
-            _packagePhpMyAdminVariantComboBox.Size = new System.Drawing.Size(260, 40);
+            _packagePhpMyAdminVariantComboBox.Size = new System.Drawing.Size(166, 23);
             _packagePhpMyAdminVariantComboBox.TabIndex = 10;
             // 
             // _packagePhpMyAdminLabel
             // 
             _packagePhpMyAdminLabel.AutoSize = true;
-            _packagePhpMyAdminLabel.Location = new System.Drawing.Point(11, 207);
-            _packagePhpMyAdminLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packagePhpMyAdminLabel.Location = new System.Drawing.Point(6, 97);
+            _packagePhpMyAdminLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpMyAdminLabel.Name = "_packagePhpMyAdminLabel";
-            _packagePhpMyAdminLabel.Size = new System.Drawing.Size(160, 32);
+            _packagePhpMyAdminLabel.Size = new System.Drawing.Size(81, 15);
             _packagePhpMyAdminLabel.TabIndex = 9;
             _packagePhpMyAdminLabel.Text = "phpMyAdmin";
             // 
@@ -148,10 +149,10 @@ namespace Winp.Form
             _packagePhpStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packagePhpStatusLabel.ImageIndex = 0;
-            _packagePhpStatusLabel.Location = new System.Drawing.Point(448, 154);
-            _packagePhpStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packagePhpStatusLabel.Location = new System.Drawing.Point(265, 72);
+            _packagePhpStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpStatusLabel.Name = "_packagePhpStatusLabel";
-            _packagePhpStatusLabel.Size = new System.Drawing.Size(301, 32);
+            _packagePhpStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packagePhpStatusLabel.TabIndex = 8;
             _packagePhpStatusLabel.Text = "Dummy";
             _packagePhpStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -161,19 +162,19 @@ namespace Winp.Form
             _packagePhpVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpVariantComboBox.FormattingEnabled = true;
-            _packagePhpVariantComboBox.Location = new System.Drawing.Point(180, 151);
-            _packagePhpVariantComboBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            _packagePhpVariantComboBox.Location = new System.Drawing.Point(97, 71);
+            _packagePhpVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packagePhpVariantComboBox.Name = "_packagePhpVariantComboBox";
-            _packagePhpVariantComboBox.Size = new System.Drawing.Size(260, 40);
+            _packagePhpVariantComboBox.Size = new System.Drawing.Size(166, 23);
             _packagePhpVariantComboBox.TabIndex = 7;
             // 
             // _packagePhpLabel
             // 
             _packagePhpLabel.AutoSize = true;
-            _packagePhpLabel.Location = new System.Drawing.Point(11, 154);
-            _packagePhpLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packagePhpLabel.Location = new System.Drawing.Point(6, 72);
+            _packagePhpLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpLabel.Name = "_packagePhpLabel";
-            _packagePhpLabel.Size = new System.Drawing.Size(57, 32);
+            _packagePhpLabel.Size = new System.Drawing.Size(30, 15);
             _packagePhpLabel.TabIndex = 6;
             _packagePhpLabel.Text = "PHP";
             // 
@@ -182,10 +183,10 @@ namespace Winp.Form
             _packageMariaDbStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             _packageMariaDbStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packageMariaDbStatusLabel.ImageIndex = 0;
-            _packageMariaDbStatusLabel.Location = new System.Drawing.Point(448, 47);
-            _packageMariaDbStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packageMariaDbStatusLabel.Location = new System.Drawing.Point(265, 22);
+            _packageMariaDbStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageMariaDbStatusLabel.Name = "_packageMariaDbStatusLabel";
-            _packageMariaDbStatusLabel.Size = new System.Drawing.Size(301, 32);
+            _packageMariaDbStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packageMariaDbStatusLabel.TabIndex = 5;
             _packageMariaDbStatusLabel.Text = "Dummy";
             _packageMariaDbStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -195,19 +196,19 @@ namespace Winp.Form
             _packageMariaDbVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packageMariaDbVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageMariaDbVariantComboBox.FormattingEnabled = true;
-            _packageMariaDbVariantComboBox.Location = new System.Drawing.Point(180, 44);
-            _packageMariaDbVariantComboBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            _packageMariaDbVariantComboBox.Location = new System.Drawing.Point(97, 21);
+            _packageMariaDbVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packageMariaDbVariantComboBox.Name = "_packageMariaDbVariantComboBox";
-            _packageMariaDbVariantComboBox.Size = new System.Drawing.Size(260, 40);
+            _packageMariaDbVariantComboBox.Size = new System.Drawing.Size(166, 23);
             _packageMariaDbVariantComboBox.TabIndex = 4;
             // 
             // _packageMariaDbLabel
             // 
             _packageMariaDbLabel.AutoSize = true;
-            _packageMariaDbLabel.Location = new System.Drawing.Point(11, 47);
-            _packageMariaDbLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packageMariaDbLabel.Location = new System.Drawing.Point(6, 22);
+            _packageMariaDbLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageMariaDbLabel.Name = "_packageMariaDbLabel";
-            _packageMariaDbLabel.Size = new System.Drawing.Size(105, 32);
+            _packageMariaDbLabel.Size = new System.Drawing.Size(52, 15);
             _packageMariaDbLabel.TabIndex = 3;
             _packageMariaDbLabel.Text = "MariaDB";
             // 
@@ -216,10 +217,10 @@ namespace Winp.Form
             _packageNginxStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             _packageNginxStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packageNginxStatusLabel.ImageIndex = 0;
-            _packageNginxStatusLabel.Location = new System.Drawing.Point(448, 100);
-            _packageNginxStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packageNginxStatusLabel.Location = new System.Drawing.Point(265, 47);
+            _packageNginxStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageNginxStatusLabel.Name = "_packageNginxStatusLabel";
-            _packageNginxStatusLabel.Size = new System.Drawing.Size(301, 32);
+            _packageNginxStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packageNginxStatusLabel.TabIndex = 2;
             _packageNginxStatusLabel.Text = "Dummy";
             _packageNginxStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -229,45 +230,57 @@ namespace Winp.Form
             _packageNginxVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packageNginxVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageNginxVariantComboBox.FormattingEnabled = true;
-            _packageNginxVariantComboBox.Location = new System.Drawing.Point(180, 97);
-            _packageNginxVariantComboBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            _packageNginxVariantComboBox.Location = new System.Drawing.Point(97, 45);
+            _packageNginxVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packageNginxVariantComboBox.Name = "_packageNginxVariantComboBox";
-            _packageNginxVariantComboBox.Size = new System.Drawing.Size(260, 40);
+            _packageNginxVariantComboBox.Size = new System.Drawing.Size(166, 23);
             _packageNginxVariantComboBox.TabIndex = 1;
             // 
             // _packageNginxLabel
             // 
             _packageNginxLabel.AutoSize = true;
-            _packageNginxLabel.Location = new System.Drawing.Point(11, 100);
-            _packageNginxLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            _packageNginxLabel.Location = new System.Drawing.Point(6, 47);
+            _packageNginxLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageNginxLabel.Name = "_packageNginxLabel";
-            _packageNginxLabel.Size = new System.Drawing.Size(77, 32);
+            _packageNginxLabel.Size = new System.Drawing.Size(39, 15);
             _packageNginxLabel.TabIndex = 0;
             _packageNginxLabel.Text = "Nginx";
             // 
             // _controlGroupBox
             // 
             _controlGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _controlGroupBox.Controls.Add(_controlBrowserButton);
             _controlGroupBox.Controls.Add(_controlStartButton);
             _controlGroupBox.Controls.Add(_controlStopButton);
             _controlGroupBox.Controls.Add(_controlConfigureButton);
-            _controlGroupBox.Location = new System.Drawing.Point(17, 292);
-            _controlGroupBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            _controlGroupBox.Location = new System.Drawing.Point(9, 137);
+            _controlGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _controlGroupBox.Name = "_controlGroupBox";
-            _controlGroupBox.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            _controlGroupBox.Size = new System.Drawing.Size(763, 105);
+            _controlGroupBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _controlGroupBox.Size = new System.Drawing.Size(435, 49);
             _controlGroupBox.TabIndex = 8;
             _controlGroupBox.TabStop = false;
             _controlGroupBox.Text = "Controls";
             // 
+            // _controlBrowserButton
+            // 
+            _controlBrowserButton.Location = new System.Drawing.Point(330, 19);
+            _controlBrowserButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            _controlBrowserButton.Name = "_controlBrowserButton";
+            _controlBrowserButton.Size = new System.Drawing.Size(100, 23);
+            _controlBrowserButton.TabIndex = 4;
+            _controlBrowserButton.Text = "Open browser";
+            _controlBrowserButton.UseVisualStyleBackColor = true;
+            _controlBrowserButton.Click += ControlBrowserButton_Click;
+            // 
             // ServiceForm
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(794, 416);
+            ClientSize = new System.Drawing.Size(452, 195);
             Controls.Add(_controlGroupBox);
             Controls.Add(_packageGroupBox);
-            Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             Name = "ServiceForm";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Winp Service";
@@ -298,5 +311,6 @@ namespace Winp.Form
         private System.Windows.Forms.ComboBox _packageMariaDbVariantComboBox;
         private System.Windows.Forms.Label _packageMariaDbLabel;
         private System.Windows.Forms.GroupBox _controlGroupBox;
+        private System.Windows.Forms.Button _controlBrowserButton;
     }
 }
