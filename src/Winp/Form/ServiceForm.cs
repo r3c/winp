@@ -99,6 +99,21 @@ public partial class ServiceForm : System.Windows.Forms.Form
         e.Cancel = true;
     }
 
+    private void ControlBrowserButton_Click(object sender, EventArgs e)
+    {
+        if (_configuration.Locations.Count < 1)
+            return;
+
+        var location = _configuration.Locations[0];
+        var nginx = _configuration.Package.Nginx;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = $"{Uri.UriSchemeHttp}://{nginx.ServerAddress}:{nginx.ServerPort}{location.Base}",
+            UseShellExecute = true
+        });
+    }
+
     private void ControlConfigureButton_Click(object sender, EventArgs e)
     {
         var form = new ConfigurationForm(_configuration, configuration =>
@@ -136,17 +151,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
                 await PackageStop(_services[j]);
 
             return;
-        }
-
-        if (_configuration.Locations.Count > 0)
-        {
-            var nginx = _configuration.Package.Nginx;
-
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = $"http://{nginx.ServerAddress}:{nginx.ServerPort}{_configuration.Locations[0].Base}",
-                UseShellExecute = true
-            });
         }
     }
 
