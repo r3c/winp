@@ -29,7 +29,14 @@ public class NginxPackage : IPackage, IService
 
         foreach (var location in locations)
         {
-            Directory.CreateDirectory(location.Root.AbsolutePath);
+            try
+            {
+                Directory.CreateDirectory(location.Root.AbsolutePath);
+            }
+            catch (SystemException exception)
+            {
+                return $"cannot create directory '{location.Root.AbsolutePath}': {exception.Message}";
+            }
 
             locationValues.Add(new Dictionary<Value, Value>
             {
