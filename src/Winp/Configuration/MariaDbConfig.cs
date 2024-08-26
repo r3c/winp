@@ -6,6 +6,7 @@ namespace Winp.Configuration;
 
 public record MariaDbConfig
 {
+    private const string DownloadBase = "https://downloads.mariadb.com/MariaDB";
     private const string Platform = "winx64";
     private const string Version = "11.5.1";
 
@@ -17,13 +18,14 @@ public record MariaDbConfig
 
     [JsonProperty(PropertyName = "variants")]
     public IReadOnlyList<PackageVariantConfig> Variants = new[]
+    {
+        new PackageVariantConfig
         {
-            new PackageVariantConfig
-            {
-                DownloadUrl = new Uri($"https://downloads.mariadb.com/MariaDB/mariadb-{Version}/{Platform}-packages/mariadb-{Version}-{Platform}.zip"),
-                Identifier = $"{Version}-{Platform}",
-                IsSelected = true,
-                PathInArchive = $"mariadb-{Version}-{Platform}"
-            }
-        };
+            DownloadUrl =
+                new Uri($"{DownloadBase}/mariadb-{Version}/{Platform}-packages/mariadb-{Version}-{Platform}.zip"),
+            Identifier = $"{Version}-{Platform}",
+            IsSelected = true,
+            PathInArchive = $"mariadb-{Version}-{Platform}"
+        }
+    };
 }
