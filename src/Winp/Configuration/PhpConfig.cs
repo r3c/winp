@@ -6,6 +6,7 @@ namespace Winp.Configuration;
 
 public record PhpConfig
 {
+    private const string DownloadBase = "https://windows.php.net/downloads/releases/archives";
     private const string Platform = "Win32-vs16-x64";
     private const string Version = "8.3.8";
 
@@ -17,12 +18,12 @@ public record PhpConfig
 
     [JsonProperty(PropertyName = "variants")]
     public IReadOnlyList<PackageVariantConfig> Variants = new[]
+    {
+        new PackageVariantConfig
         {
-            new PackageVariantConfig
-            {
-                DownloadUrl = new Uri($"https://windows.php.net/downloads/releases/archives/php-{Version}-{Platform}.zip"),
-                Identifier = $"{Version}-{Platform}",
-                IsSelected = true
-            }
-        };
+            DownloadUrl = new Uri($"{DownloadBase}/php-{Version}-{Platform}.zip"),
+            Identifier = $"{Version}-{Platform}",
+            IsSelected = true
+        }
+    };
 }

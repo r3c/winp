@@ -52,9 +52,9 @@ internal static class Template
 
         var context = Context.CreateCascade(extraContext, Context.CreateBuiltin(new Dictionary<Value, Value>
         {
-            ["replace"] = Value.FromFunction(Function.CreatePure3(
-                (state, source, from, to) => source.AsString.Replace(from.AsString, to.AsString))),
-            ["trim"] = Value.FromFunction(Function.CreatePure2((state, input, remove) =>
+            ["replace"] = Value.FromFunction(Function.CreatePure3((_, source, from, to) =>
+                source.AsString.Replace(from.AsString, to.AsString))),
+            ["trim"] = Value.FromFunction(Function.CreatePure2((_, input, remove) =>
                 remove.AsString.Length > 0 ? input.AsString.Trim(remove.AsString[0]) : string.Empty))
         }));
 

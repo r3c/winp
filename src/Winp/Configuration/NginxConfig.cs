@@ -6,6 +6,7 @@ namespace Winp.Configuration;
 
 public record NginxConfig
 {
+    private const string DownloadBase = "https://nginx.org/download";
     private const string Version = "1.27.0";
 
     [JsonProperty(PropertyName = "serverAddress")]
@@ -16,13 +17,13 @@ public record NginxConfig
 
     [JsonProperty(PropertyName = "variants")]
     public IReadOnlyList<PackageVariantConfig> Variants = new[]
+    {
+        new PackageVariantConfig
         {
-            new PackageVariantConfig
-            {
-                DownloadUrl = new Uri($"https://nginx.org/download/nginx-{Version}.zip"),
-                Identifier = Version,
-                IsSelected = true,
-                PathInArchive = $"nginx-{Version}"
-            }
-        };
+            DownloadUrl = new Uri($"{DownloadBase}/nginx-{Version}.zip"),
+            Identifier = Version,
+            IsSelected = true,
+            PathInArchive = $"nginx-{Version}"
+        }
+    };
 }
