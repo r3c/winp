@@ -8,7 +8,7 @@ public record MariaDbConfig
 {
     private const string DownloadBase = "https://downloads.mariadb.com/MariaDB";
     private const string Platform = "winx64";
-    private const string Version = "11.5.1";
+    private const string Version = "11.6.1";
 
     [JsonProperty(PropertyName = "dataDirectory")]
     public string DataDirectory = "data";
