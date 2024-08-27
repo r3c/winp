@@ -7,7 +7,7 @@ namespace Winp.Configuration;
 public record NginxConfig
 {
     private const string DownloadBase = "https://nginx.org/download";
-    private const string Version = "1.27.0";
+    private const string Version = "1.27.1";
 
     [JsonProperty(PropertyName = "serverAddress")]
     public string ServerAddress = "127.0.0.1";
