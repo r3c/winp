@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -163,6 +162,29 @@ public partial class ServiceForm : System.Windows.Forms.Form
     private ServiceReference CreateServiceReference(IPackage package, ServiceRunner? runner,
         IReadOnlyList<PackageVariantConfig> variants, ComboBox variantComboBox, Label statusLabel)
     {
+        var refreshTextIgnore = false;
+        var refreshTextLayout = new EventHandler((sender, _) =>
+        {
+            if (refreshTextIgnore || sender is not Label label)
+                return;
+
+            refreshTextIgnore = true;
+
+            // Set text and left-aligned icon on underlying label component with a margin between them
+            label.AutoSize = true;
+
+            var imageWidth = label.ImageList is not null ? label.ImageList.ImageSize.Width : 0;
+            var labelWidth = label.Width;
+
+            label.AutoSize = false;
+            label.Width = imageWidth + 4 + labelWidth;
+
+            refreshTextIgnore = false;
+        });
+
+        statusLabel.SizeChanged += refreshTextLayout;
+        statusLabel.TextChanged += refreshTextLayout;
+
         var service = new ServiceReference(
             package,
             runner,
@@ -180,19 +202,8 @@ public partial class ServiceForm : System.Windows.Forms.Form
             }),
             status => RunUiAction(() =>
             {
-                const int space = 4;
-
                 statusLabel.ImageIndex = (int)status.Level;
                 statusLabel.Text = status.Message;
-
-                // Set text and left-aligned icon on underlying label component.
-                statusLabel.AutoSize = true;
-
-                var imageWidth = statusLabel.ImageList is not null ? statusLabel.ImageList.ImageSize.Width : 0;
-                var labelWidth = statusLabel.Width;
-
-                statusLabel.AutoSize = false;
-                statusLabel.Width = imageWidth + space + labelWidth;
             }));
 
         if (runner is not null)
@@ -205,8 +216,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         variantComboBox.SelectedIndex = variants
             .Select<PackageVariantConfig, int?>((config, index) => config.IsSelected ? index + indexOffset : null)
-            .Where(index => index is not null)
-            .FirstOrDefault()
+            .FirstOrDefault(index => index is not null)
             .GetValueOrDefault(variantComboBox.Items.Count > 0 ? 0 : -1);
 
         variantComboBox.SelectedIndexChanged += (_, _) =>
@@ -265,7 +275,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
                 if (installMessage != null)
                 {
-                    service.SetStatus(new Status(StatusLevel.Failure, installMessage));
+                    service.SetStatus(new Status(StatusLevel.Failure, $"Install error: {installMessage}"));
 
                     return false;
                 }
@@ -277,7 +287,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
             if (configureMessage != null)
             {
-                service.SetStatus(new Status(StatusLevel.Failure, $"Error: {configureMessage}"));
+                service.SetStatus(new Status(StatusLevel.Failure, $"Configure error: {configureMessage}"));
 
                 return false;
             }

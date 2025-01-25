@@ -112,7 +112,7 @@ namespace Winp.Form
             // 
             // _packagePhpMyAdminStatusLabel
             // 
-            _packagePhpMyAdminStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            _packagePhpMyAdminStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpMyAdminStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packagePhpMyAdminStatusLabel.ImageIndex = 0;
             _packagePhpMyAdminStatusLabel.Location = new System.Drawing.Point(265, 97);
@@ -125,7 +125,7 @@ namespace Winp.Form
             // 
             // _packagePhpMyAdminVariantComboBox
             // 
-            _packagePhpMyAdminVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packagePhpMyAdminVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packagePhpMyAdminVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpMyAdminVariantComboBox.FormattingEnabled = true;
             _packagePhpMyAdminVariantComboBox.Location = new System.Drawing.Point(97, 96);
@@ -146,7 +146,7 @@ namespace Winp.Form
             // 
             // _packagePhpStatusLabel
             // 
-            _packagePhpStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            _packagePhpStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packagePhpStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packagePhpStatusLabel.ImageIndex = 0;
             _packagePhpStatusLabel.Location = new System.Drawing.Point(265, 72);
@@ -159,7 +159,7 @@ namespace Winp.Form
             // 
             // _packagePhpVariantComboBox
             // 
-            _packagePhpVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packagePhpVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packagePhpVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpVariantComboBox.FormattingEnabled = true;
             _packagePhpVariantComboBox.Location = new System.Drawing.Point(97, 71);
@@ -180,7 +180,7 @@ namespace Winp.Form
             // 
             // _packageMariaDbStatusLabel
             // 
-            _packageMariaDbStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            _packageMariaDbStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packageMariaDbStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packageMariaDbStatusLabel.ImageIndex = 0;
             _packageMariaDbStatusLabel.Location = new System.Drawing.Point(265, 22);
@@ -193,7 +193,7 @@ namespace Winp.Form
             // 
             // _packageMariaDbVariantComboBox
             // 
-            _packageMariaDbVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packageMariaDbVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packageMariaDbVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageMariaDbVariantComboBox.FormattingEnabled = true;
             _packageMariaDbVariantComboBox.Location = new System.Drawing.Point(97, 21);
@@ -214,7 +214,7 @@ namespace Winp.Form
             // 
             // _packageNginxStatusLabel
             // 
-            _packageNginxStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            _packageNginxStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _packageNginxStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             _packageNginxStatusLabel.ImageIndex = 0;
             _packageNginxStatusLabel.Location = new System.Drawing.Point(265, 47);
@@ -227,7 +227,7 @@ namespace Winp.Form
             // 
             // _packageNginxVariantComboBox
             // 
-            _packageNginxVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packageNginxVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packageNginxVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageNginxVariantComboBox.FormattingEnabled = true;
             _packageNginxVariantComboBox.Location = new System.Drawing.Point(97, 45);
