@@ -16,14 +16,7 @@ public record MariaDbConfig
         ("3978118", "11.7.1", true)
     };
 
-    [JsonProperty(PropertyName = "dataDirectory")]
-    public string DataDirectory = "data";
-
-    [JsonProperty(PropertyName = "serverPort")]
-    public int ServerPort = 3306;
-
-    [JsonProperty(PropertyName = "variants")]
-    public IReadOnlyList<PackageVariantConfig> Variants = MariaDbVariants
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = MariaDbVariants
         .Select(variant => new PackageVariantConfig
         {
             DownloadUrl = new Uri(
@@ -33,4 +26,16 @@ public record MariaDbConfig
             PathInArchive = $"mariadb-{variant.Version}-{Platform}"
         })
         .ToArray();
+
+    [JsonProperty(PropertyName = "dataDirectory")]
+    public string DataDirectory = "data";
+
+    [JsonProperty(PropertyName = "serverPort")]
+    public int ServerPort = 3306;
+
+    [JsonProperty(PropertyName = "userVariants")]
+    public IReadOnlyList<PackageVariantConfig> UserVariants = [];
+
+    [JsonIgnore]
+    public IReadOnlyList<PackageVariantConfig> Variants => UserVariants.Count > 0 ? UserVariants : DefaultVariants;
 }
