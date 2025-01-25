@@ -39,7 +39,8 @@ public class MariaDbPackage : IPackage, IService
         if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectory, "my.ini")))
         {
             var arguments = new[] { Executable.EscapeArgument("--datadir=" + mariadb.DataDirectory) };
-            var process = Executable.Start(CreateProcessStartInfo(application, variant.Identifier, "mysql_install_db.exe", arguments));
+            var process = Executable.Start(CreateProcessStartInfo(application, variant.Identifier,
+                "mysql_install_db.exe", arguments));
 
             if (process == null || await process.Stop(TimeSpan.FromMinutes(5)) != 0)
                 return "could not initialize data directory";
@@ -68,20 +69,19 @@ public class MariaDbPackage : IPackage, IService
 
         // Download and extract archive
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
-        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
+        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
+            packageDirectory);
 
-        if (downloadMessage != null)
-            return $"download failure ({downloadMessage})";
-
-        return null;
+        return downloadMessage != null ? $"download failure ({downloadMessage})" : null;
     }
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, "mysqld.exe", Array.Empty<string>()).FileName);
+        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, "mysqld.exe", []).FileName);
     }
 
-    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string executable, string[] arguments)
+    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier,
+        string executable, IReadOnlyList<string> arguments)
     {
         var installDirectory = application.Environment.InstallDirectory;
         var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);

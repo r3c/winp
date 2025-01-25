@@ -75,12 +75,12 @@ public class NginxPackage : IPackage, IService
 
     public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
     {
-        return CreateProcessStartInfo(application, variantIdentifier, Array.Empty<string>());
+        return CreateProcessStartInfo(application, variantIdentifier, []);
     }
 
     public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
     {
-        return CreateProcessStartInfo(application, variantIdentifier, new[] { "-s", "quit" });
+        return CreateProcessStartInfo(application, variantIdentifier, ["-s", "quit"]);
     }
 
     public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
@@ -99,7 +99,7 @@ public class NginxPackage : IPackage, IService
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, Array.Empty<string>()).FileName);
+        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, []).FileName);
     }
 
     private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string[] arguments)

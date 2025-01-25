@@ -43,7 +43,7 @@ public class PhpPackage : IPackage, IService
         var php = application.Package.Php;
         var binding = $"{php.ServerAddress}:{php.ServerPort}";
 
-        return CreateProcessStartInfo(application, variantIdentifier, new[] { "-b", binding, "-c", "php.ini" });
+        return CreateProcessStartInfo(application, variantIdentifier, ["-b", binding, "-c", "php.ini"]);
     }
 
     public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
@@ -62,20 +62,19 @@ public class PhpPackage : IPackage, IService
 
         // Download and extract archive
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
-        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
+        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
+            packageDirectory);
 
-        if (downloadMessage != null)
-            return $"download failure ({downloadMessage})";
-
-        return null;
+        return downloadMessage != null ? $"download failure ({downloadMessage})" : null;
     }
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, Array.Empty<string>()).FileName);
+        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, []).FileName);
     }
 
-    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string[] arguments)
+    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier,
+        IReadOnlyList<string> arguments)
     {
         var installDirectory = application.Environment.InstallDirectory;
         var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
