@@ -25,12 +25,13 @@ Download latest [Winp release](https://github.com/r3c/winp/releases) from
 GitHub or compile from source, unpack anywhere you want then run `Winp.exe`.
 
 - Click "Configure" button to change server bindings or locations (optional).
-- Click "Start services" button to download and start required packages (accept
-  Windows network prompts if need be).
+- Click "Start services" button to download, configure and start packages.
+- Wait for a few minutes (on first start) and accept Windows network prompts.
 
 You should see all packages in "Running" status (or "Ready" for phpMyAdmin
-which doesn't execute as a background service). A new browser windows will also
-open to http://localhost/ or whatever URL you set as first location.
+which doesn't execute as a background service). Click the "Open browser"
+button to have your default browser open to http://localhost/ or whatever
+URL you set as first location.
 
 If you didn't change default configuration you can also navigate to
 http://localhost/phpmyadmin/ to open PhpMyAdmin.
