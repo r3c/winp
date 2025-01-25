@@ -17,6 +17,15 @@ public record PhpConfig
         ("8.3.9", true)
     };
 
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpVariants
+        .Select(variant => new PackageVariantConfig
+        {
+            DownloadUrl = new Uri($"{DownloadBase}/php-{variant.Version}-{Platform}.zip"),
+            Identifier = $"{variant.Version}-{Platform}",
+            IsSelected = variant.IsLatest
+        })
+        .ToArray();
+
     [JsonProperty(PropertyName = "extensions")]
     public IReadOnlyList<string> Extensions = new[]
     {
@@ -37,13 +46,9 @@ public record PhpConfig
     [JsonProperty(PropertyName = "serverPort")]
     public int ServerPort = 9000;
 
-    [JsonProperty(PropertyName = "variants")]
-    public IReadOnlyList<PackageVariantConfig> Variants = PhpVariants
-        .Select(variant => new PackageVariantConfig
-        {
-            DownloadUrl = new Uri($"{DownloadBase}/php-{variant.Version}-{Platform}.zip"),
-            Identifier = $"{variant.Version}-{Platform}",
-            IsSelected = variant.IsLatest
-        })
-        .ToArray();
+    [JsonProperty(PropertyName = "userVariants")]
+    public IReadOnlyList<PackageVariantConfig> UserVariants = [];
+
+    [JsonIgnore]
+    public IReadOnlyList<PackageVariantConfig> Variants => UserVariants.Count > 0 ? UserVariants : DefaultVariants;
 }

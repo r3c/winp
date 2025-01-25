@@ -15,8 +15,7 @@ public record PhpMyAdminConfig
         ("5.2.1", true)
     };
 
-    [JsonProperty(PropertyName = "variants")]
-    public IReadOnlyList<PackageVariantConfig> Variants = PhpMyAdminVariants
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpMyAdminVariants
         .Select(variant => new PackageVariantConfig
         {
             DownloadUrl = new Uri($"{DownloadBase}/{variant.Version}/phpMyAdmin-{variant.Version}-{Language}.zip"),
@@ -25,4 +24,10 @@ public record PhpMyAdminConfig
             PathInArchive = $"phpMyAdmin-{variant.Version}-{Language}"
         })
         .ToArray();
+
+    [JsonProperty(PropertyName = "userVariants")]
+    public IReadOnlyList<PackageVariantConfig> UserVariants = [];
+
+    [JsonIgnore]
+    public IReadOnlyList<PackageVariantConfig> Variants => UserVariants.Count > 0 ? UserVariants : DefaultVariants;
 }
