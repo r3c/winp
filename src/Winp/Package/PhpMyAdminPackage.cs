@@ -23,8 +23,7 @@ internal class PhpMyAdminPackage : IPackage
         foreach (var name in new[] { ConfigurationPhpMyAdmin })
         {
             var destinationPath = Path.Combine(packageDirectory.AbsolutePath, name);
-            var success =
-                await Template.WriteToFile<PhpMyAdminPackage>($"PhpMyAdmin.{name}", context, destinationPath);
+            var success = await Template.WriteToFile<PhpMyAdminPackage>($"PhpMyAdmin.{name}", context, destinationPath);
 
             if (!success)
                 return $"configuration failure with '{name}'";
@@ -39,13 +38,10 @@ internal class PhpMyAdminPackage : IPackage
 
         // Download and extract archive
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
-        var downloadMessage =
-            await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, packageDirectory);
+        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
+            packageDirectory);
 
-        if (downloadMessage != null)
-            return $"download failure ({downloadMessage})";
-
-        return null;
+        return downloadMessage != null ? $"download failure ({downloadMessage})" : null;
     }
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
