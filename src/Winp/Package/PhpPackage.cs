@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cottle;
 using Winp.Configuration;
@@ -19,7 +21,10 @@ public class PhpPackage : IPackage, IService
 
         // Write configuration files
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
-        var context = Context.Empty;
+        var context = Context.CreateCustom(new Dictionary<Value, Value>
+        {
+            ["extensions"] = application.Package.Php.Extensions.Select(Value.FromString).ToList()
+        });
 
         foreach (var name in new[] { ConfigurationPhp })
         {

@@ -14,6 +14,20 @@ public record PhpConfig
     private const string Version83 = "8.3.9";
     private const string VersionLatest = Version83;
 
+    [JsonProperty(PropertyName = "extensions")]
+    public IReadOnlyList<string> Extensions = new[]
+    {
+        "curl",
+        "gd",
+        "intl",
+        "mbstring",
+        "mysqli",
+        "openssl",
+        "pdo_mysql",
+        "sodium",
+        "zip"
+    };
+
     [JsonProperty(PropertyName = "serverAddress")]
     public string ServerAddress = "127.0.0.1";
 
