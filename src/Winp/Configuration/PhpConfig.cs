@@ -9,10 +9,13 @@ public record PhpConfig
 {
     private const string DownloadBase = "https://windows.php.net/downloads/releases/archives";
     private const string Platform = "Win32-vs16-x64";
-    private const string Version81 = "8.1.28";
-    private const string Version82 = "8.2.21";
-    private const string Version83 = "8.3.9";
-    private const string VersionLatest = Version83;
+
+    private static readonly IReadOnlyList<(string Version, bool IsLatest)> PhpVariants = new[]
+    {
+        ("8.1.28", false),
+        ("8.2.21", false),
+        ("8.3.9", true)
+    };
 
     [JsonProperty(PropertyName = "extensions")]
     public IReadOnlyList<string> Extensions = new[]
@@ -35,12 +38,12 @@ public record PhpConfig
     public int ServerPort = 9000;
 
     [JsonProperty(PropertyName = "variants")]
-    public IReadOnlyList<PackageVariantConfig> Variants = new[] { Version81, Version82, Version83 }
-        .Select(version => new PackageVariantConfig
+    public IReadOnlyList<PackageVariantConfig> Variants = PhpVariants
+        .Select(variant => new PackageVariantConfig
         {
-            DownloadUrl = new Uri($"{DownloadBase}/php-{version}-{Platform}.zip"),
-            Identifier = $"{version}-{Platform}",
-            IsSelected = version == VersionLatest
+            DownloadUrl = new Uri($"{DownloadBase}/php-{variant.Version}-{Platform}.zip"),
+            Identifier = $"{variant.Version}-{Platform}",
+            IsSelected = variant.IsLatest
         })
         .ToArray();
 }

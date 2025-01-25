@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Winp.Configuration;
@@ -7,9 +8,13 @@ namespace Winp.Configuration;
 public record MariaDbConfig
 {
     private const string DownloadBase = "https://dlm.mariadb.com";
-    private const string Identifier = "3978118";
     private const string Platform = "winx64";
-    private const string Version = "11.7.1";
+
+    private static readonly IReadOnlyList<(string Identifier, string Version, bool IsLatest)> MariaDbVariants = new[]
+    {
+        ("3906756", "11.6.1", false),
+        ("3978118", "11.7.1", true)
+    };
 
     [JsonProperty(PropertyName = "dataDirectory")]
     public string DataDirectory = "data";
@@ -18,15 +23,14 @@ public record MariaDbConfig
     public int ServerPort = 3306;
 
     [JsonProperty(PropertyName = "variants")]
-    public IReadOnlyList<PackageVariantConfig> Variants = new[]
-    {
-        new PackageVariantConfig
+    public IReadOnlyList<PackageVariantConfig> Variants = MariaDbVariants
+        .Select(variant => new PackageVariantConfig
         {
             DownloadUrl = new Uri(
-                $"{DownloadBase}/{Identifier}/MariaDB/mariadb-{Version}/{Platform}-packages/mariadb-{Version}-{Platform}.zip"),
-            Identifier = $"{Version}-{Platform}",
-            IsSelected = true,
-            PathInArchive = $"mariadb-{Version}-{Platform}"
-        }
-    };
+                $"{DownloadBase}/{variant.Identifier}/MariaDB/mariadb-{variant.Version}/{Platform}-packages/mariadb-{variant.Version}-{Platform}.zip"),
+            Identifier = $"{variant.Version}-{Platform}",
+            IsSelected = variant.IsLatest,
+            PathInArchive = $"mariadb-{variant.Version}-{Platform}"
+        })
+        .ToArray();
 }
