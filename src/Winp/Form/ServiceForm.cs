@@ -174,9 +174,11 @@ public partial class ServiceForm : System.Windows.Forms.Form
             label.AutoSize = true;
 
             var imageWidth = label.ImageList is not null ? label.ImageList.ImageSize.Width : 0;
+            var labelHeight = label.Height;
             var labelWidth = label.Width;
 
             label.AutoSize = false;
+            label.Height = labelHeight + 4;
             label.Width = imageWidth + 4 + labelWidth;
 
             refreshTextIgnore = false;
