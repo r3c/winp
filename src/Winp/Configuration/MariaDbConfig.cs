@@ -10,10 +10,10 @@ public record MariaDbConfig
     private const string DownloadBase = "https://dlm.mariadb.com";
     private const string Platform = "winx64";
 
-    private static readonly IReadOnlyList<(string Identifier, string Version, bool IsLatest)> MariaDbVariants = new[]
+    private static readonly IReadOnlyList<(string Identifier, string Version)> MariaDbVariants = new[]
     {
-        ("3906756", "11.6.1", false),
-        ("3978118", "11.7.1", true)
+        ("3906756", "11.6.1"),
+        ("3978118", "11.7.1")
     };
 
     private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = MariaDbVariants
@@ -22,13 +22,15 @@ public record MariaDbConfig
             DownloadUrl = new Uri(
                 $"{DownloadBase}/{variant.Identifier}/MariaDB/mariadb-{variant.Version}/{Platform}-packages/mariadb-{variant.Version}-{Platform}.zip"),
             Identifier = $"{variant.Version}-{Platform}",
-            IsSelected = variant.IsLatest,
             PathInArchive = $"mariadb-{variant.Version}-{Platform}"
         })
         .ToArray();
 
     [JsonProperty(PropertyName = "dataDirectory")]
     public string DataDirectory = "data";
+
+    [JsonProperty(PropertyName = "selectedVariant")]
+    public int SelectedVariant = DefaultVariants.Count - 1;
 
     [JsonProperty(PropertyName = "serverPort")]
     public int ServerPort = 3306;

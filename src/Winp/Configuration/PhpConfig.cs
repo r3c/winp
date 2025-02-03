@@ -10,19 +10,18 @@ public record PhpConfig
     private const string DownloadBase = "https://windows.php.net/downloads/releases/archives";
     private const string Platform = "Win32-vs16-x64";
 
-    private static readonly IReadOnlyList<(string Version, bool IsLatest)> PhpVariants = new[]
+    private static readonly IReadOnlyList<string> PhpVersions = new[]
     {
-        ("8.1.28", false),
-        ("8.2.21", false),
-        ("8.3.9", true)
+        "8.1.28",
+        "8.2.21",
+        "8.3.9"
     };
 
-    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpVariants
-        .Select(variant => new PackageVariantConfig
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpVersions
+        .Select(version => new PackageVariantConfig
         {
-            DownloadUrl = new Uri($"{DownloadBase}/php-{variant.Version}-{Platform}.zip"),
-            Identifier = $"{variant.Version}-{Platform}",
-            IsSelected = variant.IsLatest
+            DownloadUrl = new Uri($"{DownloadBase}/php-{version}-{Platform}.zip"),
+            Identifier = $"{version}-{Platform}"
         })
         .ToArray();
 
@@ -39,6 +38,9 @@ public record PhpConfig
         "sodium",
         "zip"
     };
+
+    [JsonProperty(PropertyName = "selectedVariant")]
+    public int SelectedVariant = DefaultVariants.Count - 1;
 
     [JsonProperty(PropertyName = "serverAddress")]
     public string ServerAddress = "127.0.0.1";

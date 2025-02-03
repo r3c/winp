@@ -10,20 +10,22 @@ public record PhpMyAdminConfig
     private const string DownloadBase = "https://files.phpmyadmin.net/phpMyAdmin";
     private const string Language = "all-languages";
 
-    private static readonly IReadOnlyList<(string Version, bool IsLatest)> PhpMyAdminVariants = new[]
+    private static readonly IReadOnlyList<string> PhpMyAdminVersions = new[]
     {
-        ("5.2.1", true)
+        "5.2.1"
     };
 
-    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpMyAdminVariants
-        .Select(variant => new PackageVariantConfig
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpMyAdminVersions
+        .Select(version => new PackageVariantConfig
         {
-            DownloadUrl = new Uri($"{DownloadBase}/{variant.Version}/phpMyAdmin-{variant.Version}-{Language}.zip"),
-            Identifier = $"{variant.Version}-{Language}",
-            IsSelected = variant.IsLatest,
-            PathInArchive = $"phpMyAdmin-{variant.Version}-{Language}"
+            DownloadUrl = new Uri($"{DownloadBase}/{version}/phpMyAdmin-{version}-{Language}.zip"),
+            Identifier = $"{version}-{Language}",
+            PathInArchive = $"phpMyAdmin-{version}-{Language}"
         })
         .ToArray();
+
+    [JsonProperty(PropertyName = "selectedVariant")]
+    public int SelectedVariant = DefaultVariants.Count - 1;
 
     [JsonProperty(PropertyName = "userVariants")]
     public IReadOnlyList<PackageVariantConfig> UserVariants = [];
