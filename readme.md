@@ -70,6 +70,30 @@ template engine with
 [custom delimiters](https://cottle.readthedocs.io/en/stable/page/04-configuration.html#delimiters-customization)
 set to "{{", "{|}" and "}}".
 
+## Custom packages
+
+You can replace the default versions for all packages by modifying the
+`Winp.json` file that gets created next to `Winp.exe` after you first save some
+configuration change within the application.
+
+Locate the `userVariants` field for the package you want to customize and set it
+to any non-empty array to replace application defaults. Each item within this
+array is expected to contain the following fields:
+
+- `downloadUrl` is the full download URL of a ZIP version of the package
+- `identifier` is a human-readable unique identifier for the version
+- `pathInArchive` is a relative path to package's directory within archive
+
+Here is an example of user variant for Nginx:
+
+```
+{
+    "downloadUrl": "https://nginx.org/download/nginx-1.27.3.zip",
+    "identifier": "1.27.3",
+    "pathInArchive": "nginx-1.27.3"
+}
+```
+
 ## Credits
 
 - [Freepik](https://www.flaticon.com/fr/auteurs/freepik) for the nice Elephant icon
