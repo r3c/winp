@@ -51,18 +51,24 @@ public partial class ServiceForm : System.Windows.Forms.Form
         var mariaDbPackage = new MariaDbPackage();
         var mariaDbInstance = new ServiceRunner(mariaDbPackage);
         var mariaDbService = CreateServiceReference(mariaDbPackage, mariaDbInstance,
-            configuration.Package.MariaDb.Variants, _packageMariaDbVariantComboBox, _packageMariaDbStatusLabel);
+            configuration.Package.MariaDb.Variants, configuration.Package.MariaDb.SelectedVariant,
+            index => configuration.Package.MariaDb.SelectedVariant = index, _packageMariaDbVariantComboBox,
+            _packageMariaDbStatusLabel);
         var nginxPackage = new NginxPackage();
         var nginxInstance = new ServiceRunner(nginxPackage);
         var nginxService = CreateServiceReference(nginxPackage, nginxInstance, configuration.Package.Nginx.Variants,
+            configuration.Package.Nginx.SelectedVariant,
+            index => configuration.Package.Nginx.SelectedVariant = index,
             _packageNginxVariantComboBox, _packageNginxStatusLabel);
         var phpPackage = new PhpPackage();
         var phpInstance = new ServiceRunner(phpPackage);
         var phpService = CreateServiceReference(phpPackage, phpInstance, configuration.Package.Php.Variants,
+            configuration.Package.Php.SelectedVariant, index => configuration.Package.Php.SelectedVariant = index,
             _packagePhpVariantComboBox, _packagePhpStatusLabel);
         var phpMyAdminPackage = new PhpMyAdminPackage();
         var phpMyAdminService = CreateServiceReference(phpMyAdminPackage, null,
-            configuration.Package.PhpMyAdmin.Variants, _packagePhpMyAdminVariantComboBox,
+            configuration.Package.PhpMyAdmin.Variants, configuration.Package.PhpMyAdmin.SelectedVariant,
+            index => configuration.Package.PhpMyAdmin.SelectedVariant = index, _packagePhpMyAdminVariantComboBox,
             _packagePhpMyAdminStatusLabel);
 
         var statusImageList = new ImageList();
@@ -160,7 +166,8 @@ public partial class ServiceForm : System.Windows.Forms.Form
     }
 
     private ServiceReference CreateServiceReference(IPackage package, ServiceRunner? runner,
-        IReadOnlyList<PackageVariantConfig> variants, ComboBox variantComboBox, Label statusLabel)
+        IReadOnlyList<PackageVariantConfig> variants, int currentVariantIndex, Action<int> setVariantIndex,
+        ComboBox variantComboBox, Label statusLabel)
     {
         var refreshTextIgnore = false;
         var refreshTextLayout = new EventHandler((sender, _) =>
@@ -216,18 +223,10 @@ public partial class ServiceForm : System.Windows.Forms.Form
         foreach (var variant in variants)
             variantComboBox.Items.Add(variant);
 
-        variantComboBox.SelectedIndex = variants
-            .Select<PackageVariantConfig, int?>((config, index) => config.IsSelected ? index + indexOffset : null)
-            .FirstOrDefault(index => index is not null)
-            .GetValueOrDefault(variantComboBox.Items.Count > 0 ? 0 : -1);
-
+        variantComboBox.SelectedIndex = currentVariantIndex + indexOffset;
         variantComboBox.SelectedIndexChanged += (_, _) =>
         {
-            foreach (var variant in variants)
-                variant.IsSelected = false;
-
-            if (variantComboBox.SelectedItem is PackageVariantConfig selectedVariant)
-                selectedVariant.IsSelected = true;
+            setVariantIndex(variantComboBox.SelectedIndex - indexOffset);
 
             ApplicationConfig.Save(ConfigurationPath, _configuration);
 

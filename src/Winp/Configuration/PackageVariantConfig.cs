@@ -13,9 +13,6 @@ public record PackageVariantConfig
     [JsonProperty(PropertyName = "identifier", Required = Required.Always)]
     public string Identifier = string.Empty;
 
-    [JsonProperty(PropertyName = "isSelected")]
-    public bool IsSelected = false;
-
     [JsonProperty(PropertyName = "pathInArchive")]
     public string PathInArchive = string.Empty;
 

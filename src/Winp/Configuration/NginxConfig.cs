@@ -9,20 +9,22 @@ public record NginxConfig
 {
     private const string DownloadBase = "https://nginx.org/download";
 
-    private static readonly IReadOnlyList<(string Version, bool IsLatest)> NginxVariants = new[]
+    private static readonly IReadOnlyList<string> NginxVersions = new[]
     {
-        ("1.27.1", true)
+        "1.27.1"
     };
 
-    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = NginxVariants
-        .Select(variant => new PackageVariantConfig
+    private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = NginxVersions
+        .Select(version => new PackageVariantConfig
         {
-            DownloadUrl = new Uri($"{DownloadBase}/nginx-{variant.Version}.zip"),
-            Identifier = variant.Version,
-            IsSelected = variant.IsLatest,
-            PathInArchive = $"nginx-{variant.Version}"
+            DownloadUrl = new Uri($"{DownloadBase}/nginx-{version}.zip"),
+            Identifier = version,
+            PathInArchive = $"nginx-{version}"
         })
         .ToArray();
+
+    [JsonProperty(PropertyName = "selectedVariant")]
+    public int SelectedVariant = DefaultVariants.Count - 1;
 
     [JsonProperty(PropertyName = "serverAddress")]
     public string ServerAddress = "127.0.0.1";
