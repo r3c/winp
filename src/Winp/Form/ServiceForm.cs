@@ -223,7 +223,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         foreach (var variant in variants)
             variantComboBox.Items.Add(variant);
 
-        variantComboBox.SelectedIndex = currentVariantIndex + indexOffset;
+        variantComboBox.SelectedIndex = Math.Min(currentVariantIndex + indexOffset, variantComboBox.Items.Count - 1);
         variantComboBox.SelectedIndexChanged += (_, _) =>
         {
             setVariantIndex(variantComboBox.SelectedIndex - indexOffset);
