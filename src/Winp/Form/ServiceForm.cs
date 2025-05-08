@@ -23,7 +23,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
     private readonly TaskScheduler _scheduler;
     private readonly IReadOnlyList<ServiceReference> _services;
-    private readonly NotifyIcon _notifyIcon = new NotifyIcon();
 
     public ServiceForm()
     {
@@ -159,7 +158,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _notifyIcon.Visible = true;
     }
 
-    private void NotifyIcon_Click(object sender, EventArgs e)
+    private void NotifyIcon_Click(object? sender, EventArgs e)
     {
         this.Show();
         this.WindowState = FormWindowState.Normal;
