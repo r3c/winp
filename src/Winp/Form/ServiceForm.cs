@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing; // Added for SystemIcons
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
             configuration = new ApplicationConfig();
         }
 
-        var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+        _scheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
         var mariaDbPackage = new MariaDbPackage();
         var mariaDbInstance = new ServiceRunner(mariaDbPackage);
@@ -84,16 +85,14 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _packagePhpStatusLabel.ImageList = statusImageList;
         _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
         _services = [mariaDbService, nginxService, phpService, phpMyAdminService];
-        _scheduler = scheduler;
 
-        // Set tray icon (optional: set icon resource if available)
-        try
+        // Configure NotifyIcon (it's initialized in Designer.cs)
+        if (_notifyIcon != null)
         {
-            _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            _notifyIcon.Icon = this.Icon ?? SystemIcons.Application;
+            // Text and Visible properties are set in Designer.cs
+            // Event handler _notifyIcon.MouseClick is also set in Designer.cs
         }
-        catch { /* fallback if icon not found */ }
-
-        _notifyIcon.Click += NotifyIcon_Click;
     }
 
     private void ServiceForm_Shown(object sender, EventArgs e)
@@ -103,14 +102,31 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        // Allow closing form is all services are stopped
+        // Allow closing form if all services are stopped
         if (!_services.Any(package => package.Runner?.IsRunning ?? false))
+        {
+            // If services are stopped, ensure NotifyIcon is hidden before closing
+            if (_notifyIcon != null && _notifyIcon.Visible)
+            {
+                _notifyIcon.Visible = false;
+            }
+            // Proceed with normal closing procedure (base.OnClosing will be called implicitly if e.Cancel is false)
             return;
+        }
 
-        // Otherwise stop them before closing form
-        ControlStopExecute().ContinueWith(_ => Close(), _scheduler);
+        // Otherwise, services are running: stop them before closing form
+        e.Cancel = true; // Prevent immediate closing
 
-        e.Cancel = true;
+        // Optional: Disable form to prevent further interaction
+        // this.Enabled = false;
+
+        ControlStopExecute().ContinueWith(_ =>
+        {
+            // This continuation runs on the UI thread (_scheduler)
+            // After services are stopped, call Close() again.
+            // OnClosing will be re-triggered, and the first 'if' block will handle cleanup.
+            Close();
+        }, _scheduler);
     }
 
     private void ControlBrowserButton_Click(object sender, EventArgs e)
@@ -152,18 +168,29 @@ public partial class ServiceForm : System.Windows.Forms.Form
         RunBackgroundAction(ControlStopExecute);
     }
 
-    private void ControlMinimizeToTrayButton_Click(object sender, EventArgs e)
+    private void ControlMinimizeButton_Click(object sender, EventArgs e)
     {
         this.Hide();
-        _notifyIcon.Visible = true;
+        if (_notifyIcon != null)
+        {
+            _notifyIcon.Visible = true;
+        }
+        this.ShowInTaskbar = false;
     }
 
-    private void NotifyIcon_Click(object? sender, EventArgs e)
+    private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
     {
-        this.Show();
-        this.WindowState = FormWindowState.Normal;
-        this.Activate();
-        _notifyIcon.Visible = false;
+        if (e.Button == MouseButtons.Left)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            if (_notifyIcon != null)
+            {
+                _notifyIcon.Visible = false;
+            }
+            this.ShowInTaskbar = true;
+            this.Activate();
+        }
     }
 
     private async Task ControlStartExecute()
