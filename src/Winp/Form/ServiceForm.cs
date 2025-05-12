@@ -85,15 +85,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
         _services = [mariaDbService, nginxService, phpService, phpMyAdminService];
         _scheduler = scheduler;
-
-        // Set tray icon (optional: set icon resource if available)
-        try
-        {
-            _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-        }
-        catch { /* fallback if icon not found */ }
-
-        _notifyIcon.Click += NotifyIcon_Click;
+        _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
     }
 
     private void ServiceForm_Shown(object sender, EventArgs e)
@@ -154,15 +146,17 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
     private void ControlMinimizeToTrayButton_Click(object sender, EventArgs e)
     {
-        this.Hide();
+        Hide();
+
         _notifyIcon.Visible = true;
     }
 
-    private void NotifyIcon_Click(object? sender, EventArgs e)
+    private void NotifyIcon_Click(object sender, EventArgs e)
     {
-        this.Show();
-        this.WindowState = FormWindowState.Normal;
-        this.Activate();
+        Show();
+        WindowState = FormWindowState.Normal;
+        Activate();
+
         _notifyIcon.Visible = false;
     }
 
