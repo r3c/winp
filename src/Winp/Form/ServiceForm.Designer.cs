@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Windows.Forms; // Added for NotifyIcon
 
 namespace Winp.Form
 {
@@ -32,10 +31,11 @@ namespace Winp.Form
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container(); // Ensure components is initialized
             _controlStopButton = new System.Windows.Forms.Button();
             _controlStartButton = new System.Windows.Forms.Button();
             _controlConfigureButton = new System.Windows.Forms.Button();
+            _controlMinimizeToTrayButton = new System.Windows.Forms.Button();
+            _notifyIcon = new System.Windows.Forms.NotifyIcon();
             _packageGroupBox = new System.Windows.Forms.GroupBox();
             _packagePhpMyAdminStatusLabel = new System.Windows.Forms.Label();
             _packagePhpMyAdminVariantComboBox = new System.Windows.Forms.ComboBox();
@@ -51,8 +51,6 @@ namespace Winp.Form
             _packageNginxLabel = new System.Windows.Forms.Label();
             _controlGroupBox = new System.Windows.Forms.GroupBox();
             _controlBrowserButton = new System.Windows.Forms.Button();
-            _controlMinimizeButton = new System.Windows.Forms.Button();
-            _notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             _packageGroupBox.SuspendLayout();
             _controlGroupBox.SuspendLayout();
             SuspendLayout();
@@ -90,6 +88,23 @@ namespace Winp.Form
             _controlConfigureButton.UseVisualStyleBackColor = true;
             _controlConfigureButton.Click += ControlConfigureButton_Click;
             //
+            // _controlMinimizeToTrayButton
+            //
+            _controlMinimizeToTrayButton.Location = new System.Drawing.Point(438, 19);
+            _controlMinimizeToTrayButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            _controlMinimizeToTrayButton.Name = "_controlMinimizeToTrayButton";
+            _controlMinimizeToTrayButton.Size = new System.Drawing.Size(100, 23);
+            _controlMinimizeToTrayButton.TabIndex = 5;
+            _controlMinimizeToTrayButton.Text = "Minimize to tray";
+            _controlMinimizeToTrayButton.UseVisualStyleBackColor = true;
+            _controlMinimizeToTrayButton.Click += ControlMinimizeToTrayButton_Click;
+            //
+            // _notifyIcon
+            //
+            _notifyIcon.Text = "Winp Service";
+            _notifyIcon.Visible = false;
+            _notifyIcon.Click += NotifyIcon_Click;
+            //
             // _packageGroupBox
             //
             _packageGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
@@ -109,7 +124,7 @@ namespace Winp.Form
             _packageGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _packageGroupBox.Name = "_packageGroupBox";
             _packageGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            _packageGroupBox.Size = new System.Drawing.Size(565, 126);
+            _packageGroupBox.Size = new System.Drawing.Size(435, 126);
             _packageGroupBox.TabIndex = 2;
             _packageGroupBox.TabStop = false;
             _packageGroupBox.Text = "Packages";
@@ -122,7 +137,7 @@ namespace Winp.Form
             _packagePhpMyAdminStatusLabel.Location = new System.Drawing.Point(265, 97);
             _packagePhpMyAdminStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpMyAdminStatusLabel.Name = "_packagePhpMyAdminStatusLabel";
-            _packagePhpMyAdminStatusLabel.Size = new System.Drawing.Size(292, 15);
+            _packagePhpMyAdminStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packagePhpMyAdminStatusLabel.TabIndex = 11;
             _packagePhpMyAdminStatusLabel.Text = "Dummy";
             _packagePhpMyAdminStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -156,7 +171,7 @@ namespace Winp.Form
             _packagePhpStatusLabel.Location = new System.Drawing.Point(265, 72);
             _packagePhpStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packagePhpStatusLabel.Name = "_packagePhpStatusLabel";
-            _packagePhpStatusLabel.Size = new System.Drawing.Size(292, 15);
+            _packagePhpStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packagePhpStatusLabel.TabIndex = 8;
             _packagePhpStatusLabel.Text = "Dummy";
             _packagePhpStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -190,7 +205,7 @@ namespace Winp.Form
             _packageMariaDbStatusLabel.Location = new System.Drawing.Point(265, 22);
             _packageMariaDbStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageMariaDbStatusLabel.Name = "_packageMariaDbStatusLabel";
-            _packageMariaDbStatusLabel.Size = new System.Drawing.Size(292, 15);
+            _packageMariaDbStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packageMariaDbStatusLabel.TabIndex = 5;
             _packageMariaDbStatusLabel.Text = "Dummy";
             _packageMariaDbStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -224,7 +239,7 @@ namespace Winp.Form
             _packageNginxStatusLabel.Location = new System.Drawing.Point(265, 47);
             _packageNginxStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             _packageNginxStatusLabel.Name = "_packageNginxStatusLabel";
-            _packageNginxStatusLabel.Size = new System.Drawing.Size(292, 15);
+            _packageNginxStatusLabel.Size = new System.Drawing.Size(162, 15);
             _packageNginxStatusLabel.TabIndex = 2;
             _packageNginxStatusLabel.Text = "Dummy";
             _packageNginxStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -253,8 +268,8 @@ namespace Winp.Form
             // _controlGroupBox
             //
             _controlGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _controlGroupBox.Controls.Add(_controlMinimizeToTrayButton);
             _controlGroupBox.Controls.Add(_controlBrowserButton);
-            _controlGroupBox.Controls.Add(_controlMinimizeButton);
             _controlGroupBox.Controls.Add(_controlStartButton);
             _controlGroupBox.Controls.Add(_controlStopButton);
             _controlGroupBox.Controls.Add(_controlConfigureButton);
@@ -262,7 +277,7 @@ namespace Winp.Form
             _controlGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _controlGroupBox.Name = "_controlGroupBox";
             _controlGroupBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            _controlGroupBox.Size = new System.Drawing.Size(565, 49);
+            _controlGroupBox.Size = new System.Drawing.Size(552, 49);
             _controlGroupBox.TabIndex = 8;
             _controlGroupBox.TabStop = false;
             _controlGroupBox.Text = "Controls";
@@ -278,28 +293,11 @@ namespace Winp.Form
             _controlBrowserButton.UseVisualStyleBackColor = true;
             _controlBrowserButton.Click += ControlBrowserButton_Click;
             //
-            // _controlMinimizeButton
-            //
-            _controlMinimizeButton.Location = new System.Drawing.Point(438, 19);
-            _controlMinimizeButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            _controlMinimizeButton.Name = "_controlMinimizeButton";
-            _controlMinimizeButton.Size = new System.Drawing.Size(115, 23);
-            _controlMinimizeButton.TabIndex = 5;
-            _controlMinimizeButton.Text = "Minimize to Tray";
-            _controlMinimizeButton.UseVisualStyleBackColor = true;
-            _controlMinimizeButton.Click += new System.EventHandler(this.ControlMinimizeButton_Click);
-            //
-            // _notifyIcon
-            //
-            _notifyIcon.Text = "Winp Service Control";
-            _notifyIcon.Visible = false;
-            _notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
-            //
             // ServiceForm
             //
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(583, 195);
+            ClientSize = new System.Drawing.Size(552, 195);
             Controls.Add(_controlGroupBox);
             Controls.Add(_packageGroupBox);
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -316,7 +314,7 @@ namespace Winp.Form
         private System.Windows.Forms.Button _controlConfigureButton;
         private System.Windows.Forms.Button _controlStartButton;
         private System.Windows.Forms.Button _controlStopButton;
-        private System.Windows.Forms.Button _controlMinimizeButton;
+        private System.Windows.Forms.Button _controlMinimizeToTrayButton;
         private System.Windows.Forms.NotifyIcon _notifyIcon;
 
         #endregion
