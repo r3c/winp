@@ -85,6 +85,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
         _services = [mariaDbService, nginxService, phpService, phpMyAdminService];
         _scheduler = scheduler;
+        _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
     }
 
     private void ServiceForm_Shown(object sender, EventArgs e)
@@ -141,6 +142,22 @@ public partial class ServiceForm : System.Windows.Forms.Form
     private void ControlStopButton_Click(object sender, EventArgs e)
     {
         RunBackgroundAction(ControlStopExecute);
+    }
+
+    private void ControlMinimizeToTrayButton_Click(object sender, EventArgs e)
+    {
+        Hide();
+
+        _notifyIcon.Visible = true;
+    }
+
+    private void NotifyIcon_Click(object sender, EventArgs e)
+    {
+        Show();
+        WindowState = FormWindowState.Normal;
+        Activate();
+
+        _notifyIcon.Visible = false;
     }
 
     private async Task ControlStartExecute()

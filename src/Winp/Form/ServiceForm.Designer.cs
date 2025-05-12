@@ -34,6 +34,8 @@ namespace Winp.Form
             _controlStopButton = new System.Windows.Forms.Button();
             _controlStartButton = new System.Windows.Forms.Button();
             _controlConfigureButton = new System.Windows.Forms.Button();
+            _controlMinimizeToTrayButton = new System.Windows.Forms.Button();
+            _notifyIcon = new System.Windows.Forms.NotifyIcon();
             _packageGroupBox = new System.Windows.Forms.GroupBox();
             _packagePhpMyAdminStatusLabel = new System.Windows.Forms.Label();
             _packagePhpMyAdminVariantComboBox = new System.Windows.Forms.ComboBox();
@@ -86,6 +88,23 @@ namespace Winp.Form
             _controlConfigureButton.UseVisualStyleBackColor = true;
             _controlConfigureButton.Click += ControlConfigureButton_Click;
             // 
+            // _controlMinimizeToTrayButton
+            //
+            _controlMinimizeToTrayButton.Location = new System.Drawing.Point(438, 19);
+            _controlMinimizeToTrayButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            _controlMinimizeToTrayButton.Name = "_controlMinimizeToTrayButton";
+            _controlMinimizeToTrayButton.Size = new System.Drawing.Size(112, 23);
+            _controlMinimizeToTrayButton.TabIndex = 5;
+            _controlMinimizeToTrayButton.Text = "Minimize to Tray";
+            _controlMinimizeToTrayButton.UseVisualStyleBackColor = true;
+            _controlMinimizeToTrayButton.Click += ControlMinimizeToTrayButton_Click;
+            //
+            // _notifyIcon
+            //
+            _notifyIcon.Text = "Winp Service";
+            _notifyIcon.Visible = false;
+            _notifyIcon.Click += NotifyIcon_Click;
+            //
             // _packageGroupBox
             // 
             _packageGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
@@ -105,7 +124,7 @@ namespace Winp.Form
             _packageGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _packageGroupBox.Name = "_packageGroupBox";
             _packageGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            _packageGroupBox.Size = new System.Drawing.Size(435, 126);
+            _packageGroupBox.Size = new System.Drawing.Size(558, 126);
             _packageGroupBox.TabIndex = 2;
             _packageGroupBox.TabStop = false;
             _packageGroupBox.Text = "Packages";
@@ -249,6 +268,7 @@ namespace Winp.Form
             // _controlGroupBox
             // 
             _controlGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _controlGroupBox.Controls.Add(_controlMinimizeToTrayButton);
             _controlGroupBox.Controls.Add(_controlBrowserButton);
             _controlGroupBox.Controls.Add(_controlStartButton);
             _controlGroupBox.Controls.Add(_controlStopButton);
@@ -257,7 +277,7 @@ namespace Winp.Form
             _controlGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _controlGroupBox.Name = "_controlGroupBox";
             _controlGroupBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            _controlGroupBox.Size = new System.Drawing.Size(435, 49);
+            _controlGroupBox.Size = new System.Drawing.Size(558, 49);
             _controlGroupBox.TabIndex = 8;
             _controlGroupBox.TabStop = false;
             _controlGroupBox.Text = "Controls";
@@ -277,7 +297,7 @@ namespace Winp.Form
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(452, 195);
+            ClientSize = new System.Drawing.Size(575, 195);
             Controls.Add(_controlGroupBox);
             Controls.Add(_packageGroupBox);
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -294,6 +314,8 @@ namespace Winp.Form
         private System.Windows.Forms.Button _controlConfigureButton;
         private System.Windows.Forms.Button _controlStartButton;
         private System.Windows.Forms.Button _controlStopButton;
+        private System.Windows.Forms.Button _controlMinimizeToTrayButton;
+        private System.Windows.Forms.NotifyIcon _notifyIcon;
 
         #endregion
 
