@@ -7,9 +7,10 @@
     <Description>Portable Nginx/PHP/MySQL development server for Windows.</Description>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+    <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.3.8</Version>
   </PropertyGroup>
