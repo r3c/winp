@@ -48,12 +48,12 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         var scheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
-        var mariaDbPackage = new MariaDbPackage();
-        var mariaDbInstance = new ServiceRunner(mariaDbPackage);
-        var mariaDbService = CreateServiceReference(mariaDbPackage, mariaDbInstance,
-            configuration.Package.MariaDb.Variants, configuration.Package.MariaDb.SelectedVariant,
-            index => configuration.Package.MariaDb.SelectedVariant = index, _packageMariaDbVariantComboBox,
-            _packageMariaDbStatusLabel);
+        var mySqlPackage = new MySqlPackage();
+        var mySqlInstance = new ServiceRunner(mySqlPackage);
+        var mySqlService = CreateServiceReference(mySqlPackage, mySqlInstance,
+            configuration.Package.MySql.Variants, configuration.Package.MySql.SelectedVariant,
+            index => configuration.Package.MySql.SelectedVariant = index, _packageMySqlVariantComboBox,
+            _packageMySqlStatusLabel);
         var nginxPackage = new NginxPackage();
         var nginxInstance = new ServiceRunner(nginxPackage);
         var nginxService = CreateServiceReference(nginxPackage, nginxInstance, configuration.Package.Nginx.Variants,
@@ -79,11 +79,11 @@ public partial class ServiceForm : System.Windows.Forms.Form
         statusImageList.Images.Add(Resources.statusLoading);
 
         _configuration = configuration;
-        _packageMariaDbStatusLabel.ImageList = statusImageList;
+        _packageMySqlStatusLabel.ImageList = statusImageList;
         _packageNginxStatusLabel.ImageList = statusImageList;
         _packagePhpStatusLabel.ImageList = statusImageList;
         _packagePhpMyAdminStatusLabel.ImageList = statusImageList;
-        _services = [mariaDbService, nginxService, phpService, phpMyAdminService];
+        _services = [mySqlService, nginxService, phpService, phpMyAdminService];
         _scheduler = scheduler;
         _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
     }
