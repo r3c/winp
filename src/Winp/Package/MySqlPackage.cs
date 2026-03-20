@@ -9,38 +9,55 @@ using Winp.Install;
 
 namespace Winp.Package;
 
-public class MariaDbPackage : IPackage, IService
+public class MySqlPackage : IPackage, IService
 {
-    private const string ConfigurationMysqld = "mysqld.cnf";
+    private const string ConfigurationMySqld = "mysqld.cnf";
 
     public async Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant)
     {
         var environment = application.Environment;
-        var mariadb = application.Package.MariaDb;
+        var mySql = application.Package.MySql;
 
         // Write configuration file
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
         var context = Context.CreateCustom(new Dictionary<Value, Value>
         {
-            ["dataDirectory"] = mariadb.DataDirectory,
-            ["serverPort"] = mariadb.ServerPort
+            ["dataDirectory"] = mySql.DataDirectory,
+            ["serverPort"] = mySql.ServerPort
         });
 
-        foreach (var name in new[] { ConfigurationMysqld })
+        foreach (var name in new[] { ConfigurationMySqld })
         {
             var destinationPath = Path.Combine(packageDirectory.AbsolutePath, "config", name);
-            var success = await Template.WriteToFile<PhpPackage>($"MariaDb.{name}", context, destinationPath);
+            var success = await Template.WriteToFile<PhpPackage>($"MySQL.{name}", context, destinationPath);
 
             if (!success)
                 return $"configuration failure with '{name}'";
         }
 
         // Initialize data directory
-        if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mariadb.DataDirectory, "my.ini")))
+        if (!File.Exists(Path.Join(packageDirectory.AbsolutePath, mySql.DataDirectory, "error.log")))
         {
-            var arguments = new[] { Executable.EscapeArgument("--datadir=" + mariadb.DataDirectory) };
-            var process = Executable.Start(CreateProcessStartInfo(application, variant.Identifier,
-                "mysql_install_db.exe", arguments));
+            IReadOnlyList<string> arguments;
+            string executable;
+
+            var dataDirArgument = Executable.EscapeArgument("--datadir=" + mySql.DataDirectory);
+            var identifier = variant.Identifier;
+
+            if (identifier.StartsWith("mariadb-"))
+            {
+                executable = "mysql_install_db.exe";
+                arguments = new[] { dataDirArgument };
+            }
+            else if (identifier.StartsWith("mysql-"))
+            {
+                executable = "mysqld.exe";
+                arguments = new[] { "--initialize-insecure", dataDirArgument };
+            }
+            else
+                return "unknown variant type";
+
+            var process = Executable.Start(CreateProcessStartInfo(application, identifier, executable, arguments));
 
             if (process == null || await process.Stop(TimeSpan.FromMinutes(5)) != 0)
                 return "could not initialize data directory";
@@ -51,7 +68,7 @@ public class MariaDbPackage : IPackage, IService
 
     public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
     {
-        var arguments = new[] { Executable.EscapeArgument("--defaults-file=config/" + ConfigurationMysqld) };
+        var arguments = new[] { Executable.EscapeArgument("--defaults-file=config/" + ConfigurationMySqld) };
 
         return CreateProcessStartInfo(application, variantIdentifier, "mysqld.exe", arguments);
     }
@@ -91,6 +108,6 @@ public class MariaDbPackage : IPackage, IService
 
     private static Uri GetPackageDirectory(Uri installDirectory, string variantIdentifier)
     {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, "mariadb", variantIdentifier));
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, "mysql", variantIdentifier));
     }
 }

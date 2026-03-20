@@ -43,9 +43,9 @@ namespace Winp.Form
             _packagePhpStatusLabel = new System.Windows.Forms.Label();
             _packagePhpVariantComboBox = new System.Windows.Forms.ComboBox();
             _packagePhpLabel = new System.Windows.Forms.Label();
-            _packageMariaDbStatusLabel = new System.Windows.Forms.Label();
-            _packageMariaDbVariantComboBox = new System.Windows.Forms.ComboBox();
-            _packageMariaDbLabel = new System.Windows.Forms.Label();
+            _packageMySqlStatusLabel = new System.Windows.Forms.Label();
+            _packageMySqlVariantComboBox = new System.Windows.Forms.ComboBox();
+            _packageMySqlLabel = new System.Windows.Forms.Label();
             _packageNginxStatusLabel = new System.Windows.Forms.Label();
             _packageNginxVariantComboBox = new System.Windows.Forms.ComboBox();
             _packageNginxLabel = new System.Windows.Forms.Label();
@@ -114,9 +114,9 @@ namespace Winp.Form
             _packageGroupBox.Controls.Add(_packagePhpStatusLabel);
             _packageGroupBox.Controls.Add(_packagePhpVariantComboBox);
             _packageGroupBox.Controls.Add(_packagePhpLabel);
-            _packageGroupBox.Controls.Add(_packageMariaDbStatusLabel);
-            _packageGroupBox.Controls.Add(_packageMariaDbVariantComboBox);
-            _packageGroupBox.Controls.Add(_packageMariaDbLabel);
+            _packageGroupBox.Controls.Add(_packageMySqlStatusLabel);
+            _packageGroupBox.Controls.Add(_packageMySqlVariantComboBox);
+            _packageGroupBox.Controls.Add(_packageMySqlLabel);
             _packageGroupBox.Controls.Add(_packageNginxStatusLabel);
             _packageGroupBox.Controls.Add(_packageNginxVariantComboBox);
             _packageGroupBox.Controls.Add(_packageNginxLabel);
@@ -197,39 +197,39 @@ namespace Winp.Form
             _packagePhpLabel.TabIndex = 6;
             _packagePhpLabel.Text = "PHP";
             // 
-            // _packageMariaDbStatusLabel
+            // _packageMySqlStatusLabel
             // 
-            _packageMariaDbStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            _packageMariaDbStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            _packageMariaDbStatusLabel.ImageIndex = 0;
-            _packageMariaDbStatusLabel.Location = new System.Drawing.Point(265, 22);
-            _packageMariaDbStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            _packageMariaDbStatusLabel.Name = "_packageMariaDbStatusLabel";
-            _packageMariaDbStatusLabel.Size = new System.Drawing.Size(162, 15);
-            _packageMariaDbStatusLabel.TabIndex = 5;
-            _packageMariaDbStatusLabel.Text = "Dummy";
-            _packageMariaDbStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            _packageMySqlStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packageMySqlStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            _packageMySqlStatusLabel.ImageIndex = 0;
+            _packageMySqlStatusLabel.Location = new System.Drawing.Point(265, 22);
+            _packageMySqlStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            _packageMySqlStatusLabel.Name = "_packageMySqlStatusLabel";
+            _packageMySqlStatusLabel.Size = new System.Drawing.Size(162, 15);
+            _packageMySqlStatusLabel.TabIndex = 5;
+            _packageMySqlStatusLabel.Text = "Dummy";
+            _packageMySqlStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // _packageMariaDbVariantComboBox
+            // _packageMySqlVariantComboBox
             // 
-            _packageMariaDbVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-            _packageMariaDbVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            _packageMariaDbVariantComboBox.FormattingEnabled = true;
-            _packageMariaDbVariantComboBox.Location = new System.Drawing.Point(97, 21);
-            _packageMariaDbVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            _packageMariaDbVariantComboBox.Name = "_packageMariaDbVariantComboBox";
-            _packageMariaDbVariantComboBox.Size = new System.Drawing.Size(166, 23);
-            _packageMariaDbVariantComboBox.TabIndex = 4;
+            _packageMySqlVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
+            _packageMySqlVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            _packageMySqlVariantComboBox.FormattingEnabled = true;
+            _packageMySqlVariantComboBox.Location = new System.Drawing.Point(97, 21);
+            _packageMySqlVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _packageMySqlVariantComboBox.Name = "_packageMySqlVariantComboBox";
+            _packageMySqlVariantComboBox.Size = new System.Drawing.Size(166, 23);
+            _packageMySqlVariantComboBox.TabIndex = 4;
             // 
-            // _packageMariaDbLabel
+            // _packageMySqlLabel
             // 
-            _packageMariaDbLabel.AutoSize = true;
-            _packageMariaDbLabel.Location = new System.Drawing.Point(6, 22);
-            _packageMariaDbLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            _packageMariaDbLabel.Name = "_packageMariaDbLabel";
-            _packageMariaDbLabel.Size = new System.Drawing.Size(52, 15);
-            _packageMariaDbLabel.TabIndex = 3;
-            _packageMariaDbLabel.Text = "MariaDB";
+            _packageMySqlLabel.AutoSize = true;
+            _packageMySqlLabel.Location = new System.Drawing.Point(6, 22);
+            _packageMySqlLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            _packageMySqlLabel.Name = "_packageMySqlLabel";
+            _packageMySqlLabel.Size = new System.Drawing.Size(52, 15);
+            _packageMySqlLabel.TabIndex = 3;
+            _packageMySqlLabel.Text = "MySQL";
             // 
             // _packageNginxStatusLabel
             // 
@@ -329,9 +329,9 @@ namespace Winp.Form
         private System.Windows.Forms.Label _packagePhpStatusLabel;
         private System.Windows.Forms.ComboBox _packagePhpVariantComboBox;
         private System.Windows.Forms.Label _packagePhpLabel;
-        private System.Windows.Forms.Label _packageMariaDbStatusLabel;
-        private System.Windows.Forms.ComboBox _packageMariaDbVariantComboBox;
-        private System.Windows.Forms.Label _packageMariaDbLabel;
+        private System.Windows.Forms.Label _packageMySqlStatusLabel;
+        private System.Windows.Forms.ComboBox _packageMySqlVariantComboBox;
+        private System.Windows.Forms.Label _packageMySqlLabel;
         private System.Windows.Forms.GroupBox _controlGroupBox;
         private System.Windows.Forms.Button _controlBrowserButton;
     }

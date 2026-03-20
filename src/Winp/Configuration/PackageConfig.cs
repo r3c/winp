@@ -4,8 +4,8 @@ namespace Winp.Configuration;
 
 public record PackageConfig
 {
-    [JsonProperty(PropertyName = "mariaDb")]
-    public MariaDbConfig MariaDb = new();
+    [JsonProperty(PropertyName = "mysql")]
+    public MysqlConfig MySql = new();
 
     [JsonProperty(PropertyName = "nginx")]
     public NginxConfig Nginx = new();

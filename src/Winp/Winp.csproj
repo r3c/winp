@@ -28,8 +28,8 @@
     <EmbeddedResource Include="Package\Nginx\nginx.conf" />
     <None Remove="Services\Php\php.ini" />
     <EmbeddedResource Include="Package\Php\php.ini" />
-    <None Remove="Services\MariaDb\mysqld.cnf" />
-    <EmbeddedResource Include="Package\MariaDb\mysqld.cnf" />
+    <None Remove="Services\MySQL\mysqld.cnf" />
+    <EmbeddedResource Include="Package\MySQL\mysqld.cnf" />
     <None Remove="Services\PhpMyAdmin\config.inc.php" />
     <EmbeddedResource Include="Package\PhpMyAdmin\config.inc.php" />
   </ItemGroup>
