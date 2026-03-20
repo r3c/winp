@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -93,7 +92,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
         _ = PackageRefreshAll();
     }
 
-    protected override void OnClosing(CancelEventArgs e)
+    protected override void OnFormClosing(FormClosingEventArgs e)
     {
         // Allow closing form is all services are stopped
         if (!_services.Any(package => package.Runner?.IsRunning ?? false))
