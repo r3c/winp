@@ -7,21 +7,25 @@ namespace Winp.Configuration;
 
 public record PhpConfig
 {
+    private const string Architecture = "x64";
     private const string DownloadBase = "https://windows.php.net/downloads/releases/archives";
-    private const string Platform = "Win32-vs16-x64";
+    private const string Platform = "Win32";
 
-    private static readonly IReadOnlyList<string> PhpVersions = new[]
+    private static readonly IReadOnlyList<(string Number, string VisualStudio)> PhpVersions = new[]
     {
-        "8.1.28",
-        "8.2.21",
-        "8.3.9"
+        ("8.1.28", "16"),
+        ("8.2.21", "16"),
+        ("8.3.9", "16"),
+        ("8.4.19", "17"),
+        ("8.5.4", "17")
     };
 
     private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpVersions
         .Select(version => new PackageVariantConfig
         {
-            DownloadUrl = new Uri($"{DownloadBase}/php-{version}-{Platform}.zip"),
-            Identifier = $"{version}-{Platform}"
+            DownloadUrl = new Uri(
+                $"{DownloadBase}/php-{version.Number}-{Platform}-vs{version.VisualStudio}-{Architecture}.zip"),
+            Identifier = $"php-{version.Number}"
         })
         .ToArray();
 

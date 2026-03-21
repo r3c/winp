@@ -112,6 +112,6 @@ public class NginxPackage : IPackage, IService
 
     private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
     {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, "nginx", identifier));
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, identifier));
     }
 }
