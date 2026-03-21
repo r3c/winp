@@ -50,8 +50,12 @@ namespace Winp.Form
             _packageNginxVariantComboBox = new System.Windows.Forms.ComboBox();
             _packageNginxLabel = new System.Windows.Forms.Label();
             _controlGroupBox = new System.Windows.Forms.GroupBox();
-            _controlBrowserButton = new System.Windows.Forms.Button();
+            _locationBrowserButton = new System.Windows.Forms.Button();
+            _locationGroupBox = new System.Windows.Forms.GroupBox();
+            _locationSelectComboBox = new System.Windows.Forms.ComboBox();
+            _locationBrowserButton = new System.Windows.Forms.Button();
             _packageGroupBox.SuspendLayout();
+            _locationGroupBox.SuspendLayout();
             _controlGroupBox.SuspendLayout();
             SuspendLayout();
             // 
@@ -90,12 +94,12 @@ namespace Winp.Form
             // 
             // _controlMinimizeToTrayButton
             //
-            _controlMinimizeToTrayButton.Location = new System.Drawing.Point(438, 19);
+            _controlMinimizeToTrayButton.Location = new System.Drawing.Point(330, 19);
             _controlMinimizeToTrayButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _controlMinimizeToTrayButton.Name = "_controlMinimizeToTrayButton";
-            _controlMinimizeToTrayButton.Size = new System.Drawing.Size(112, 23);
+            _controlMinimizeToTrayButton.Size = new System.Drawing.Size(100, 23);
             _controlMinimizeToTrayButton.TabIndex = 5;
-            _controlMinimizeToTrayButton.Text = "Minimize to Tray";
+            _controlMinimizeToTrayButton.Text = "Minimize";
             _controlMinimizeToTrayButton.UseVisualStyleBackColor = true;
             _controlMinimizeToTrayButton.Click += ControlMinimizeToTrayButton_Click;
             //
@@ -124,7 +128,7 @@ namespace Winp.Form
             _packageGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             _packageGroupBox.Name = "_packageGroupBox";
             _packageGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            _packageGroupBox.Size = new System.Drawing.Size(558, 126);
+            _packageGroupBox.Size = new System.Drawing.Size(438, 126);
             _packageGroupBox.TabIndex = 2;
             _packageGroupBox.TabStop = false;
             _packageGroupBox.Text = "Packages";
@@ -147,7 +151,7 @@ namespace Winp.Form
             _packagePhpMyAdminVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packagePhpMyAdminVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpMyAdminVariantComboBox.FormattingEnabled = true;
-            _packagePhpMyAdminVariantComboBox.Location = new System.Drawing.Point(97, 96);
+            _packagePhpMyAdminVariantComboBox.Location = new System.Drawing.Point(97, 94);
             _packagePhpMyAdminVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packagePhpMyAdminVariantComboBox.Name = "_packagePhpMyAdminVariantComboBox";
             _packagePhpMyAdminVariantComboBox.Size = new System.Drawing.Size(166, 23);
@@ -181,7 +185,7 @@ namespace Winp.Form
             _packagePhpVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packagePhpVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packagePhpVariantComboBox.FormattingEnabled = true;
-            _packagePhpVariantComboBox.Location = new System.Drawing.Point(97, 71);
+            _packagePhpVariantComboBox.Location = new System.Drawing.Point(97, 69);
             _packagePhpVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packagePhpVariantComboBox.Name = "_packagePhpVariantComboBox";
             _packagePhpVariantComboBox.Size = new System.Drawing.Size(166, 23);
@@ -215,7 +219,7 @@ namespace Winp.Form
             _packageMySqlVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packageMySqlVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageMySqlVariantComboBox.FormattingEnabled = true;
-            _packageMySqlVariantComboBox.Location = new System.Drawing.Point(97, 21);
+            _packageMySqlVariantComboBox.Location = new System.Drawing.Point(97, 19);
             _packageMySqlVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packageMySqlVariantComboBox.Name = "_packageMySqlVariantComboBox";
             _packageMySqlVariantComboBox.Size = new System.Drawing.Size(166, 23);
@@ -249,7 +253,7 @@ namespace Winp.Form
             _packageNginxVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
             _packageNginxVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             _packageNginxVariantComboBox.FormattingEnabled = true;
-            _packageNginxVariantComboBox.Location = new System.Drawing.Point(97, 45);
+            _packageNginxVariantComboBox.Location = new System.Drawing.Point(97, 44);
             _packageNginxVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _packageNginxVariantComboBox.Name = "_packageNginxVariantComboBox";
             _packageNginxVariantComboBox.Size = new System.Drawing.Size(166, 23);
@@ -269,7 +273,7 @@ namespace Winp.Form
             // 
             _controlGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             _controlGroupBox.Controls.Add(_controlMinimizeToTrayButton);
-            _controlGroupBox.Controls.Add(_controlBrowserButton);
+            _controlGroupBox.Controls.Add(_locationBrowserButton);
             _controlGroupBox.Controls.Add(_controlStartButton);
             _controlGroupBox.Controls.Add(_controlStopButton);
             _controlGroupBox.Controls.Add(_controlConfigureButton);
@@ -277,27 +281,55 @@ namespace Winp.Form
             _controlGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             _controlGroupBox.Name = "_controlGroupBox";
             _controlGroupBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            _controlGroupBox.Size = new System.Drawing.Size(558, 49);
-            _controlGroupBox.TabIndex = 8;
+            _controlGroupBox.Size = new System.Drawing.Size(438, 49);
+            _controlGroupBox.TabIndex = 9;
             _controlGroupBox.TabStop = false;
             _controlGroupBox.Text = "Controls";
             // 
             // _controlBrowserButton
             // 
-            _controlBrowserButton.Location = new System.Drawing.Point(330, 19);
-            _controlBrowserButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            _controlBrowserButton.Name = "_controlBrowserButton";
-            _controlBrowserButton.Size = new System.Drawing.Size(100, 23);
-            _controlBrowserButton.TabIndex = 4;
-            _controlBrowserButton.Text = "Open browser";
-            _controlBrowserButton.UseVisualStyleBackColor = true;
-            _controlBrowserButton.Click += ControlBrowserButton_Click;
+            _locationBrowserButton.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            _locationBrowserButton.Location = new System.Drawing.Point(330, 19);
+            _locationBrowserButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            _locationBrowserButton.Name = "_locationBrowserButton";
+            _locationBrowserButton.Size = new System.Drawing.Size(100, 23);
+            _locationBrowserButton.TabIndex = 4;
+            _locationBrowserButton.Text = "Open";
+            _locationBrowserButton.UseVisualStyleBackColor = true;
+            _locationBrowserButton.Click += LocationBrowserButtonClick;
+            // 
+            // _locationGroupBox
+            // 
+            _locationGroupBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _locationGroupBox.Controls.Add(_locationSelectComboBox);
+            _locationGroupBox.Controls.Add(_locationBrowserButton);
+            _locationGroupBox.Location = new System.Drawing.Point(9, 190);
+            _locationGroupBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _locationGroupBox.Name = "_locationGroupBox";
+            _locationGroupBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _locationGroupBox.Size = new System.Drawing.Size(438, 49);
+            _locationGroupBox.TabIndex = 8;
+            _locationGroupBox.TabStop = false;
+            _locationGroupBox.Text = "Locations";
+            // 
+            // _locationSelectComboBox
+            // 
+            _locationSelectComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _locationSelectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            _locationSelectComboBox.FormattingEnabled = true;
+            _locationSelectComboBox.Location = new System.Drawing.Point(6, 19);
+            _locationSelectComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _locationSelectComboBox.Name = "_locationSelectComboBox";
+            _locationSelectComboBox.Size = new System.Drawing.Size(316, 23);
+            _locationSelectComboBox.TabIndex = 4;
+            _locationSelectComboBox.SelectedIndexChanged += LocationSelectComboBoxChange;
             // 
             // ServiceForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(575, 195);
+            ClientSize = new System.Drawing.Size(456, 248);
+            Controls.Add(_locationGroupBox);
             Controls.Add(_controlGroupBox);
             Controls.Add(_packageGroupBox);
             Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -308,6 +340,7 @@ namespace Winp.Form
             _packageGroupBox.ResumeLayout(false);
             _packageGroupBox.PerformLayout();
             _controlGroupBox.ResumeLayout(false);
+            _locationGroupBox.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -333,6 +366,8 @@ namespace Winp.Form
         private System.Windows.Forms.ComboBox _packageMySqlVariantComboBox;
         private System.Windows.Forms.Label _packageMySqlLabel;
         private System.Windows.Forms.GroupBox _controlGroupBox;
-        private System.Windows.Forms.Button _controlBrowserButton;
+        private System.Windows.Forms.Button _locationBrowserButton;
+        private System.Windows.Forms.GroupBox _locationGroupBox;
+        private System.Windows.Forms.ComboBox _locationSelectComboBox;
     }
 }
