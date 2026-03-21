@@ -89,6 +89,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
     private void ServiceForm_Shown(object sender, EventArgs e)
     {
+        LocationRefresh();
         _ = PackageRefreshAll();
     }
 
@@ -104,21 +105,6 @@ public partial class ServiceForm : System.Windows.Forms.Form
         e.Cancel = true;
     }
 
-    private void ControlBrowserButton_Click(object sender, EventArgs e)
-    {
-        if (_configuration.Locations.Count < 1)
-            return;
-
-        var location = _configuration.Locations[0];
-        var nginx = _configuration.Package.Nginx;
-
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = $"{Uri.UriSchemeHttp}://{nginx.ServerAddress}:{nginx.ServerPort}{location.Base}",
-            UseShellExecute = true
-        });
-    }
-
     private void ControlConfigureButton_Click(object sender, EventArgs e)
     {
         var form = new ConfigurationForm(_configuration, configuration =>
@@ -127,6 +113,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
             _configuration = configuration;
 
+            LocationRefresh();
             _ = PackageRefreshAll();
         });
 
@@ -148,6 +135,26 @@ public partial class ServiceForm : System.Windows.Forms.Form
         Hide();
 
         _notifyIcon.Visible = true;
+    }
+
+    private void LocationBrowserButtonClick(object sender, EventArgs e)
+    {
+        if (_locationSelectComboBox.SelectedItem is not LocationItem item)
+            return;
+
+        var location = item.Location;
+        var nginx = _configuration.Package.Nginx;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = $"{Uri.UriSchemeHttp}://{nginx.ServerAddress}:{nginx.ServerPort}{location.Base}",
+            UseShellExecute = true
+        });
+    }
+
+    private void LocationSelectComboBoxChange(object sender, EventArgs e)
+    {
+        _locationBrowserButton.Enabled = _locationSelectComboBox.SelectedItem is LocationItem;
     }
 
     private void NotifyIcon_Click(object sender, EventArgs e)
@@ -250,6 +257,15 @@ public partial class ServiceForm : System.Windows.Forms.Form
         };
 
         return service;
+    }
+
+    private void LocationRefresh()
+    {
+        _locationSelectComboBox.Items.Clear();
+        _locationSelectComboBox.Items.AddRange(_configuration.Locations
+            .Select(location => new LocationItem(location))
+            .ToArray<object>());
+        _locationSelectComboBox.SelectedIndex = _locationSelectComboBox.Items.Count > 0 ? 0 : -1;
     }
 
     private async Task PackageRefresh(ServiceReference service)
@@ -373,5 +389,13 @@ public partial class ServiceForm : System.Windows.Forms.Form
         var task = new Task(action);
 
         task.Start(_scheduler);
+    }
+
+    private record LocationItem(LocationConfig Location)
+    {
+        public override string ToString()
+        {
+            return Location.Base;
+        }
     }
 }

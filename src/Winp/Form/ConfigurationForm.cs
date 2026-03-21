@@ -231,26 +231,15 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
         _locationListBox.Items.Clear();
         _locationListBox.Items.AddRange(_locations
             .Select((location, index) => new LocationItem(index, location.Base))
-            .Cast<object>()
-            .ToArray());
+            .ToArray<object>());
         _locationListBox.Items.Add("<new location>");
     }
 
-    private class LocationItem
+    private record LocationItem(int Index, string Label)
     {
-        public readonly int Index;
-
-        private readonly string _label;
-
-        public LocationItem(int index, string label)
-        {
-            Index = index;
-            _label = label;
-        }
-
         public override string ToString()
         {
-            return _label;
+            return Label;
         }
     }
 }
