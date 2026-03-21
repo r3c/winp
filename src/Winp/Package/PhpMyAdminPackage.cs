@@ -54,6 +54,6 @@ internal class PhpMyAdminPackage : IPackage
 
     public static Uri GetPackageDirectory(Uri installDirectory, string identifier)
     {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, "phpmyadmin", identifier));
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, identifier));
     }
 }

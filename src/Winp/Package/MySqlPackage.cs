@@ -108,6 +108,6 @@ public class MySqlPackage : IPackage, IService
 
     private static Uri GetPackageDirectory(Uri installDirectory, string variantIdentifier)
     {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, "mysql", variantIdentifier));
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, variantIdentifier));
     }
 }

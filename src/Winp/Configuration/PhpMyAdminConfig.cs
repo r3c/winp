@@ -12,14 +12,14 @@ public record PhpMyAdminConfig
 
     private static readonly IReadOnlyList<string> PhpMyAdminVersions = new[]
     {
-        "5.2.1"
+        "5.2.3"
     };
 
     private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = PhpMyAdminVersions
         .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri($"{DownloadBase}/{version}/phpMyAdmin-{version}-{Language}.zip"),
-            Identifier = $"{version}-{Language}",
+            Identifier = $"phpmyadmin-{version}",
             PathInArchive = $"phpMyAdmin-{version}-{Language}"
         })
         .ToArray();

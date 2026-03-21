@@ -84,6 +84,6 @@ public class PhpPackage : IPackage, IService
 
     private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
     {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, "php", identifier));
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, identifier));
     }
 }

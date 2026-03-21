@@ -27,7 +27,7 @@ public record MysqlConfig
         {
             DownloadUrl = new Uri(
                 $"{MySqlDownloadBase}/mysql-{variant.Familly}/mysql-{variant.Number}-{Platform}.zip"),
-            Identifier = $"mysql-{variant.Number}-{Platform}",
+            Identifier = $"mysql-{variant.Number}",
             PathInArchive = $"mysql-{variant.Number}-{Platform}"
         })
         .ToArray();
@@ -37,7 +37,7 @@ public record MysqlConfig
         {
             DownloadUrl = new Uri(
                 $"{MariaDbDownloadBase}/{variant.Identifier}/MariaDB/mariadb-{variant.Number}/{Platform}-packages/mariadb-{variant.Number}-{Platform}.zip"),
-            Identifier = $"mariadb-{variant.Number}-{Platform}",
+            Identifier = $"mariadb-{variant.Number}",
             PathInArchive = $"mariadb-{variant.Number}-{Platform}"
         })
         .ToArray();

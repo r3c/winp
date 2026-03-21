@@ -11,14 +11,16 @@ public record NginxConfig
 
     private static readonly IReadOnlyList<string> NginxVersions = new[]
     {
-        "1.27.1"
+        "1.27.1",
+        "1.28.2",
+        "1.29.6"
     };
 
     private static readonly IReadOnlyList<PackageVariantConfig> DefaultVariants = NginxVersions
         .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri($"{DownloadBase}/nginx-{version}.zip"),
-            Identifier = version,
+            Identifier = $"nginx-{version}",
             PathInArchive = $"nginx-{version}"
         })
         .ToArray();
