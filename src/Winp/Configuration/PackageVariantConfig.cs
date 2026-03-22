@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace Winp.Configuration;
@@ -10,17 +11,17 @@ public record PackageVariantConfig
     [JsonProperty(PropertyName = "downloadUrl", Required = Required.Always)]
     public Uri DownloadUrl = EmptyDownloadUrl;
 
-    [JsonProperty(PropertyName = "identifier", Required = Required.Always)]
-    public string Identifier = string.Empty;
+    [JsonProperty(PropertyName = "name", Required = Required.Always)]
+    public string Name = string.Empty;
 
     [JsonProperty(PropertyName = "pathInArchive")]
     public string PathInArchive = string.Empty;
 
-    /// <summary>
-    /// Note: quick hack because PackageVariantConfig is used as a combobox item.
-    /// </summary>
-    public override string ToString()
+    [JsonProperty(PropertyName = "version", Required = Required.Always)]
+    public string Version = string.Empty;
+
+    public Uri GetDirectory(Uri installDirectory)
     {
-        return Identifier;
+        return new Uri(Path.Combine(installDirectory.AbsolutePath, $"{Name}-{Version}"));
     }
 }

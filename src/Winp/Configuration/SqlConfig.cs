@@ -23,22 +23,24 @@ public record SqlConfig
     };
 
     private static readonly IReadOnlyList<PackageVariantConfig> MariaDbVariants = MariaDbVersions
-        .Select(variant => new PackageVariantConfig
+        .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri(
-                $"{MariaDbDownloadBase}/{variant.Identifier}/MariaDB/mariadb-{variant.Number}/{Platform}-packages/mariadb-{variant.Number}-{Platform}.zip"),
-            Identifier = $"mariadb-{variant.Number}",
-            PathInArchive = $"mariadb-{variant.Number}-{Platform}"
+                $"{MariaDbDownloadBase}/{version.Identifier}/MariaDB/mariadb-{version.Number}/{Platform}-packages/mariadb-{version.Number}-{Platform}.zip"),
+            Name = "mariadb",
+            PathInArchive = $"mariadb-{version.Number}-{Platform}",
+            Version = version.Number
         })
         .ToArray();
 
     private static readonly IReadOnlyList<PackageVariantConfig> MySqlVariants = MySqlVersions
-        .Select(variant => new PackageVariantConfig
+        .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri(
-                $"{MySqlDownloadBase}/MySQL-{variant.Familly}/mysql-{variant.Number}-{Platform}.zip"),
-            Identifier = $"mysql-{variant.Number}",
-            PathInArchive = $"mysql-{variant.Number}-{Platform}"
+                $"{MySqlDownloadBase}/MySQL-{version.Familly}/mysql-{version.Number}-{Platform}.zip"),
+            Name = "mysql",
+            PathInArchive = $"mysql-{version.Number}-{Platform}",
+            Version = version.Number
         })
         .ToArray();
 

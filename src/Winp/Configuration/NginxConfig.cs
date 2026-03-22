@@ -20,8 +20,9 @@ public record NginxConfig
         .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri($"{DownloadBase}/nginx-{version}.zip"),
-            Identifier = $"nginx-{version}",
-            PathInArchive = $"nginx-{version}"
+            Name = "nginx",
+            PathInArchive = $"nginx-{version}",
+            Version = version
         })
         .ToArray();
 

@@ -25,7 +25,8 @@ public record PhpConfig
         {
             DownloadUrl = new Uri(
                 $"{DownloadBase}/php-{version.Number}-{Platform}-vs{version.VisualStudio}-{Architecture}.zip"),
-            Identifier = $"php-{version.Number}"
+            Name = "php",
+            Version = version.Number
         })
         .ToArray();
 

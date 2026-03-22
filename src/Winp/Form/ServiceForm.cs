@@ -222,7 +222,9 @@ public partial class ServiceForm : System.Windows.Forms.Form
             runner,
             () =>
             {
-                var task = new Task<PackageVariantConfig?>(() => variantComboBox.SelectedItem as PackageVariantConfig);
+                var task = new Task<PackageVariantConfig?>(() => variantComboBox.SelectedItem is VariantItem item
+                    ? item.Variant
+                    : null);
 
                 task.Start(_scheduler);
 
@@ -243,8 +245,9 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         var indexOffset = variantComboBox.Items.Count;
 
-        foreach (var variant in variants)
-            variantComboBox.Items.Add(variant);
+        variantComboBox.Items.AddRange(variants
+            .Select(variant => new VariantItem(variant))
+            .ToArray<object>());
 
         variantComboBox.SelectedIndex = Math.Min(currentVariantIndex + indexOffset, variantComboBox.Items.Count - 1);
         variantComboBox.SelectedIndexChanged += (_, _) =>
@@ -331,7 +334,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
             {
                 service.SetStatus(new Status(StatusLevel.Loading, "Starting..."));
 
-                var success = await Task.Run(() => instance.Start(_configuration, variant.Identifier,
+                var success = await Task.Run(() => instance.Start(_configuration, variant,
                     () => _ = PackageRefresh(service)));
 
                 if (!success)
@@ -362,7 +365,7 @@ public partial class ServiceForm : System.Windows.Forms.Form
 
         service.SetStatus(new Status(StatusLevel.Loading, "Stopping..."));
 
-        await Task.Run(() => runner.Stop(_configuration, variant.Identifier));
+        await Task.Run(() => runner.Stop(_configuration, variant));
         await PackageRefresh(service);
     }
 
@@ -396,6 +399,14 @@ public partial class ServiceForm : System.Windows.Forms.Form
         public override string ToString()
         {
             return Location.Base;
+        }
+    }
+
+    private record VariantItem(PackageVariantConfig Variant)
+    {
+        public override string ToString()
+        {
+            return $"{Variant.Name}-{Variant.Version}";
         }
     }
 }
