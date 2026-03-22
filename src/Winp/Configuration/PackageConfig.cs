@@ -4,9 +4,6 @@ namespace Winp.Configuration;
 
 public record PackageConfig
 {
-    [JsonProperty(PropertyName = "mysql")]
-    public MysqlConfig MySql = new();
-
     [JsonProperty(PropertyName = "nginx")]
     public NginxConfig Nginx = new();
 
@@ -15,4 +12,7 @@ public record PackageConfig
 
     [JsonProperty(PropertyName = "phpMyAdmin")]
     public PhpMyAdminConfig PhpMyAdmin = new();
+
+    [JsonProperty(PropertyName = "sql")]
+    public SqlConfig Sql = new();
 }

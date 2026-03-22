@@ -29,7 +29,7 @@
     <None Remove="Services\Php\php.ini" />
     <EmbeddedResource Include="Package\Php\php.ini" />
     <None Remove="Services\MySQL\mysqld.cnf" />
-    <EmbeddedResource Include="Package\MySQL\mysqld.cnf" />
+    <EmbeddedResource Include="Package\Sql\mysqld.cnf" />
     <None Remove="Services\PhpMyAdmin\config.inc.php" />
     <EmbeddedResource Include="Package\PhpMyAdmin\config.inc.php" />
   </ItemGroup>

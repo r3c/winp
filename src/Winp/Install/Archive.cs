@@ -24,11 +24,11 @@ internal static class Archive
                     UserAgent =
                     {
                         new ProductInfoHeaderValue("Mozilla", "5.0"),
-                        new ProductInfoHeaderValue("(Windows NT 6.1; WOW64)"),
-                        new ProductInfoHeaderValue("AppleWebKit", "535.1"),
+                        new ProductInfoHeaderValue("(Windows NT 10.0; Win64; x64)"),
+                        new ProductInfoHeaderValue("AppleWebKit", "537.36"),
                         new ProductInfoHeaderValue("(KHTML, like Gecko)"),
-                        new ProductInfoHeaderValue("Chrome", "13.0.782.112"),
-                        new ProductInfoHeaderValue("Safari", "535.1")
+                        new ProductInfoHeaderValue("Chrome", "146.0.0.0"),
+                        new ProductInfoHeaderValue("Safari", "537.36")
                     }
                 }
             });
@@ -42,7 +42,7 @@ internal static class Archive
 
         try
         {
-            using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+            await using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
 
             var prefix = string.IsNullOrEmpty(archivePath) ? string.Empty : archivePath.TrimEnd('/') + "/";
 
