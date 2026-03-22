@@ -1,21 +1,10 @@
-using System.ComponentModel;
-
 namespace Winp.Configuration;
 
 public enum LocationType
 {
-    [Description("No access (HTTP 403)")]
-    Deny,
-
-    [Description("Execute PHP files by URL")]
-    PhpFileName,
-
-    [Description("Pass all requests to index.php")]
-    PhpOnly,
-
-    [Description("Static files only")]
-    Static,
-
-    [Description("Use PhpMyAdmin")]
-    PhpMyAdmin
+    Deny = 0,
+    PhpFileName = 1,
+    PhpOnly = 2,
+    Static = 3,
+    PhpMyAdmin = 4
 }

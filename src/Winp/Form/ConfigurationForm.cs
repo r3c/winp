@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Windows.Forms;
 using Winp.Configuration;
 
@@ -12,7 +10,16 @@ namespace Winp.Form;
 
 public partial class ConfigurationForm : System.Windows.Forms.Form
 {
-    private ApplicationConfig _application;
+    private static readonly IReadOnlyList<LocationTypeItem> LocationTypes = new[]
+    {
+        new LocationTypeItem(LocationType.Deny, "No access (HTTP 403)"),
+        new LocationTypeItem(LocationType.PhpFileName, "Execute PHP files by URL"),
+        new LocationTypeItem(LocationType.PhpOnly, "Pass all requests to index.php"),
+        new LocationTypeItem(LocationType.Static, "Static files only"),
+        new LocationTypeItem(LocationType.PhpMyAdmin, "Use PhpMyAdmin")
+    };
+
+    private readonly ApplicationConfig _application;
     private readonly List<LocationConfig> _locations;
     private readonly Action<ApplicationConfig> _save;
 
@@ -20,16 +27,13 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
     {
         InitializeComponent();
 
-        var descriptions = Enum.GetNames(typeof(LocationType))
-            .Select(name => typeof(LocationType).GetField(name)?.GetCustomAttribute(typeof(DescriptionAttribute)))
-            .Cast<DescriptionAttribute>().Select(a => a.Description);
         var environment = application.Environment;
         var package = application.Package;
 
         _application = application;
         _installDirectoryTextBox.Text = environment.InstallDirectory.AbsolutePath;
         _locations = application.Locations.ToList();
-        _locationTypeComboBox.Items.AddRange(descriptions.Cast<object>().ToArray());
+        _locationTypeComboBox.Items.AddRange(LocationTypes.ToArray<object>());
         _locationTypeComboBox.SelectedIndex = 0;
         _save = save;
         _serverAddressTextBox.Text = package.Nginx.ServerAddress;
@@ -42,21 +46,21 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
     {
         if (!Uri.TryCreate(_installDirectoryTextBox.Text, UriKind.Absolute, out var installDirectory))
         {
-            MessageBox.Show(this, "Install directory is not a valid path", "Error", MessageBoxButtons.OK);
+            MessageBox.Show(this, @"Install directory is not a valid path", @"Error", MessageBoxButtons.OK);
 
             return;
         }
 
         if (!IPAddress.TryParse(_serverAddressTextBox.Text, out var serverAddress))
         {
-            MessageBox.Show(this, "Server address is not a valid IP", "Error", MessageBoxButtons.OK);
+            MessageBox.Show(this, @"Server address is not a valid IP", @"Error", MessageBoxButtons.OK);
 
             return;
         }
 
         if (!int.TryParse(_serverPortTextBox.Text, out var serverPort) || serverPort < 1 || serverPort > 65535)
         {
-            MessageBox.Show(this, "Server port is not a valid integer between 1 and 65535", "Error", MessageBoxButtons.OK);
+            MessageBox.Show(this, @"Server port is not a valid integer between 1 and 65535", @"Error", MessageBoxButtons.OK);
 
             return;
         }
@@ -121,7 +125,7 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
             locationRoot = locationRootUri;
         else
         {
-            MessageBox.Show(this, "Root directory is not a valid path", "Error", MessageBoxButtons.OK);
+            MessageBox.Show(this, @"Root directory is not a valid path", @"Error", MessageBoxButtons.OK);
 
             return;
         }
@@ -132,7 +136,7 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
             Index = _locationIndexCheckBox.Checked,
             List = _locationListCheckBox.Checked,
             Root = locationRoot,
-            Type = (LocationType)_locationTypeComboBox.SelectedIndex
+            Type = _locationTypeComboBox.SelectedItem is LocationTypeItem typeItem ? typeItem.Value : LocationType.Deny
         };
 
         if (_locationListBox.SelectedItem is LocationItem item)
@@ -165,7 +169,9 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
             _locationRootTextBox.Text = location.Root.IsAbsoluteUri
                 ? location.Root.AbsolutePath
                 : string.Empty;
-            _locationTypeComboBox.SelectedIndex = (int)location.Type;
+            _locationTypeComboBox.SelectedIndex = LocationTypes
+                .ToList()
+                .FindIndex(typeItem => typeItem.Value == location.Type);
 
             _locationDeleteButton.Enabled = true;
             _locationUpdateButton.Text = @"Update";
@@ -176,7 +182,7 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
             _locationIndexCheckBox.Checked = false;
             _locationListCheckBox.Checked = false;
             _locationRootTextBox.Text = string.Empty;
-            _locationTypeComboBox.SelectedIndex = default;
+            _locationTypeComboBox.SelectedIndex = 0;
 
             _locationDeleteButton.Enabled = false;
             _locationUpdateButton.Text = @"Insert";
@@ -191,7 +197,9 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
 
     private void LocationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        switch ((LocationType)_locationTypeComboBox.SelectedIndex)
+        var locationType = _locationTypeComboBox.SelectedItem is LocationTypeItem item ? item.Value : LocationType.Deny;
+
+        switch (locationType)
         {
             case LocationType.PhpFileName:
             case LocationType.Static:
@@ -236,6 +244,14 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
     }
 
     private record LocationItem(int Index, string Label)
+    {
+        public override string ToString()
+        {
+            return Label;
+        }
+    }
+
+    private record LocationTypeItem(LocationType Value, string Label)
     {
         public override string ToString()
         {
