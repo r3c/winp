@@ -9,14 +9,14 @@ using Winp.Install;
 
 namespace Winp.Package;
 
-public class MySqlPackage : IPackage, IService
+public class SqlPackage : IPackage, IService
 {
     private const string ConfigurationMySqld = "mysqld.cnf";
 
     public async Task<string?> Configure(ApplicationConfig application, PackageVariantConfig variant)
     {
         var environment = application.Environment;
-        var mySql = application.Package.MySql;
+        var mySql = application.Package.Sql;
 
         // Write configuration file
         var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
@@ -29,7 +29,7 @@ public class MySqlPackage : IPackage, IService
         foreach (var name in new[] { ConfigurationMySqld })
         {
             var destinationPath = Path.Combine(packageDirectory.AbsolutePath, "config", name);
-            var success = await Template.WriteToFile<PhpPackage>($"MySQL.{name}", context, destinationPath);
+            var success = await Template.WriteToFile<PhpPackage>($"Sql.{name}", context, destinationPath);
 
             if (!success)
                 return $"configuration failure with '{name}'";

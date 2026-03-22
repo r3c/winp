@@ -43,9 +43,9 @@ namespace Winp.Form
             _packagePhpStatusLabel = new System.Windows.Forms.Label();
             _packagePhpVariantComboBox = new System.Windows.Forms.ComboBox();
             _packagePhpLabel = new System.Windows.Forms.Label();
-            _packageMySqlStatusLabel = new System.Windows.Forms.Label();
-            _packageMySqlVariantComboBox = new System.Windows.Forms.ComboBox();
-            _packageMySqlLabel = new System.Windows.Forms.Label();
+            _packageSqlStatusLabel = new System.Windows.Forms.Label();
+            _packageSqlVariantComboBox = new System.Windows.Forms.ComboBox();
+            _packageSqlLabel = new System.Windows.Forms.Label();
             _packageNginxStatusLabel = new System.Windows.Forms.Label();
             _packageNginxVariantComboBox = new System.Windows.Forms.ComboBox();
             _packageNginxLabel = new System.Windows.Forms.Label();
@@ -118,9 +118,9 @@ namespace Winp.Form
             _packageGroupBox.Controls.Add(_packagePhpStatusLabel);
             _packageGroupBox.Controls.Add(_packagePhpVariantComboBox);
             _packageGroupBox.Controls.Add(_packagePhpLabel);
-            _packageGroupBox.Controls.Add(_packageMySqlStatusLabel);
-            _packageGroupBox.Controls.Add(_packageMySqlVariantComboBox);
-            _packageGroupBox.Controls.Add(_packageMySqlLabel);
+            _packageGroupBox.Controls.Add(_packageSqlStatusLabel);
+            _packageGroupBox.Controls.Add(_packageSqlVariantComboBox);
+            _packageGroupBox.Controls.Add(_packageSqlLabel);
             _packageGroupBox.Controls.Add(_packageNginxStatusLabel);
             _packageGroupBox.Controls.Add(_packageNginxVariantComboBox);
             _packageGroupBox.Controls.Add(_packageNginxLabel);
@@ -201,39 +201,39 @@ namespace Winp.Form
             _packagePhpLabel.TabIndex = 6;
             _packagePhpLabel.Text = "PHP";
             // 
-            // _packageMySqlStatusLabel
+            // _packageSqlStatusLabel
             // 
-            _packageMySqlStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            _packageMySqlStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            _packageMySqlStatusLabel.ImageIndex = 0;
-            _packageMySqlStatusLabel.Location = new System.Drawing.Point(265, 22);
-            _packageMySqlStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            _packageMySqlStatusLabel.Name = "_packageMySqlStatusLabel";
-            _packageMySqlStatusLabel.Size = new System.Drawing.Size(162, 15);
-            _packageMySqlStatusLabel.TabIndex = 5;
-            _packageMySqlStatusLabel.Text = "Dummy";
-            _packageMySqlStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            _packageSqlStatusLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            _packageSqlStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            _packageSqlStatusLabel.ImageIndex = 0;
+            _packageSqlStatusLabel.Location = new System.Drawing.Point(265, 22);
+            _packageSqlStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            _packageSqlStatusLabel.Name = "_packageSqlStatusLabel";
+            _packageSqlStatusLabel.Size = new System.Drawing.Size(162, 15);
+            _packageSqlStatusLabel.TabIndex = 5;
+            _packageSqlStatusLabel.Text = "Dummy";
+            _packageSqlStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // _packageMySqlVariantComboBox
+            // _packageSqlVariantComboBox
             // 
-            _packageMySqlVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-            _packageMySqlVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            _packageMySqlVariantComboBox.FormattingEnabled = true;
-            _packageMySqlVariantComboBox.Location = new System.Drawing.Point(97, 19);
-            _packageMySqlVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            _packageMySqlVariantComboBox.Name = "_packageMySqlVariantComboBox";
-            _packageMySqlVariantComboBox.Size = new System.Drawing.Size(166, 23);
-            _packageMySqlVariantComboBox.TabIndex = 4;
+            _packageSqlVariantComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
+            _packageSqlVariantComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            _packageSqlVariantComboBox.FormattingEnabled = true;
+            _packageSqlVariantComboBox.Location = new System.Drawing.Point(97, 19);
+            _packageSqlVariantComboBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            _packageSqlVariantComboBox.Name = "_packageSqlVariantComboBox";
+            _packageSqlVariantComboBox.Size = new System.Drawing.Size(166, 23);
+            _packageSqlVariantComboBox.TabIndex = 4;
             // 
-            // _packageMySqlLabel
+            // _packageSqlLabel
             // 
-            _packageMySqlLabel.AutoSize = true;
-            _packageMySqlLabel.Location = new System.Drawing.Point(6, 22);
-            _packageMySqlLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            _packageMySqlLabel.Name = "_packageMySqlLabel";
-            _packageMySqlLabel.Size = new System.Drawing.Size(52, 15);
-            _packageMySqlLabel.TabIndex = 3;
-            _packageMySqlLabel.Text = "MySQL";
+            _packageSqlLabel.AutoSize = true;
+            _packageSqlLabel.Location = new System.Drawing.Point(6, 22);
+            _packageSqlLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            _packageSqlLabel.Name = "_packageSqlLabel";
+            _packageSqlLabel.Size = new System.Drawing.Size(52, 15);
+            _packageSqlLabel.TabIndex = 3;
+            _packageSqlLabel.Text = "SQL";
             // 
             // _packageNginxStatusLabel
             // 
@@ -362,9 +362,9 @@ namespace Winp.Form
         private System.Windows.Forms.Label _packagePhpStatusLabel;
         private System.Windows.Forms.ComboBox _packagePhpVariantComboBox;
         private System.Windows.Forms.Label _packagePhpLabel;
-        private System.Windows.Forms.Label _packageMySqlStatusLabel;
-        private System.Windows.Forms.ComboBox _packageMySqlVariantComboBox;
-        private System.Windows.Forms.Label _packageMySqlLabel;
+        private System.Windows.Forms.Label _packageSqlStatusLabel;
+        private System.Windows.Forms.ComboBox _packageSqlVariantComboBox;
+        private System.Windows.Forms.Label _packageSqlLabel;
         private System.Windows.Forms.GroupBox _controlGroupBox;
         private System.Windows.Forms.Button _locationBrowserButton;
         private System.Windows.Forms.GroupBox _locationGroupBox;
