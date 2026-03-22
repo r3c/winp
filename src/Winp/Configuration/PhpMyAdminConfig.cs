@@ -19,8 +19,9 @@ public record PhpMyAdminConfig
         .Select(version => new PackageVariantConfig
         {
             DownloadUrl = new Uri($"{DownloadBase}/{version}/phpMyAdmin-{version}-{Language}.zip"),
-            Identifier = $"phpmyadmin-{version}",
-            PathInArchive = $"phpMyAdmin-{version}-{Language}"
+            Name = "phpmyadmin",
+            PathInArchive = $"phpMyAdmin-{version}-{Language}",
+            Version = version
         })
         .ToArray();
 

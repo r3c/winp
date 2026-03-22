@@ -20,7 +20,7 @@ public class PhpPackage : IPackage, IService
         var environment = application.Environment;
 
         // Write configuration files
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var context = Context.CreateCustom(new Dictionary<Value, Value>
         {
             ["extensions"] = application.Package.Php.Extensions.Select(Value.FromString).ToList()
@@ -38,15 +38,17 @@ public class PhpPackage : IPackage, IService
         return null;
     }
 
-    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
+    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, PackageVariantConfig variant)
     {
         var php = application.Package.Php;
         var binding = $"{php.ServerAddress}:{php.ServerPort}";
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
 
-        return CreateProcessStartInfo(application, variantIdentifier, ["-b", binding, "-c", "php.ini"]);
+        return CreateProcessStartInfo(packageDirectory, ["-b", binding, "-c", "php.ini"]);
     }
 
-    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
+    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, PackageVariantConfig variant,
+        int processId)
     {
         return new ProcessStartInfo
         {
@@ -61,7 +63,7 @@ public class PhpPackage : IPackage, IService
         var environment = application.Environment;
 
         // Download and extract archive
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
             packageDirectory);
 
@@ -70,20 +72,13 @@ public class PhpPackage : IPackage, IService
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, []).FileName);
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
+
+        return File.Exists(CreateProcessStartInfo(packageDirectory, []).FileName);
     }
 
-    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier,
-        IReadOnlyList<string> arguments)
+    private static ProcessStartInfo CreateProcessStartInfo(Uri packageDirectory, IReadOnlyList<string> arguments)
     {
-        var installDirectory = application.Environment.InstallDirectory;
-        var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
-
         return Executable.CreateStartInfo(packageDirectory, "php-cgi.exe", arguments);
-    }
-
-    private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
-    {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, identifier));
     }
 }

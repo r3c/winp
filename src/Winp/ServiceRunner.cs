@@ -12,12 +12,12 @@ internal class ServiceRunner(IService service)
 
     private Executable? _executable;
 
-    public async Task<bool> Start(ApplicationConfig application, string variantIdentifier, Action refresh)
+    public async Task<bool> Start(ApplicationConfig application, PackageVariantConfig variant, Action refresh)
     {
         if (_executable != null)
-            await Stop(application, variantIdentifier);
+            await Stop(application, variant);
 
-        var process = Executable.Start(service.CreateProcessStart(application, variantIdentifier));
+        var process = Executable.Start(service.CreateProcessStart(application, variant));
 
         if (process == null)
             return false;
@@ -29,7 +29,7 @@ internal class ServiceRunner(IService service)
         return true;
     }
 
-    public async Task Stop(ApplicationConfig application, string variantIdentifier)
+    public async Task Stop(ApplicationConfig application, PackageVariantConfig variant)
     {
         if (_executable != null)
         {
@@ -38,7 +38,7 @@ internal class ServiceRunner(IService service)
             var tasks = new List<Task<int?>>(2) { _executable.Stop(duration) };
 
             // Execute "stop" command
-            var stopStartInfo = service.CreateProcessStop(application, variantIdentifier, _executable.Id);
+            var stopStartInfo = service.CreateProcessStop(application, variant, _executable.Id);
             var stopProcess = Executable.Start(stopStartInfo);
 
             if (stopProcess != null)

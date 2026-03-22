@@ -5,6 +5,6 @@ namespace Winp;
 
 internal interface IService
 {
-    ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variant);
-    ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variant, int processId);
+    ProcessStartInfo CreateProcessStart(ApplicationConfig application, PackageVariantConfig variant);
+    ProcessStartInfo CreateProcessStop(ApplicationConfig application, PackageVariantConfig variant, int processId);
 }

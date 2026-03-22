@@ -17,7 +17,7 @@ internal class PhpMyAdminPackage : IPackage
         var environment = application.Environment;
 
         // Write configuration files
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var context = Context.Empty;
 
         foreach (var name in new[] { ConfigurationPhpMyAdmin })
@@ -37,7 +37,7 @@ internal class PhpMyAdminPackage : IPackage
         var environment = application.Environment;
 
         // Download and extract archive
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
             packageDirectory);
 
@@ -47,7 +47,7 @@ internal class PhpMyAdminPackage : IPackage
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
         var environment = application.Environment;
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
 
         return File.Exists(Path.Combine(packageDirectory.AbsolutePath, IndexPhpMyAdmin));
     }

@@ -24,7 +24,7 @@ public class NginxPackage : IPackage, IService
         var phpMyAdmin = application.Package.PhpMyAdmin;
 
         // Write configuration files
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var locationValues = new List<Value>();
 
         foreach (var location in locations)
@@ -53,7 +53,7 @@ public class NginxPackage : IPackage, IService
             ["locations"] = locationValues,
             ["phpMyAdmin"] = new Dictionary<Value, Value>
             {
-                ["directory"] = PhpMyAdminPackage.GetPackageDirectory(environment.InstallDirectory, phpMyAdmin.Variants.First().Identifier).AbsolutePath,
+                ["directory"] = phpMyAdmin.Variants.First().GetDirectory(environment.InstallDirectory).AbsolutePath,
             },
             ["phpServerAddress"] = php.ServerAddress,
             ["phpServerPort"] = php.ServerPort,
@@ -73,14 +73,19 @@ public class NginxPackage : IPackage, IService
         return null;
     }
 
-    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
+    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return CreateProcessStartInfo(application, variantIdentifier, []);
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
+
+        return CreateProcessStartInfo(packageDirectory, []);
     }
 
-    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
+    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, PackageVariantConfig variant,
+        int processId)
     {
-        return CreateProcessStartInfo(application, variantIdentifier, ["-s", "quit"]);
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
+
+        return CreateProcessStartInfo(packageDirectory, ["-s", "quit"]);
     }
 
     public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
@@ -88,8 +93,9 @@ public class NginxPackage : IPackage, IService
         var environment = application.Environment;
 
         // Download and extract archive
-        var installDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
-        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive, installDirectory);
+        var installDirectory = variant.GetDirectory(environment.InstallDirectory);
+        var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
+            installDirectory);
 
         if (downloadMessage != null)
             return $"download failure ({downloadMessage})";
@@ -99,19 +105,13 @@ public class NginxPackage : IPackage, IService
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, []).FileName);
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
+
+        return File.Exists(CreateProcessStartInfo(packageDirectory, []).FileName);
     }
 
-    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier, string[] arguments)
+    private static ProcessStartInfo CreateProcessStartInfo(Uri packageDirectory, string[] arguments)
     {
-        var installDirectory = application.Environment.InstallDirectory;
-        var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
-
         return Executable.CreateStartInfo(packageDirectory, "nginx.exe", arguments);
-    }
-
-    private static Uri GetPackageDirectory(Uri installDirectory, string identifier)
-    {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, identifier));
     }
 }

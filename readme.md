@@ -13,7 +13,7 @@ one-click portable install of required software for PHP development:
 
 - [Nginx](https://nginx.org/)
 - [PHP](https://www.php.net/)
-- [MariaDB](https://mariadb.org/)
+- [MariaDB](https://mariadb.org/) or [MySQL](https://www.mysql.com/)
 - [PhpMyAdmin](https://www.phpmyadmin.net/)
 
 Please note Winp is a development tool and is not suitable for production
@@ -43,7 +43,7 @@ and run.
 
 - `Install directory` is the directory where all packages are downloaded.
   They're all portable packages stored in their own directory, along with files
-  they may create (e.g. logs, data files for MariaDB).
+  they may create (e.g. logs, data files for MariaDB/MySQL).
 - `Server address` and `Port` can be changed to select which IP address and
   port Nginx will listen on.
 - `Locations` is a list of Nginx locations and how Nginx should process HTTP
@@ -81,16 +81,18 @@ to any non-empty array to replace application defaults. Each item within this
 array is expected to contain the following fields:
 
 - `downloadUrl` is the full download URL of a ZIP version of the package
-- `identifier` is a human-readable unique identifier for the version
-- `pathInArchive` is a relative path to package's directory within archive
+- `name` is a human-readable software name identifier
+- `pathInArchive` is a relative path to package's directory within archive (optional)
+- `version` is a human-readable software version identifier
 
 Here is an example of user variant for Nginx:
 
 ```
 {
     "downloadUrl": "https://nginx.org/download/nginx-1.27.3.zip",
-    "identifier": "1.27.3",
-    "pathInArchive": "nginx-1.27.3"
+    "name": "nginx",
+    "pathInArchive": "nginx-1.27.3",
+    "version": "1.27.3",
 }
 ```
 

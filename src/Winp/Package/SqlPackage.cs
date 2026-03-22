@@ -19,7 +19,7 @@ public class SqlPackage : IPackage, IService
         var mySql = application.Package.Sql;
 
         // Write configuration file
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var context = Context.CreateCustom(new Dictionary<Value, Value>
         {
             ["dataDirectory"] = mySql.DataDirectory,
@@ -42,22 +42,26 @@ public class SqlPackage : IPackage, IService
             string executable;
 
             var dataDirArgument = Executable.EscapeArgument("--datadir=" + mySql.DataDirectory);
-            var identifier = variant.Identifier;
 
-            if (identifier.StartsWith("mariadb-"))
+            switch (variant.Name)
             {
-                executable = "mysql_install_db.exe";
-                arguments = new[] { dataDirArgument };
-            }
-            else if (identifier.StartsWith("mysql-"))
-            {
-                executable = "mysqld.exe";
-                arguments = new[] { "--initialize-insecure", dataDirArgument };
-            }
-            else
-                return "unknown variant type";
+                case "mariadb":
+                    executable = "mysql_install_db.exe";
+                    arguments = new[] { dataDirArgument };
 
-            var process = Executable.Start(CreateProcessStartInfo(application, identifier, executable, arguments));
+                    break;
+
+                case "mysql":
+                    executable = "mysqld.exe";
+                    arguments = new[] { "--initialize-insecure", dataDirArgument };
+
+                    break;
+
+                default:
+                    return "unknown variant type";
+            }
+
+            var process = Executable.Start(CreateProcessStartInfo(packageDirectory, executable, arguments));
 
             if (process == null || await process.Stop(TimeSpan.FromMinutes(5)) != 0)
                 return "could not initialize data directory";
@@ -66,18 +70,21 @@ public class SqlPackage : IPackage, IService
         return null;
     }
 
-    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, string variantIdentifier)
+    public ProcessStartInfo CreateProcessStart(ApplicationConfig application, PackageVariantConfig variant)
     {
         var arguments = new[] { Executable.EscapeArgument("--defaults-file=config/" + ConfigurationMySqld) };
+        var installDirectory = application.Environment.InstallDirectory;
 
-        return CreateProcessStartInfo(application, variantIdentifier, "mysqld.exe", arguments);
+        return CreateProcessStartInfo(variant.GetDirectory(installDirectory), "mysqld.exe", arguments);
     }
 
-    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, string variantIdentifier, int processId)
+    public ProcessStartInfo CreateProcessStop(ApplicationConfig application, PackageVariantConfig variant,
+        int processId)
     {
         var arguments = new[] { "-u", "root", "shutdown" };
+        var installDirectory = application.Environment.InstallDirectory;
 
-        return CreateProcessStartInfo(application, variantIdentifier, "mysqladmin.exe", arguments);
+        return CreateProcessStartInfo(variant.GetDirectory(installDirectory), "mysqladmin.exe", arguments);
     }
 
     public async Task<string?> Install(ApplicationConfig application, PackageVariantConfig variant)
@@ -85,7 +92,7 @@ public class SqlPackage : IPackage, IService
         var environment = application.Environment;
 
         // Download and extract archive
-        var packageDirectory = GetPackageDirectory(environment.InstallDirectory, variant.Identifier);
+        var packageDirectory = variant.GetDirectory(environment.InstallDirectory);
         var downloadMessage = await Archive.DownloadAndExtract(variant.DownloadUrl, variant.PathInArchive,
             packageDirectory);
 
@@ -94,20 +101,14 @@ public class SqlPackage : IPackage, IService
 
     public bool IsInstalled(ApplicationConfig application, PackageVariantConfig variant)
     {
-        return File.Exists(CreateProcessStartInfo(application, variant.Identifier, "mysqld.exe", []).FileName);
+        var packageDirectory = variant.GetDirectory(application.Environment.InstallDirectory);
+
+        return File.Exists(CreateProcessStartInfo(packageDirectory, "mysqld.exe", []).FileName);
     }
 
-    private static ProcessStartInfo CreateProcessStartInfo(ApplicationConfig application, string variantIdentifier,
-        string executable, IReadOnlyList<string> arguments)
+    private static ProcessStartInfo CreateProcessStartInfo(Uri packageDirectory, string executable,
+        IReadOnlyList<string> arguments)
     {
-        var installDirectory = application.Environment.InstallDirectory;
-        var packageDirectory = GetPackageDirectory(installDirectory, variantIdentifier);
-
         return Executable.CreateStartInfo(packageDirectory, Path.Combine("bin", executable), arguments);
-    }
-
-    private static Uri GetPackageDirectory(Uri installDirectory, string variantIdentifier)
-    {
-        return new Uri(Path.Combine(installDirectory.AbsolutePath, variantIdentifier));
     }
 }
