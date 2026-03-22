@@ -54,11 +54,15 @@ regexps yet) and a type that defines which configuration preset must be applied
 for this location. Available location types are:
 
 - `No access (HTTP 403)`: reject all requests with HTTP 403 error.
-- `Execute PHP files by URL`: search for PHP file by concatenating base
-  directory and URL path, and execute that file to produce HTTP response.
-- `Pass all requests to index.php`: always execute `index.php` file from base
-  directory to produce HTTP response.
-- `Static files only`: serve static files (no PHP support).
+- `Match PHP files by URL and execute`: search for file matching relative URL
+  path in root directory, execute it if it's a PHP file or serve it otherwise.
+- `Pass all requests to index.php`: always execute `index.php` file from root
+  directory.
+- `Match file by URL or fallback to index.php`: search for file matching
+  relative URL path in root directory and serve that file, or fallback to
+  executing `index.php` file from root directory.
+- `Static files only`: search for file matching relative URL path in root
+  directory and service it (no PHP support).
 - `Use PhpMyAdmin`: execute PhpMyAdmin package.
 
 For more advanced configuration, you'll find `*.template` files created by Winp

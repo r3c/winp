@@ -12,11 +12,12 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
 {
     private static readonly IReadOnlyList<LocationTypeItem> LocationTypes = new[]
     {
-        new LocationTypeItem(LocationType.Deny, "No access (HTTP 403)"),
-        new LocationTypeItem(LocationType.PhpFileName, "Execute PHP files by URL"),
-        new LocationTypeItem(LocationType.PhpOnly, "Pass all requests to index.php"),
-        new LocationTypeItem(LocationType.Static, "Static files only"),
-        new LocationTypeItem(LocationType.PhpMyAdmin, "Use PhpMyAdmin")
+        new LocationTypeItem(LocationType.Deny, "No access (HTTP 403)", false, false),
+        new LocationTypeItem(LocationType.PhpFileName, "Match PHP files by URL and execute", true, true),
+        new LocationTypeItem(LocationType.PhpOnly, "Pass all requests to index.php", true, false),
+        new LocationTypeItem(LocationType.PhpFallback, "Match file by URL or fallback to index.php", true, false),
+        new LocationTypeItem(LocationType.Static, "Match file by URL, static only", true, true),
+        new LocationTypeItem(LocationType.PhpMyAdmin, "Use PhpMyAdmin", false, false)
     };
 
     private readonly ApplicationConfig _application;
@@ -197,41 +198,15 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
 
     private void LocationTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        var locationType = _locationTypeComboBox.SelectedItem is LocationTypeItem item ? item.Value : LocationType.Deny;
+        if (_locationTypeComboBox.SelectedItem is not LocationTypeItem item)
+            return;
 
-        switch (locationType)
-        {
-            case LocationType.PhpFileName:
-            case LocationType.Static:
-                _locationRootButton.Visible = true;
-                _locationRootLabel.Visible = true;
-                _locationRootTextBox.Visible = true;
-                _locationIndexCheckBox.Visible = true;
-                _locationIndexLabel.Visible = true;
-                _locationListCheckBox.Visible = true;
-
-                break;
-
-            case LocationType.PhpOnly:
-                _locationRootButton.Visible = true;
-                _locationRootLabel.Visible = true;
-                _locationRootTextBox.Visible = true;
-                _locationIndexCheckBox.Visible = false;
-                _locationIndexLabel.Visible = false;
-                _locationListCheckBox.Visible = false;
-
-                break;
-
-            default:
-                _locationRootButton.Visible = false;
-                _locationRootLabel.Visible = false;
-                _locationRootTextBox.Visible = false;
-                _locationIndexCheckBox.Visible = false;
-                _locationIndexLabel.Visible = false;
-                _locationListCheckBox.Visible = false;
-
-                break;
-        }
+        _locationRootButton.Visible = item.CanSetRoot;
+        _locationRootLabel.Visible = item.CanSetRoot;
+        _locationRootTextBox.Visible = item.CanSetRoot;
+        _locationIndexCheckBox.Visible = item.CanSetIndex;
+        _locationIndexLabel.Visible = item.CanSetIndex;
+        _locationListCheckBox.Visible = item.CanSetIndex;
     }
 
     private void LocationRefresh()
@@ -251,7 +226,7 @@ public partial class ConfigurationForm : System.Windows.Forms.Form
         }
     }
 
-    private record LocationTypeItem(LocationType Value, string Label)
+    private record LocationTypeItem(LocationType Value, string Label, bool CanSetRoot, bool CanSetIndex)
     {
         public override string ToString()
         {
