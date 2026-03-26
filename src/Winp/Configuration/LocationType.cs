@@ -6,5 +6,6 @@ public enum LocationType
     PhpFileName = 1,
     PhpOnly = 2,
     Static = 3,
-    PhpMyAdmin = 4
+    PhpMyAdmin = 4,
+    PhpFallback = 5
 }
