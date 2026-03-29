@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/r3c/winp/verify.yml?branch=master)](https://github.com/r3c/winp/actions/workflows/verify.yml)
 [![License](https://img.shields.io/github/license/r3c/winp.svg)](https://opensource.org/licenses/MIT)
-[![Download](https://img.shields.io/badge/Download-.zip-blue)](https://github.com/r3c/winp/releases/latest/download/winp-win-x64.zip)
+[![Download](https://img.shields.io/badge/download-.zip-blue)](https://github.com/r3c/winp/releases/latest/download/winp-win-x64.zip)
 
 ![image](https://github.com/r3c/winp/blob/resource/readme/service.png?raw=true)
 ![image](https://github.com/r3c/winp/blob/resource/readme/configuration.png?raw=true)
