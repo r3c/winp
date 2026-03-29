@@ -1,7 +1,8 @@
 # Winp: Windows Nginx PHP development server
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/r3c/winp/verify.yml?branch=master)](https://github.com/r3c/winp/actions/workflows/verify.yml)
-[![license](https://img.shields.io/github/license/r3c/winp.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/github/license/r3c/winp.svg)](https://opensource.org/licenses/MIT)
+[![Download](https://img.shields.io/badge/Download-.zip-blue)](https://github.com/r3c/winp/releases/latest/download/winp-win-x64.zip)
 
 ![image](https://github.com/r3c/winp/blob/resource/readme/service.png?raw=true)
 ![image](https://github.com/r3c/winp/blob/resource/readme/configuration.png?raw=true)
@@ -21,8 +22,10 @@ usage.
 
 ## Installation
 
-Download latest [Winp release](https://github.com/r3c/winp/releases) from
-GitHub or compile from source, unpack anywhere you want then run `Winp.exe`.
+Download
+[latest Winp release](https://github.com/r3c/winp/releases/latest/download/winp-win-x64.zip)
+from GitHub or compile from source, unpack anywhere you want then run
+`Winp.exe`.
 
 - Click "Configure" button to change server bindings or locations (optional).
 - Click "Start services" button to download, configure and start packages.
@@ -72,7 +75,7 @@ started, so you can tweak them to your needs. They're created if missing and
 reused otherwise, and are written using [Cottle](https://r3c.github.io/cottle/)
 template engine with
 [custom delimiters](https://cottle.readthedocs.io/en/stable/page/04-configuration.html#delimiters-customization)
-set to "{{", "{|}" and "}}".
+set to "\{\{", "\{\|\}" and "\}\}".
 
 ## Custom packages
 
